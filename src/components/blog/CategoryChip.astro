@@ -1,0 +1,29 @@
+---
+interface Props {
+  category: string;
+  active?: boolean;
+}
+
+const { category, active = false } = Astro.props;
+
+function slugify(s: string): string {
+  return s
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
+const slug = slugify(category);
+---
+
+<a
+  href={`/blog/category/${slug}`}
+  class={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+    active
+      ? 'bg-foreground text-background shadow-sm'
+      : 'bg-secondary text-foreground hover:bg-accent'
+  }`}
+>
+  {category}
+</a>

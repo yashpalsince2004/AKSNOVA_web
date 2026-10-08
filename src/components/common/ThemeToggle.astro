@@ -1,0 +1,89 @@
+---
+// Theme Toggle with zero hydration cost - purely native inline JS
+---
+
+<div class="theme-toggle-group flex items-center rounded-full bg-secondary p-1">
+  <button
+    type="button"
+    data-theme-val="light"
+    aria-label="Light theme"
+    class="theme-btn rounded-full p-1.5 text-muted-foreground transition-colors hover:text-foreground"
+  >
+    <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 2v2"></path>
+      <path d="M12 20v2"></path>
+      <path d="m4.93 4.93 1.41 1.41"></path>
+      <path d="m17.66 17.66 1.41 1.41"></path>
+      <path d="M2 12h2"></path>
+      <path d="M20 12h2"></path>
+      <path d="m6.34 17.66-1.41 1.41"></path>
+      <path d="m19.07 4.93-1.41 1.41"></path>
+    </svg>
+  </button>
+  <button
+    type="button"
+    data-theme-val="system"
+    aria-label="System theme"
+    class="theme-btn rounded-full p-1.5 text-muted-foreground transition-colors hover:text-foreground"
+  >
+    <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+      <line x1="8" x2="16" y1="21" y2="21"></line>
+      <line x1="12" x2="12" y1="17" y2="21"></line>
+    </svg>
+  </button>
+  <button
+    type="button"
+    data-theme-val="dark"
+    aria-label="Dark theme"
+    class="theme-btn rounded-full p-1.5 text-muted-foreground transition-colors hover:text-foreground"
+  >
+    <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+    </svg>
+  </button>
+</div>
+
+<script is:inline>
+  function updateThemeUI(t) {
+    document.querySelectorAll('.theme-toggle-group').forEach((group) => {
+      group.querySelectorAll('.theme-btn').forEach((btn) => {
+        const val = btn.getAttribute('data-theme-val');
+        if (val === t) {
+          btn.classList.add('bg-brand', 'text-primary-foreground');
+          btn.classList.remove('text-muted-foreground');
+        } else {
+          btn.classList.remove('bg-brand', 'text-primary-foreground');
+          btn.classList.add('text-muted-foreground');
+        }
+      });
+    });
+  }
+
+  function applyTheme(t) {
+    localStorage.setItem('theme', t);
+    const isDark = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.classList.toggle('dark', isDark);
+    updateThemeUI(t);
+  }
+
+  // Initialize
+  const current = localStorage.getItem('theme') || 'dark';
+  updateThemeUI(current);
+
+  // Setup click listeners
+  document.querySelectorAll('.theme-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const targetTheme = btn.getAttribute('data-theme-val');
+      if (targetTheme) applyTheme(targetTheme);
+    });
+  });
+
+  // Listen for system changes if system theme selected
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    if (localStorage.getItem('theme') === 'system') {
+      applyTheme('system');
+    }
+  });
+</script>

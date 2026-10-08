@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Allow: /courses/
+Allow: /blog/
+Allow: /placements/
+Allow: /about/
+Allow: /contact/
+Allow: /trainers/
+
+Disallow: /resume-builder/
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://aksnova.in/sitemap-index.xml

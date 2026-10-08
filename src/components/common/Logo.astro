@@ -1,0 +1,42 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = 'h-9' } = Astro.props;
+---
+
+<div class="flex items-center gap-2.5">
+  <!-- Brand logo from verified local assets -->
+  <img
+    src="/logos/logo-light.png"
+    alt="AKSNOVA Edutech"
+    width="160"
+    height="36"
+    class={`${className} w-auto dark:hidden logo-img object-contain`}
+    onerror="this.style.display='none'; this.nextElementSibling.style.display='none'; this.parentElement.querySelector('.logo-fallback').style.display='flex';"
+  />
+  <img
+    src="/logos/logo-dark.png"
+    alt="AKSNOVA Edutech"
+    width="160"
+    height="36"
+    class={`${className} hidden w-auto dark:block logo-img object-contain`}
+    onerror="this.style.display='none'; this.previousElementSibling.style.display='none'; this.parentElement.querySelector('.logo-fallback').style.display='flex';"
+  />
+
+  <!-- High-fidelity vector / emblem fallback if external asset CDN is not active -->
+  <div class="logo-fallback hidden items-center gap-2.5">
+    <div class="relative flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-brand to-brand-deep text-white shadow-sm font-black text-lg tracking-tighter">
+      A
+    </div>
+    <div class="flex flex-col">
+      <span class="font-extrabold tracking-tight text-foreground text-lg leading-none">
+        AKS<span class="text-brand">NOVA</span>
+      </span>
+      <span class="text-[10px] font-bold tracking-widest text-muted-foreground uppercase leading-tight">
+        Edutech
+      </span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Page Not Found (404) | AKSNOVA Edutech"
+  description="The page you are looking for does not exist or has been moved."
+  noindex={true}
+>
+  <div class="mx-auto flex min-h-[60vh] max-w-2xl flex-col items-center justify-center px-4 py-20 text-center">
+    <div class="flex h-20 w-20 items-center justify-center rounded-3xl bg-brand/10 text-brand text-3xl font-black">
+      404
+    </div>
+
+    <h1 class="mt-6 text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">
+      Looks like this page took a wrong turn.
+    </h1>
+
+    <p class="mt-4 text-base text-muted-foreground leading-relaxed max-w-md">
+      The link you clicked may be outdated or the page may have been moved. Let's get you back on track.
+    </p>
+
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a
+        href="/"
+        class="inline-flex h-12 items-center rounded-2xl bg-brand px-6 text-sm font-bold text-primary-foreground shadow-md transition hover:bg-brand-deep"
+      >
+        Back Home
+      </a>
+      <a
+        href="/courses"
+        class="inline-flex h-12 items-center rounded-2xl bg-secondary px-6 text-sm font-bold text-foreground transition hover:bg-accent"
+      >
+        Explore Courses
+      </a>
+      <a
+        href="/blog"
+        class="inline-flex h-12 items-center rounded-2xl bg-secondary px-6 text-sm font-bold text-foreground transition hover:bg-accent"
+      >
+        Read Insights
+      </a>
+    </div>
+  </div>
+</BaseLayout>

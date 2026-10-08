@@ -1,0 +1,243 @@
+---
+import { companyLogos } from '@/lib/company-logos';
+
+type Relationship = 'featured-company' | 'industry-network';
+interface Company {
+  name: string;
+  relationship: Relationship;
+  logo?: string;
+}
+
+export const networkCopy = {
+  eyebrow: 'AKSNOVA Placement Network',
+  title: 'Connecting Skills With Career Opportunities',
+  sub: 'Career skills, industry exposure and placement assistance — working together to open doors.',
+  featuredLabel: 'Featured Companies',
+  networkLabel: 'Industry & Hiring Network',
+};
+
+const featured: Company[] = [
+  'TCS',
+  'Infosys',
+  'Wipro',
+  'Accenture',
+  'Capgemini',
+  'Cognizant',
+  'HCLTech',
+  'Tech Mahindra',
+].map((name) => ({ name, relationship: 'featured-company' }));
+
+const network: Company[] = [
+  'Mindgate Solutions Pvt. Ltd.',
+  'WP Translation and Testing Services Pvt. Ltd.',
+  'Mindspace Software Technologies Pvt. Ltd.',
+  'PlantIT',
+  'Galentic Technologies Pvt. Ltd.',
+  'Technopurple IT Solution',
+  'AQM Technologies Pvt. Ltd.',
+  'Vistaar Systems Pvt. Ltd.',
+  'Comflex Technologies Pvt. Ltd.',
+  'Exegesis Infotech India Pvt. Ltd.',
+  'ARCOT Groups',
+  'Kaizen Infotech Solutions Pvt. Ltd.',
+  'eClerx Services Limited',
+  'EINS Technologies India Pvt. Ltd.',
+  'Sounce Retail Pvt. Ltd.',
+  'YES BANK',
+  'Network TechLab (I) Pvt. Ltd.',
+  'Greytrix Business Solutions Pvt. Ltd.',
+  'Metricroid Technology Solutions Pvt. Ltd.',
+  'Piramal Finance',
+  'Astrika Infotech Pvt. Ltd.',
+  'Expenzing',
+  'Fermion Infotech Pvt. Ltd.',
+  'E-Stone Information Technology Pvt. Ltd.',
+  'Secret Technologies India',
+  'VMS Group',
+  'DSmart HR Solution & Services',
+  'Seap Infotech Pvt. Ltd.',
+  'Clear Intentions',
+  'WebMobi360',
+  'Digipxpressions Media Pvt. Ltd.',
+  'Universal Media',
+  'Caresoft Systems Pvt. Ltd.',
+  'Aaztech Software Solution',
+  'Hasba IT Solutions',
+].map((name) => ({ name, relationship: 'industry-network' }));
+
+const benefits = [
+  {
+    title: 'Career Growth',
+    icon: `<svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>`,
+  },
+  {
+    title: 'Industry Exposure',
+    icon: `<svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>`,
+  },
+  {
+    title: 'Placement Assistance',
+    icon: `<svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" /></svg>`,
+  },
+  {
+    title: 'Skill Development',
+    icon: `<svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>`,
+  },
+];
+
+const short = (n: string) => n.replace(/\s*(Pvt\.? Ltd\.?|Limited|\(I\))\s*/g, ' ').trim();
+const half = Math.ceil(network.length / 2);
+---
+
+<section id="placement-network" aria-labelledby="pn-title" class="relative mx-auto max-w-7xl px-4 py-16 md:px-6">
+  <div class="pn-glow relative overflow-hidden rounded-[28px] bg-card py-14">
+    <!-- Header -->
+    <div class="mx-auto max-w-3xl px-6 text-center">
+      <p class="eyebrow">{networkCopy.eyebrow}</p>
+      <h2 id="pn-title" class="mt-4 text-3xl font-bold tracking-[-0.8px] md:text-[44px] md:leading-[1.15]">
+        {networkCopy.title}
+      </h2>
+      <p class="mt-4 text-lg text-muted-foreground">{networkCopy.sub}</p>
+    </div>
+
+    <!-- Featured Tier -->
+    <p class="mt-12 px-6 text-center text-sm font-bold text-brand">{networkCopy.featuredLabel}</p>
+    <div class="mt-4 pn-fade group/row overflow-hidden py-2">
+      <ul class="pn-track flex w-max gap-3" style="animation-duration: 35s;">
+        {[0, 1].map((copy) => (
+          featured.map((c) => {
+            const logo = companyLogos[c.name];
+            return (
+              <li
+                class="flex shrink-0 items-center justify-center rounded-2xl border border-border/50 bg-logo-card px-6 text-center font-extrabold text-logo-ink transition-all duration-300 hover:-translate-y-1 hover:border-brand/60 hover:shadow-md h-24 w-52 md:w-60"
+                title={c.name}
+                aria-hidden={copy === 1 ? 'true' : undefined}
+              >
+                {logo ? (
+                  <img
+                    src={logo}
+                    alt={`${c.name} logo`}
+                    loading="lazy"
+                    decoding="async"
+                    class="max-h-12 w-auto max-w-[85%] object-contain"
+                    onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.style.display='block';"
+                  />
+                ) : null}
+                <span class={logo ? 'hidden text-xl font-black' : 'text-xl font-black'}>
+                  {short(c.name)}
+                </span>
+              </li>
+            );
+          })
+        ))}
+      </ul>
+    </div>
+
+    <!-- Slogan statement -->
+    <p class="mx-auto mt-14 max-w-4xl px-6 text-center text-3xl font-extrabold uppercase tracking-tight md:text-5xl">
+      From learning to <span class="text-brand">opportunity.</span>
+    </p>
+
+    <!-- Network Tier (Two bidirectional continuous rows) -->
+    <p class="mt-14 px-6 text-center text-sm font-bold text-brand">{networkCopy.networkLabel}</p>
+    <div class="mt-4 space-y-2">
+      <!-- Row 1 -->
+      <div class="pn-fade group/row overflow-hidden py-1">
+        <ul class="pn-track flex w-max gap-3" style="animation-duration: 70s;">
+          {[0, 1].map((copy) => (
+            network.slice(0, half).map((c) => {
+              const logo = companyLogos[c.name];
+              return (
+                <li
+                  class="flex shrink-0 items-center justify-center rounded-2xl border border-border/50 bg-logo-card px-5 text-center font-bold text-logo-ink transition-all duration-300 hover:-translate-y-1 hover:border-brand/60 hover:shadow-xs h-16 w-56 text-sm"
+                  title={c.name}
+                  aria-hidden={copy === 1 ? 'true' : undefined}
+                >
+                  {logo ? (
+                    <img
+                      src={logo}
+                      alt={`${c.name} logo`}
+                      loading="lazy"
+                      decoding="async"
+                      class="max-h-9 w-auto max-w-[85%] object-contain"
+                      onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.style.display='block';"
+                    />
+                  ) : null}
+                  <span class={logo ? 'hidden text-xs font-bold leading-tight' : 'text-xs font-bold leading-tight'}>
+                    {short(c.name)}
+                  </span>
+                </li>
+              );
+            })
+          ))}
+        </ul>
+      </div>
+
+      <!-- Row 2 (Reverse direction) -->
+      <div class="pn-fade group/row overflow-hidden py-1">
+        <ul class="pn-track pn-reverse flex w-max gap-3" style="animation-duration: 80s;">
+          {[0, 1].map((copy) => (
+            network.slice(half).map((c) => {
+              const logo = companyLogos[c.name];
+              return (
+                <li
+                  class="flex shrink-0 items-center justify-center rounded-2xl border border-border/50 bg-logo-card px-5 text-center font-bold text-logo-ink transition-all duration-300 hover:-translate-y-1 hover:border-brand/60 hover:shadow-xs h-16 w-56 text-sm"
+                  title={c.name}
+                  aria-hidden={copy === 1 ? 'true' : undefined}
+                >
+                  {logo ? (
+                    <img
+                      src={logo}
+                      alt={`${c.name} logo`}
+                      loading="lazy"
+                      decoding="async"
+                      class="max-h-9 w-auto max-w-[85%] object-contain"
+                      onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.style.display='block';"
+                    />
+                  ) : null}
+                  <span class={logo ? 'hidden text-xs font-bold leading-tight' : 'text-xs font-bold leading-tight'}>
+                    {short(c.name)}
+                  </span>
+                </li>
+              );
+            })
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Pillars / Benefits -->
+    <ul class="mx-6 mt-14 grid grid-cols-2 gap-y-6 md:mx-10 md:grid-cols-4 md:divide-x md:divide-border">
+      {benefits.map(({ icon, title }) => (
+        <li class="flex flex-col items-center gap-3 px-4 text-center">
+          <span class="flex h-12 w-12 items-center justify-center rounded-full bg-brand/15 text-brand" set:html={icon} />
+          <span class="font-bold text-foreground">{title}</span>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Bottom CTA Card inside Placement Network -->
+    <div class="mx-auto mt-14 max-w-2xl px-6 text-center">
+      <h3 class="text-2xl font-bold md:text-3xl text-foreground">Ready to Build Your Career?</h3>
+      <p class="mt-3 text-muted-foreground">
+        Explore our career-focused programs and start building skills that create verifiable opportunities.
+      </p>
+      <div class="mt-6 flex flex-wrap justify-center gap-3">
+        <a
+          href="/courses"
+          class="inline-flex h-12 items-center gap-2 rounded-2xl bg-brand px-6 text-sm font-bold text-primary-foreground transition hover:bg-brand-deep"
+        >
+          Explore courses
+          <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </a>
+        <a
+          href="/contact"
+          class="inline-flex h-12 items-center rounded-2xl border border-foreground/40 px-6 text-sm font-bold text-foreground transition hover:border-foreground"
+        >
+          Book free counselling
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

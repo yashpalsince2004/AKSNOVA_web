@@ -1,0 +1,122 @@
+---
+import Logo from './Logo.astro';
+
+const currentYear = new Date().getFullYear();
+
+const itCourses = [
+  { name: 'Full Stack Development', href: '/courses/full-stack-development' },
+  { name: 'Data Science & AI', href: '/courses/data-science-ai' },
+  { name: 'Cloud Computing & DevOps', href: '/courses/cloud-devops' },
+  { name: 'Cyber Security & Ethical Hacking', href: '/courses/cyber-security' },
+  { name: 'All IT Courses', href: '/courses#it' },
+];
+
+const nonItCourses = [
+  { name: 'Accounting with Tally & GST', href: '/courses/accounting-tally-gst' },
+  { name: 'Graphic Design', href: '/courses/graphic-design' },
+  { name: 'All Non-IT Courses', href: '/courses#non-it' },
+];
+
+const insightsLinks = [
+  { name: 'AI Career Roadmap', href: '/blog/how-to-start-a-career-in-artificial-intelligence-2026' },
+  { name: 'Data Science Guide', href: '/blog/data-science-roadmap-for-beginners' },
+  { name: 'Python Roadmap', href: '/blog/python-roadmap-for-beginners' },
+  { name: 'Resume Shortlisting Tips', href: '/blog/resume-tips-for-freshers' },
+  { name: 'All Articles & Guides', href: '/blog' },
+  { name: 'RSS Feed', href: '/rss.xml' },
+];
+
+const companyLinks = [
+  { name: 'About AKSNOVA', href: '/about' },
+  { name: 'Placement Network', href: '/placements' },
+  { name: 'Trainers & Mentors', href: '/trainers' },
+  { name: 'Resume Builder', href: '/resume-builder' },
+  { name: 'Contact Us', href: '/contact' },
+];
+---
+
+<footer class="border-t border-border bg-card/60 pt-16 pb-28 md:pb-16 text-foreground">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6">
+    <div class="grid gap-10 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
+      <!-- Col 1: Brand & Bio -->
+      <div class="sm:col-span-2 md:col-span-1 lg:col-span-2">
+        <a href="/" aria-label="AKSNOVA Homepage">
+          <Logo class="h-9" />
+        </a>
+        <p class="mt-4 max-w-sm text-sm text-muted-foreground leading-relaxed">
+          Career-focused IT and professional training institute. We help learners build practical skills, build verifiable portfolios, and get placed at leading companies.
+        </p>
+        <div class="mt-6 flex flex-col gap-1.5 text-xs text-muted-foreground">
+          <p><span class="font-semibold text-foreground">Email:</span> hello@aksnova.in</p>
+          <p><span class="font-semibold text-foreground">Phone:</span> +91 00000 00000</p>
+          <p><span class="font-semibold text-foreground">Hours:</span> Mon–Sat, 9:00 AM – 7:00 PM</p>
+        </div>
+      </div>
+
+      <!-- Col 2: IT Courses -->
+      <div>
+        <h3 class="text-sm font-bold tracking-wider uppercase text-brand">IT Programs</h3>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          {itCourses.map((c) => (
+            <li>
+              <a href={c.href} class="text-muted-foreground transition hover:text-foreground">
+                {c.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Col 3: Non-IT Courses & Company -->
+      <div>
+        <h3 class="text-sm font-bold tracking-wider uppercase text-brand">Professional</h3>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          {nonItCourses.map((c) => (
+            <li>
+              <a href={c.href} class="text-muted-foreground transition hover:text-foreground">
+                {c.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <h3 class="mt-6 text-sm font-bold tracking-wider uppercase text-brand">Institute</h3>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          {companyLinks.map((c) => (
+            <li>
+              <a href={c.href} class="text-muted-foreground transition hover:text-foreground">
+                {c.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Col 4: Insights & Guides -->
+      <div>
+        <h3 class="text-sm font-bold tracking-wider uppercase text-brand">Career Insights</h3>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          {insightsLinks.map((c) => (
+            <li>
+              <a href={c.href} class="text-muted-foreground transition hover:text-foreground">
+                {c.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="mt-14 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row text-xs text-muted-foreground">
+      <p>© {currentYear} AKSNOVA Edutech. All rights reserved. Learn. Build. Get Hired.</p>
+      <div class="flex items-center gap-6">
+        <a href="/about" class="hover:text-foreground transition">About</a>
+        <a href="/placements" class="hover:text-foreground transition">Placements</a>
+        <a href="/blog" class="hover:text-foreground transition">Insights</a>
+        <a href="/contact" class="hover:text-foreground transition">Contact</a>
+        <a href="/rss.xml" class="hover:text-foreground transition">RSS Feed</a>
+      </div>
+    </div>
+  </div>
+</footer>

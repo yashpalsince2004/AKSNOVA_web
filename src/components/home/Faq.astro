@@ -1,0 +1,59 @@
+---
+import { generateFaqSchema } from '@/lib/seo';
+
+const faqs = [
+  {
+    question: 'Do I need prior coding or technical experience to enroll?',
+    answer: 'No. All our foundational tracks start from absolute basics. Our academic counsellors assess your background and recommend the appropriate batch starting point.',
+  },
+  {
+    question: 'Is placement assistance provided after course completion?',
+    answer: 'Yes. We provide 100% dedicated placement assistance including 1-on-1 resume reviews, mock interviews with industry practitioners, portfolio hosting, and direct referrals across our 250+ partner network.',
+  },
+  {
+    question: 'Are classes conducted online or in person?',
+    answer: 'We provide classroom batches at our dedicated training facility as well as live interactive online batches with recorded mentor sessions and weekday/weekend slots.',
+  },
+  {
+    question: 'Will I receive an industry-recognised certificate?',
+    answer: 'Yes, every learner who completes the curriculum, assignments, and capstone project receives an official AKSNOVA course completion certificate with verifiable credentials.',
+  },
+];
+
+const schema = generateFaqSchema(faqs);
+---
+
+<section id="faq" aria-labelledby="faq-title" class="mx-auto max-w-3xl px-4 py-16 md:px-6">
+  <div class="text-center">
+    <p class="eyebrow">FAQ</p>
+    <h2 id="faq-title" class="mt-3 text-3xl font-bold tracking-tight md:text-4xl text-foreground">
+      Frequently asked questions
+    </h2>
+    <p class="mt-2 text-muted-foreground text-sm">
+      Everything you need to know about our courses, batches, and placement process.
+    </p>
+  </div>
+
+  <div class="mt-10 space-y-3">
+    {faqs.map(({ question, answer }, index) => (
+      <details
+        class="group rounded-2xl bg-card border border-border/60 px-6 py-4 transition-all open:border-brand/50 open:bg-card/90"
+        open={index === 0}
+      >
+        <summary class="flex cursor-pointer items-center justify-between text-base font-bold text-foreground select-none list-none">
+          <span>{question}</span>
+          <span class="ml-4 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-secondary text-foreground transition-transform duration-300 group-open:rotate-180">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        </summary>
+        <p class="mt-4 text-sm text-muted-foreground leading-relaxed">
+          {answer}
+        </p>
+      </details>
+    ))}
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

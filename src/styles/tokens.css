@@ -1,0 +1,68 @@
+/* Design Tokens for AKSNOVA Edutech */
+:root {
+  --radius: 1rem;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Primary Brand: AKSNOVA Red */
+  --brand: oklch(0.6 0.23 27);
+  --brand-deep: oklch(0.52 0.21 27);
+  --brand-rgb: 237, 28, 36; /* #ED1C24 */
+
+  /* Light Theme Tokens */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.22 0.02 330);
+  --card: oklch(0.97 0.004 100);
+  --card-foreground: oklch(0.22 0.02 330);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.005 270);
+  --primary: var(--brand);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.92 0.007 100);
+  --secondary-foreground: oklch(0.22 0.02 330);
+  --muted: oklch(0.97 0.004 100);
+  --muted-foreground: oklch(0.48 0.012 100);
+  --accent: oklch(0.84 0.01 100);
+  --accent-foreground: oklch(0.22 0.02 330);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.88 0.01 100);
+  --input: oklch(0.88 0.01 100);
+  --ring: var(--brand);
+  --hero-ink: oklch(1 0 0);
+  --panel: oklch(0.14 0.004 100 / 0.5);
+  --logo-card: oklch(1 0 0);
+  --logo-ink: oklch(0.2 0.01 30);
+  --font-sans: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Resume Builder accent (blue) */
+  --rb: oklch(0.55 0.23 268);
+  --rb-soft: oklch(0.94 0.03 268);
+}
+
+.dark {
+  --background: oklch(0.16 0.004 100);
+  --foreground: oklch(0.98 0.003 100);
+  --card: oklch(0.21 0.006 100);
+  --card-foreground: oklch(0.98 0.003 100);
+  --popover: oklch(0.25 0.006 100);
+  --popover-foreground: oklch(0.98 0.003 100);
+  --secondary: oklch(0.27 0.007 100);
+  --secondary-foreground: oklch(0.98 0.003 100);
+  --muted: oklch(0.21 0.006 100);
+  --muted-foreground: oklch(0.72 0.01 100);
+  --accent: oklch(0.34 0.008 100);
+  --accent-foreground: oklch(0.98 0.003 100);
+  --border: oklch(0.3 0.008 100);
+  --input: oklch(0.3 0.008 100);
+  --panel: oklch(0.09 0 0 / 0.45);
+  --logo-card: oklch(0.98 0.003 100);
+  --logo-ink: oklch(0.18 0.01 30);
+  --rb: oklch(0.66 0.19 268);
+  --rb-soft: oklch(0.28 0.06 268);
+}

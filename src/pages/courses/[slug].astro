@@ -1,0 +1,282 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/common/Breadcrumbs.astro';
+import { getCollection, render } from 'astro:content';
+import { generateCourseSchema, generateFaqSchema } from '@/lib/seo';
+
+export async function getStaticPaths() {
+  const courses = await getCollection('courses');
+  return courses.map((course) => ({
+    params: { slug: course.id.replace(/\.(md|mdx)$/, '') },
+    props: { course },
+  }));
+}
+
+const { course } = Astro.props;
+const { Content } = await render(course);
+
+const slug = course.id.replace(/\.(md|mdx)$/, '');
+const courseUrl = `/courses/${slug}`;
+
+// Related items
+const allCourses = await getCollection('courses');
+const relatedCourses = allCourses
+  .filter((c) => c.id !== course.id && c.data.category === course.data.category)
+  .slice(0, 3);
+
+const allPosts = await getCollection('blog');
+const relatedPosts = allPosts
+  .filter((p) => p.data.relatedCourses.some((rc) => course.data.title.toLowerCase().includes(rc.toLowerCase())))
+  .slice(0, 3);
+
+// Schemas
+const courseSchema = generateCourseSchema({
+  title: course.data.title,
+  description: course.data.description,
+  url: courseUrl,
+  duration: course.data.duration,
+  mode: course.data.mode,
+});
+
+const faqSchema = course.data.faqs.length > 0 ? generateFaqSchema(course.data.faqs) : null;
+---
+
+<BaseLayout
+  title={course.data.seoTitle || `${course.data.title} Course | AKSNOVA Edutech`}
+  description={course.data.seoDescription || course.data.description}
+  canonical={courseUrl}
+  ogImage={course.data.heroImage}
+>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(courseSchema)} />
+  {faqSchema && <script type="application/ld+json" slot="head" set:html={JSON.stringify(faqSchema)} />}
+
+  <div class="mx-auto max-w-7xl px-4 py-8 md:px-6">
+    <Breadcrumbs
+      items={[
+        { name: 'Courses', url: '/courses' },
+        { name: course.data.title, url: courseUrl },
+      ]}
+    />
+
+    <!-- Course Hero Section -->
+    <header class="mt-8 grid gap-8 lg:grid-cols-[1.2fr_0.8fr] items-center">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="rounded-full bg-brand/10 px-3 py-1 text-xs font-bold text-brand uppercase tracking-wider">
+            {course.data.category === 'IT' ? 'IT & Technology' : 'Non-IT Professional'}
+          </span>
+          <span class="text-xs text-muted-foreground font-semibold">
+            {course.data.level}
+          </span>
+        </div>
+
+        <h1 class="mt-4 text-4xl sm:text-5xl font-bold tracking-tight text-foreground leading-[1.1]">
+          {course.data.title}
+        </h1>
+
+        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">
+          {course.data.description}
+        </p>
+
+        <!-- Course Highlights Grid -->
+        <div class="mt-8 grid grid-cols-2 sm:grid-cols-3 gap-3 border-y border-border py-6">
+          <div>
+            <div class="text-xs font-bold uppercase tracking-wider text-muted-foreground">Duration</div>
+            <div class="mt-1 text-lg font-bold text-foreground">{course.data.duration}</div>
+          </div>
+          <div>
+            <div class="text-xs font-bold uppercase tracking-wider text-muted-foreground">Learning Mode</div>
+            <div class="mt-1 text-lg font-bold text-foreground">{course.data.mode}</div>
+          </div>
+          <div>
+            <div class="text-xs font-bold uppercase tracking-wider text-muted-foreground">Placement</div>
+            <div class="mt-1 text-lg font-bold text-brand">Assistance Included</div>
+          </div>
+        </div>
+
+        <div class="mt-8 flex flex-wrap gap-3.5">
+          <a
+            href="/contact"
+            class="inline-flex h-12 items-center rounded-2xl bg-brand px-6 text-sm font-bold text-primary-foreground shadow-md transition hover:bg-brand-deep"
+          >
+            Download Syllabus & Enquire
+          </a>
+          <a
+            href="#curriculum"
+            class="inline-flex h-12 items-center rounded-2xl bg-secondary px-6 text-sm font-bold text-foreground transition hover:bg-accent"
+          >
+            View Curriculum
+          </a>
+        </div>
+      </div>
+
+      <div class="relative overflow-hidden rounded-[28px] border border-border shadow-2xl">
+        <img
+          src={course.data.heroImage}
+          alt={course.data.title}
+          width="1024"
+          height="640"
+          class="w-full h-[320px] sm:h-[400px] object-cover"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+        <div class="absolute inset-x-6 bottom-6 text-white">
+          <div class="text-xs font-bold uppercase tracking-widest opacity-80">Certification</div>
+          <p class="mt-1 text-sm font-semibold text-white/95">{course.data.certification}</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Technologies & Tools -->
+    {course.data.technologies.length > 0 && (
+      <section class="mt-16 rounded-[28px] bg-card border border-border p-8 md:p-10">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-brand">Tools & Frameworks Mastered</h2>
+        <h3 class="mt-1 text-2xl font-bold text-foreground">Technologies You Will Use Daily</h3>
+        <div class="mt-6 flex flex-wrap gap-2.5">
+          {course.data.technologies.map((tech) => (
+            <span class="rounded-2xl border border-border bg-background px-4 py-2 text-sm font-semibold text-foreground">
+              {tech}
+            </span>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Learning Outcomes -->
+    {course.data.learningOutcomes.length > 0 && (
+      <section class="mt-16">
+        <h2 class="eyebrow">Outcomes</h2>
+        <h3 class="mt-2 text-3xl font-bold tracking-tight text-foreground">What You Will Be Able to Do</h3>
+        <ul class="mt-6 grid gap-3 sm:grid-cols-2">
+          {course.data.learningOutcomes.map((outcome) => (
+            <li class="flex items-start gap-3 rounded-2xl bg-card border border-border/60 p-4">
+              <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand/15 text-brand mt-0.5">
+                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                </svg>
+              </span>
+              <span class="text-sm font-medium text-foreground leading-relaxed">{outcome}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <!-- Detailed Curriculum -->
+    <section id="curriculum" class="mt-20 scroll-mt-24">
+      <div class="max-w-2xl">
+        <p class="eyebrow">Syllabus Breakdown</p>
+        <h2 class="mt-2 text-3xl font-bold tracking-tight text-foreground">Comprehensive Course Curriculum</h2>
+        <p class="mt-2 text-muted-foreground">Every module contains lectures, hands-on lab exercises, and mentor code reviews.</p>
+      </div>
+
+      <div class="mt-8 space-y-4">
+        {course.data.curriculum.map((mod, idx) => (
+          <details class="group rounded-2xl bg-card border border-border p-6 open:border-brand/50 transition-colors" open={idx === 0}>
+            <summary class="flex cursor-pointer items-center justify-between font-bold text-lg text-foreground select-none list-none">
+              <div class="flex items-center gap-3">
+                <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-brand/10 text-brand text-xs font-extrabold">
+                  {idx + 1}
+                </span>
+                <span>{mod.module}</span>
+              </div>
+              <span class="flex h-7 w-7 items-center justify-center rounded-full bg-secondary text-foreground group-open:rotate-180 transition-transform">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </span>
+            </summary>
+            <div class="mt-4 border-t border-border pt-4 text-sm text-muted-foreground">
+              <p class="font-medium text-foreground">{mod.description}</p>
+              <ul class="mt-3 grid gap-2 sm:grid-cols-2">
+                {mod.topics.map((t) => (
+                  <li class="flex items-center gap-2 text-xs sm:text-sm">
+                    <span class="h-1.5 w-1.5 rounded-full bg-brand shrink-0" />
+                    <span>{t}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Real Industry Projects -->
+    {course.data.projects.length > 0 && (
+      <section class="mt-20">
+        <p class="eyebrow">Portfolio</p>
+        <h2 class="mt-2 text-3xl font-bold tracking-tight text-foreground">Projects You Will Build</h2>
+        <div class="mt-8 grid gap-4 md:grid-cols-3">
+          {course.data.projects.map((proj, i) => (
+            <div class="rounded-2xl bg-card border border-border p-6 flex flex-col justify-between">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-widest text-brand">Project 0{i + 1}</span>
+                <h3 class="mt-2 text-lg font-bold text-foreground">{proj.title}</h3>
+                <p class="mt-3 text-sm text-muted-foreground leading-relaxed">{proj.description}</p>
+              </div>
+              <div class="mt-6 border-t border-border/80 pt-3 text-xs font-bold text-foreground">
+                Verified GitHub / Live Demo
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Course FAQs -->
+    {course.data.faqs.length > 0 && (
+      <section class="mt-20">
+        <p class="eyebrow">Questions & Answers</p>
+        <h2 class="mt-2 text-3xl font-bold tracking-tight text-foreground">Frequently Asked Questions</h2>
+        <div class="mt-8 space-y-3">
+          {course.data.faqs.map((faq) => (
+            <details class="group rounded-2xl bg-card border border-border px-6 py-4">
+              <summary class="flex cursor-pointer items-center justify-between font-bold text-foreground select-none list-none">
+                <span>{faq.question}</span>
+                <span class="ml-4 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-secondary text-foreground group-open:rotate-180 transition-transform">
+                  <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </span>
+              </summary>
+              <p class="mt-3 text-sm text-muted-foreground leading-relaxed">{faq.answer}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Related Insights -->
+    {relatedPosts.length > 0 && (
+      <section class="mt-20 border-t border-border pt-12">
+        <div class="flex items-center justify-between">
+          <h2 class="text-2xl font-bold text-foreground">Related Guides & Articles</h2>
+          <a href="/blog" class="text-sm font-bold text-brand hover:underline">View all insights</a>
+        </div>
+        <div class="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+          {relatedPosts.map((p) => (
+            <a href={`/blog/${p.id.replace(/\.(md|mdx)$/, '')}`} class="group rounded-2xl bg-card border border-border p-5 transition hover:border-brand/40">
+              <span class="text-xs font-bold text-brand uppercase">{p.data.category}</span>
+              <h3 class="mt-2 text-base font-bold text-foreground group-hover:text-brand transition">{p.data.title}</h3>
+              <p class="mt-2 text-xs text-muted-foreground line-clamp-2">{p.data.description}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Bottom CTA Bar -->
+    <div class="mt-20 rounded-[32px] bg-brand text-primary-foreground p-8 sm:p-12 md:p-14 flex flex-wrap items-center justify-between gap-6">
+      <div>
+        <h2 class="text-3xl font-extrabold tracking-tight">Ready to enroll in {course.data.title}?</h2>
+        <p class="mt-2 text-base opacity-90">Batches fill up quickly. Reserve your seat and book your orientation session.</p>
+      </div>
+      <a
+        href="/contact"
+        class="inline-flex h-12 items-center rounded-2xl bg-background px-8 text-sm font-bold text-foreground transition hover:opacity-95"
+      >
+        Book Free Counselling
+      </a>
+    </div>
+  </div>
+</BaseLayout>

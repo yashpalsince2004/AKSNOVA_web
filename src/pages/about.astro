@@ -1,0 +1,144 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/common/Breadcrumbs.astro';
+
+const stats = [
+  ['5,000+', 'Students trained'],
+  ['40+', 'Career courses'],
+  ['250+', 'Hiring partners'],
+  ['92%', 'Placement assistance rate'],
+];
+
+const values = [
+  {
+    title: 'Outcomes first',
+    desc: 'Every course is designed backwards from the job role you want — not from a textbook.',
+    icon: `<svg class="h-7 w-7 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+  },
+  {
+    title: 'Learn by doing',
+    desc: 'Real projects, real tools, and real deadlines. Theory supports practice, never the other way around.',
+    icon: `<svg class="h-7 w-7 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>`,
+  },
+  {
+    title: 'Mentors, not lecturers',
+    desc: 'Small batches led by active working professionals who review your code and assignments personally.',
+    icon: `<svg class="h-7 w-7 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>`,
+  },
+  {
+    title: 'Honest guidance',
+    desc: 'We tell you which course honestly fits your background — even when that means a shorter or more focused program.',
+    icon: `<svg class="h-7 w-7 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>`,
+  },
+];
+
+const pillars = [
+  {
+    title: 'Industry-aligned curriculum',
+    desc: 'Syllabi reviewed quarterly with hiring managers so you learn tools and patterns currently used in production.',
+  },
+  {
+    title: 'Transparent progress tracking',
+    desc: 'Regular technical assessments, portfolio milestone reviews, and individual feedback from day one.',
+  },
+  {
+    title: 'Lifelong learner community',
+    desc: 'Alumni network, hackathons, refresher sessions, and ongoing career advancement support beyond your first placement.',
+  },
+];
+---
+
+<BaseLayout
+  title="About Us | AKSNOVA Edutech"
+  description="Who we are: a career-focused training institute helping learners master practical skills, build verifiable portfolios, and get hired."
+  canonical="/about"
+>
+  <div class="mx-auto max-w-7xl px-4 py-8 md:px-6">
+    <Breadcrumbs items={[{ name: 'About Us', url: '/about' }]} />
+
+    <!-- Hero -->
+    <header class="mt-8 border-b border-border pb-16">
+      <p class="eyebrow rise">About AKSNOVA</p>
+      <h1 class="rise mt-4 max-w-4xl text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.05] text-foreground">
+        We exist to close the gap between <span class="text-brand">learning and earning.</span>
+      </h1>
+      <p class="rise mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed">
+        AKSNOVA Edutech is a career-focused training institute. We help students and working professionals build practical, job-ready skills through mentor-led programs, real industry projects, and dedicated placement support.
+      </p>
+    </header>
+
+    <!-- Stats Matrix -->
+    <section class="grid grid-cols-2 md:grid-cols-4 border-b border-border py-12 gap-6 md:gap-0 md:divide-x md:divide-border">
+      {stats.map(([num, label]) => (
+        <div class="md:px-8">
+          <div class="text-4xl sm:text-5xl font-extrabold text-brand tracking-tight">
+            {num}
+          </div>
+          <div class="mt-2 text-sm text-muted-foreground font-medium">
+            {label}
+          </div>
+        </div>
+      ))}
+    </section>
+
+    <!-- Mission & Values -->
+    <section class="py-20 grid gap-16 lg:grid-cols-2 items-start">
+      <div>
+        <p class="eyebrow">Our Mission</p>
+        <h2 class="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+          Skills that employers actually pay for
+        </h2>
+        <div class="mt-6 space-y-4 text-muted-foreground leading-relaxed text-base">
+          <p>
+            Too many graduates leave college with abstract theory but no verifiable proof of technical competence. We started AKSNOVA to fix that: intensive, mentor-led programs where every module produces something tangible you can present to an interviewer — a working web app, a clean data model, or an accounting ledger.
+          </p>
+          <p>
+            From software development and AI to taxation, graphic design, and cloud engineering, our programs share one unwavering commitment: practical execution, rigorous mentorship, and support until you land the role.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid gap-3 sm:grid-cols-2">
+        {values.map(({ title, desc, icon }) => (
+          <div class="rounded-2xl bg-card border border-border p-6 transition hover:border-brand/50">
+            <span set:html={icon} />
+            <h3 class="mt-5 text-lg font-bold text-foreground">{title}</h3>
+            <p class="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">{desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- How we work (Pillars) -->
+    <section class="rounded-[32px] bg-card border border-border p-8 sm:p-12 md:p-16 my-8">
+      <div class="max-w-2xl">
+        <p class="eyebrow">How We Work</p>
+        <h2 class="mt-2 text-3xl font-bold tracking-tight text-foreground">What Makes AKSNOVA Different</h2>
+      </div>
+
+      <div class="mt-12 grid gap-6 md:grid-cols-3">
+        {pillars.map(({ title, desc }, i) => (
+          <div class="relative rounded-2xl bg-background border border-border p-8">
+            <span class="text-xs font-black text-brand tracking-widest uppercase">0{i + 1}</span>
+            <h3 class="mt-4 text-xl font-bold text-foreground">{title}</h3>
+            <p class="mt-3 text-sm text-muted-foreground leading-relaxed">{desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <div class="mt-16 rounded-[32px] bg-brand text-primary-foreground p-8 sm:p-12 md:p-14 flex flex-wrap items-center justify-between gap-6">
+      <div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Come see how we teach.</h2>
+        <p class="mt-2 text-base opacity-90">Visit our training center, review student projects, or attend a free trial class.</p>
+      </div>
+      <a
+        href="/contact"
+        class="inline-flex h-12 items-center rounded-2xl bg-background px-8 text-sm font-bold text-foreground transition hover:opacity-95"
+      >
+        Book A Free Counselling Session
+      </a>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,129 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/common/Breadcrumbs.astro';
+
+const trainers = [
+  {
+    name: 'Vikram Joshi',
+    role: 'Lead Full Stack & Cloud Architect',
+    experience: '12+ Years Industry Experience',
+    specialty: 'React, Node.js, Microservices & AWS',
+    bio: 'Former senior engineer at enterprise SaaS providers. Passionate about teaching clean code architecture, system design, and production deployment.',
+  },
+  {
+    name: 'Dr. Ananya Ray',
+    role: 'Head of Data Science & AI',
+    experience: '10+ Years Industry & Research Experience',
+    specialty: 'Machine Learning, Deep Learning, GenAI & NLP',
+    bio: 'Extensive background building predictive analytics systems and enterprise RAG pipelines for fintech and healthcare clients.',
+  },
+  {
+    name: 'Karan Mehra',
+    role: 'Cyber Security & Ethical Hacking Lead',
+    experience: '9+ Years Security Consulting',
+    specialty: 'Penetration Testing, Kali Linux, SIEM & SOC',
+    bio: 'Certified security auditor (CEH, OSCP). Has conducted vulnerability assessments for over 40 corporate institutions and government audits.',
+  },
+  {
+    name: 'Meera Iyer',
+    role: 'Senior Finance & Taxation Faculty',
+    experience: '14+ Years Corporate Accounting',
+    specialty: 'Tally Prime, GST Compliance & Financial MIS',
+    bio: 'Chartered accountant advisor who has managed enterprise bookkeeping, corporate GST audits, and computerized payroll automation.',
+  },
+  {
+    name: 'Rohan Deshmukh',
+    role: 'Creative Director & Design Mentor',
+    experience: '8+ Years Brand & UI/UX Design',
+    specialty: 'Adobe Creative Suite, Figma & Visual Systems',
+    bio: 'Award-winning visual designer who has led brand identity redesigns for consumer startups and creative agency campaigns.',
+  },
+  {
+    name: 'Siddharth Nair',
+    role: 'DevOps & Infrastructure Specialist',
+    experience: '11+ Years Systems Engineering',
+    specialty: 'Docker, Kubernetes, CI/CD & Terraform',
+    bio: 'Cloud infrastructure engineer managing large-scale multi-region Kubernetes clusters with zero-downtime deployment pipelines.',
+  },
+];
+---
+
+<BaseLayout
+  title="Our Trainers & Industry Mentors | AKSNOVA Edutech"
+  description="Meet the experienced industry practitioners leading AKSNOVA courses. Learn directly from architects, data scientists, and senior engineers."
+  canonical="/trainers"
+>
+  <div class="mx-auto max-w-7xl px-4 py-8 md:px-6">
+    <Breadcrumbs items={[{ name: 'Trainers', url: '/trainers' }]} />
+
+    <header class="mt-8 border-b border-border pb-14">
+      <p class="eyebrow rise">Expert Faculty</p>
+      <h1 class="rise mt-4 max-w-3xl text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.05] text-foreground">
+        Learn from <span class="text-brand">practitioners,</span> not textbook theorists.
+      </h1>
+      <p class="rise mt-5 max-w-2xl text-lg text-muted-foreground leading-relaxed">
+        Every mentor at AKSNOVA brings real production experience from leading technology companies, consulting firms, and creative agencies.
+      </p>
+    </header>
+
+    <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {trainers.map((t) => (
+        <div class="rounded-2xl bg-card border border-border p-8 flex flex-col justify-between transition hover:border-brand/50">
+          <div>
+            <div class="flex items-center gap-3">
+              <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/10 text-brand text-lg font-black">
+                {t.name[0]}
+              </span>
+              <div>
+                <h3 class="font-bold text-lg text-foreground">{t.name}</h3>
+                <p class="text-xs text-brand font-semibold">{t.role}</p>
+              </div>
+            </div>
+
+            <div class="mt-6 space-y-2 border-y border-border py-4 text-xs">
+              <div>
+                <span class="text-muted-foreground">Experience:</span>{' '}
+                <span class="font-semibold text-foreground">{t.experience}</span>
+              </div>
+              <div>
+                <span class="text-muted-foreground">Specialty:</span>{' '}
+                <span class="font-semibold text-foreground">{t.specialty}</span>
+              </div>
+            </div>
+
+            <p class="mt-4 text-sm text-muted-foreground leading-relaxed">
+              {t.bio}
+            </p>
+          </div>
+
+          <div class="mt-8 border-t border-border pt-4">
+            <a
+              href="/contact"
+              class="text-xs font-bold text-brand uppercase tracking-wider hover:underline"
+            >
+              Book 1-on-1 Mentorship Call →
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Bottom CTA -->
+    <div class="mt-20 rounded-[32px] bg-card border border-border p-8 sm:p-12 md:p-14 text-center">
+      <h2 class="text-2xl sm:text-3xl font-bold text-foreground">
+        Ready to learn with dedicated mentor support?
+      </h2>
+      <p class="mx-auto mt-2 max-w-xl text-sm sm:text-base text-muted-foreground">
+        Our batches maintain small mentor-to-student ratios so you receive individual code reviews and career feedback.
+      </p>
+      <div class="mt-6 flex justify-center">
+        <a
+          href="/courses"
+          class="inline-flex h-12 items-center rounded-2xl bg-brand px-8 text-sm font-bold text-primary-foreground shadow-md transition hover:bg-brand-deep"
+        >
+          Explore Mentor-Led Courses
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

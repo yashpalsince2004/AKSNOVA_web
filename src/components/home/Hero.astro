@@ -1,0 +1,67 @@
+---
+// Hero section for AKSNOVA homepage
+---
+
+<section id="top" class="mx-auto max-w-7xl px-4 pt-4 md:px-6">
+  <div class="relative flex min-h-[68vh] items-end overflow-hidden rounded-[32px] text-hero-ink">
+    <img
+      src="/images/hero.jpg"
+      alt="Student coding in modern computer lab at AKSNOVA"
+      width="1920"
+      height="1088"
+      loading="eager"
+      fetchpriority="high"
+      class="absolute inset-0 h-full w-full object-cover"
+    />
+    <div class="hero-shade absolute inset-0" />
+
+    <div class="relative w-full p-6 sm:p-8 md:p-14">
+      <span class="rise inline-block rounded-full bg-background px-3.5 py-2 text-xs font-bold text-foreground">
+        Career-focused learning
+      </span>
+
+      <h1
+        class="rise mt-6 max-w-3xl text-4xl sm:text-5xl md:text-[70px] font-semibold leading-[1.1] tracking-[-1.2px]"
+        style="animation-delay: 0.1s"
+      >
+        From learning to <span class="text-brand">getting hired.</span>
+      </h1>
+
+      <p
+        class="rise mt-5 max-w-xl text-base sm:text-lg opacity-90 leading-relaxed"
+        style="animation-delay: 0.2s"
+      >
+        Industry-focused IT and professional training to build practical skills, create real projects, and become genuinely career-ready.
+      </p>
+
+      <div class="rise mt-8 flex flex-wrap gap-3.5" style="animation-delay: 0.3s">
+        <a
+          href="/courses"
+          class="group inline-flex h-12 items-center gap-2 rounded-2xl bg-brand px-6 text-sm font-bold text-primary-foreground shadow-lg shadow-brand/25 transition hover:bg-brand-deep hover:shadow-xl"
+        >
+          Explore courses
+          <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </a>
+        <a
+          href="/contact"
+          class="inline-flex h-12 items-center rounded-2xl bg-background/95 px-6 text-sm font-bold text-foreground backdrop-blur transition hover:bg-secondary"
+        >
+          Book free counselling
+        </a>
+      </div>
+
+      <ul class="rise mt-8 flex flex-wrap gap-2" style="animation-delay: 0.4s">
+        {['Practical Training', 'Industry Projects', 'Certification', 'Placement Assistance'].map((t) => (
+          <li class="flex items-center gap-1.5 rounded-full bg-hero-ink/15 px-3 py-1.5 text-xs font-semibold backdrop-blur-md">
+            <svg class="h-3.5 w-3.5 text-brand shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+            {t}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>

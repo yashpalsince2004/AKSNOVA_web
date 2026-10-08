@@ -1,0 +1,43 @@
+---
+import { generateBreadcrumbSchema } from '@/lib/seo';
+
+export interface BreadcrumbItem {
+  name: string;
+  url?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+  class?: string;
+}
+
+const { items, class: className = '' } = Astro.props;
+const breadcrumbItems = [{ name: 'Home', url: '/' }, ...items];
+const schema = generateBreadcrumbSchema(breadcrumbItems);
+---
+
+<nav aria-label="Breadcrumb" class={`flex items-center text-sm text-muted-foreground ${className}`}>
+  <ol class="flex flex-wrap items-center gap-2">
+    {breadcrumbItems.map((item, index) => {
+      const isLast = index === breadcrumbItems.length - 1;
+      return (
+        <li class="flex items-center gap-2">
+          {item.url && !isLast ? (
+            <a href={item.url} class="transition-colors hover:text-foreground">
+              {item.name}
+            </a>
+          ) : (
+            <span class={isLast ? 'font-semibold text-foreground' : ''} aria-current={isLast ? 'page' : undefined}>
+              {item.name}
+            </span>
+          )}
+          {!isLast && (
+            <span class="opacity-40" aria-hidden="true">/</span>
+          )}
+        </li>
+      );
+    })}
+  </ol>
+</nav>
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
