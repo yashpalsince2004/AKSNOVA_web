@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { withBase } from "@/lib/paths";
 
 const ACCEPT = [".pdf", ".docx", ".txt"];
 const MAX_BYTES = 5 * 1024 * 1024; // 5 MB
@@ -55,7 +56,7 @@ export default function ResumeBuilderApp() {
             Upload Another Resume
           </button>
           <a
-            href="/contact"
+            href={withBase('/contact')}
             className="rounded-xl bg-rb px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-primary-foreground hover:opacity-90 transition"
           >
             Schedule Mentor Review

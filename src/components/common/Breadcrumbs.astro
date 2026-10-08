@@ -1,5 +1,6 @@
 ---
 import { generateBreadcrumbSchema } from '@/lib/seo';
+import { withBase } from '@/lib/paths';
 
 export interface BreadcrumbItem {
   name: string;
@@ -23,7 +24,7 @@ const schema = generateBreadcrumbSchema(breadcrumbItems);
       return (
         <li class="flex items-center gap-2">
           {item.url && !isLast ? (
-            <a href={item.url} class="transition-colors hover:text-foreground">
+            <a href={withBase(item.url)} class="transition-colors hover:text-foreground">
               {item.name}
             </a>
           ) : (

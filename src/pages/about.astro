@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/common/Breadcrumbs.astro';
+import { withBase } from '@/lib/paths';
 
 const stats = [
   ['5,000+', 'Students trained'],
@@ -134,7 +135,7 @@ const pillars = [
         <p class="mt-2 text-base opacity-90">Visit our training center, review student projects, or attend a free trial class.</p>
       </div>
       <a
-        href="/contact"
+        href={withBase('/contact')}
         class="inline-flex h-12 items-center rounded-2xl bg-background px-8 text-sm font-bold text-foreground transition hover:opacity-95"
       >
         Book A Free Counselling Session

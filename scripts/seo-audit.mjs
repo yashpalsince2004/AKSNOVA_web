@@ -126,13 +126,36 @@ for (const filePath of htmlFiles) {
 }
 
 // Broken links check
+const BASE_PATH = (process.env.ASTRO_BASE ?? '/AKSNOVA_web').replace(/\/+$/, '');
 console.log(`\n🔗 Verifying ${internalLinks.size} unique internal links...`);
 for (const link of internalLinks) {
-  if (link.startsWith('/images/') || link.startsWith('/_astro/') || link.startsWith('/__l5e/') || link.startsWith('/favicon.')) {
+  // Strip base prefix if link starts with it
+  const pathWithoutBase = (BASE_PATH && link.startsWith(BASE_PATH))
+    ? (link.slice(BASE_PATH.length) || '/')
+    : link;
+
+  if (
+    pathWithoutBase.startsWith('/images/') ||
+    pathWithoutBase.startsWith('/_astro/') ||
+    pathWithoutBase.startsWith('/__l5e/') ||
+    pathWithoutBase.startsWith('/favicon.') ||
+    pathWithoutBase.startsWith('/logos/')
+  ) {
     continue;
   }
-  if (!allPagePaths.has(link) && !fs.existsSync(path.join(DIST_DIR, link))) {
-    console.error(`❌ Broken internal link: ${link}`);
+
+  const cleanLink = pathWithoutBase.replace(/\/$/, '') || '/';
+  const fileExact = path.join(DIST_DIR, cleanLink);
+  const fileHtml = path.join(DIST_DIR, `${cleanLink}.html`);
+  const fileIndex = path.join(DIST_DIR, cleanLink, 'index.html');
+
+  if (
+    !allPagePaths.has(cleanLink) &&
+    !fs.existsSync(fileExact) &&
+    !fs.existsSync(fileHtml) &&
+    !fs.existsSync(fileIndex)
+  ) {
+    console.error(`❌ Broken internal link: ${link} (resolved: ${cleanLink})`);
     totalErrors++;
   }
 }

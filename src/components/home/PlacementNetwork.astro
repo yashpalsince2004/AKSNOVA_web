@@ -1,5 +1,6 @@
 ---
 import { companyLogos } from '@/lib/company-logos';
+import { withBase } from '@/lib/paths';
 
 type Relationship = 'featured-company' | 'industry-network';
 interface Company {
@@ -223,7 +224,7 @@ const half = Math.ceil(network.length / 2);
       </p>
       <div class="mt-6 flex flex-wrap justify-center gap-3">
         <a
-          href="/courses"
+          href={withBase('/courses')}
           class="inline-flex h-12 items-center gap-2 rounded-2xl bg-brand px-6 text-sm font-bold text-primary-foreground transition hover:bg-brand-deep"
         >
           Explore courses
@@ -232,7 +233,7 @@ const half = Math.ceil(network.length / 2);
           </svg>
         </a>
         <a
-          href="/contact"
+          href={withBase('/contact')}
           class="inline-flex h-12 items-center rounded-2xl border border-foreground/40 px-6 text-sm font-bold text-foreground transition hover:border-foreground"
         >
           Book free counselling

@@ -5,7 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://aksnova.in',
+  site: process.env.ASTRO_SITE || 'https://yashpalsince2004.github.io',
+  base: process.env.ASTRO_BASE ?? '/AKSNOVA_web',
   trailingSlash: 'never',
   integrations: [
     react(),

@@ -6,6 +6,7 @@ import ShareButtons from '@/components/blog/ShareButtons.tsx';
 import { getCollection, render } from 'astro:content';
 import { generateArticleSchema } from '@/lib/seo';
 import { slugifyCategory } from '@/lib/blog-categories';
+import { withBase } from '@/lib/paths';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -176,7 +177,7 @@ const articleSchema = generateArticleSchema({
             </p>
             <div class="mt-6 flex flex-wrap gap-3">
               <a
-                href={`/courses/${relatedCourse.id.replace(/\.(md|mdx)$/, '')}`}
+                href={withBase(`/courses/${relatedCourse.id.replace(/\.(md|mdx)$/, '')}`)}
                 class="inline-flex h-11 items-center gap-2 rounded-2xl bg-brand px-5 text-sm font-bold text-primary-foreground shadow transition hover:bg-brand-deep"
               >
                 View Full Curriculum
@@ -185,7 +186,7 @@ const articleSchema = generateArticleSchema({
                 </svg>
               </a>
               <a
-                href="/contact"
+                href={withBase('/contact')}
                 class="inline-flex h-11 items-center rounded-2xl bg-secondary px-5 text-sm font-bold text-foreground transition hover:bg-accent"
               >
                 Book Free Counselling
@@ -202,7 +203,7 @@ const articleSchema = generateArticleSchema({
               Our academic advisors provide free profile roadmaps based on your background.
             </p>
             <a
-              href="/contact"
+              href={withBase('/contact')}
               class="mt-4 inline-flex rounded-xl bg-foreground px-4 py-2 text-xs font-bold text-background transition hover:opacity-90"
             >
               Book Free Counselling
@@ -215,7 +216,7 @@ const articleSchema = generateArticleSchema({
               Upload your current resume and let our builder tailor it for hiring partners.
             </p>
             <a
-              href="/resume-builder"
+              href={withBase('/resume-builder')}
               class="mt-4 inline-flex rounded-xl bg-secondary px-4 py-2 text-xs font-bold text-foreground transition hover:bg-accent"
             >
               Try Resume Builder

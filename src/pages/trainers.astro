@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/common/Breadcrumbs.astro';
+import { withBase } from '@/lib/paths';
 
 const trainers = [
   {
@@ -98,7 +99,7 @@ const trainers = [
 
           <div class="mt-8 border-t border-border pt-4">
             <a
-              href="/contact"
+              href={withBase('/contact')}
               class="text-xs font-bold text-brand uppercase tracking-wider hover:underline"
             >
               Book 1-on-1 Mentorship Call →
@@ -118,7 +119,7 @@ const trainers = [
       </p>
       <div class="mt-6 flex justify-center">
         <a
-          href="/courses"
+          href={withBase('/courses')}
           class="inline-flex h-12 items-center rounded-2xl bg-brand px-8 text-sm font-bold text-primary-foreground shadow-md transition hover:bg-brand-deep"
         >
           Explore Mentor-Led Courses

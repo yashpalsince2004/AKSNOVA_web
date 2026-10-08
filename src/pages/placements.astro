@@ -3,6 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/common/Breadcrumbs.astro';
 import PlacementNetwork from '@/components/home/PlacementNetwork.astro';
 import { stories } from '@/components/home/StudentStories.astro';
+import { withBase } from '@/lib/paths';
 
 const supportSteps = [
   {
@@ -140,7 +141,7 @@ const placementStats = [
         <p class="mt-2 text-base opacity-90">Talk to a counsellor about your goals, current skill levels, and placement target timelines.</p>
       </div>
       <a
-        href="/contact"
+        href={withBase('/contact')}
         class="inline-flex h-12 items-center rounded-2xl bg-background px-8 text-sm font-bold text-foreground transition hover:opacity-95"
       >
         Talk To A Placement Advisor

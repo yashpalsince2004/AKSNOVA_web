@@ -11,4 +11,4 @@ Disallow: /resume-builder/
 Disallow: /admin/
 Disallow: /api/
 
-Sitemap: https://aksnova.in/sitemap-index.xml
+Sitemap: https://yashpalsince2004.github.io/AKSNOVA_web/sitemap-index.xml

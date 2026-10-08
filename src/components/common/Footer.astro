@@ -1,37 +1,38 @@
 ---
 import Logo from './Logo.astro';
+import { withBase } from '@/lib/paths';
 
 const currentYear = new Date().getFullYear();
 
 const itCourses = [
-  { name: 'Full Stack Development', href: '/courses/full-stack-development' },
-  { name: 'Data Science & AI', href: '/courses/data-science-ai' },
-  { name: 'Cloud Computing & DevOps', href: '/courses/cloud-devops' },
-  { name: 'Cyber Security & Ethical Hacking', href: '/courses/cyber-security' },
-  { name: 'All IT Courses', href: '/courses#it' },
+  { name: 'Full Stack Development', href: withBase('/courses/full-stack-development') },
+  { name: 'Data Science & AI', href: withBase('/courses/data-science-ai') },
+  { name: 'Cloud Computing & DevOps', href: withBase('/courses/cloud-devops') },
+  { name: 'Cyber Security & Ethical Hacking', href: withBase('/courses/cyber-security') },
+  { name: 'All IT Courses', href: withBase('/courses#it') },
 ];
 
 const nonItCourses = [
-  { name: 'Accounting with Tally & GST', href: '/courses/accounting-tally-gst' },
-  { name: 'Graphic Design', href: '/courses/graphic-design' },
-  { name: 'All Non-IT Courses', href: '/courses#non-it' },
+  { name: 'Accounting with Tally & GST', href: withBase('/courses/accounting-tally-gst') },
+  { name: 'Graphic Design', href: withBase('/courses/graphic-design') },
+  { name: 'All Non-IT Courses', href: withBase('/courses#non-it') },
 ];
 
 const insightsLinks = [
-  { name: 'AI Career Roadmap', href: '/blog/how-to-start-a-career-in-artificial-intelligence-2026' },
-  { name: 'Data Science Guide', href: '/blog/data-science-roadmap-for-beginners' },
-  { name: 'Python Roadmap', href: '/blog/python-roadmap-for-beginners' },
-  { name: 'Resume Shortlisting Tips', href: '/blog/resume-tips-for-freshers' },
-  { name: 'All Articles & Guides', href: '/blog' },
-  { name: 'RSS Feed', href: '/rss.xml' },
+  { name: 'AI Career Roadmap', href: withBase('/blog/how-to-start-a-career-in-artificial-intelligence-2026') },
+  { name: 'Data Science Guide', href: withBase('/blog/data-science-roadmap-for-beginners') },
+  { name: 'Python Roadmap', href: withBase('/blog/python-roadmap-for-beginners') },
+  { name: 'Resume Shortlisting Tips', href: withBase('/blog/resume-tips-for-freshers') },
+  { name: 'All Articles & Guides', href: withBase('/blog') },
+  { name: 'RSS Feed', href: withBase('/rss.xml') },
 ];
 
 const companyLinks = [
-  { name: 'About AKSNOVA', href: '/about' },
-  { name: 'Placement Network', href: '/placements' },
-  { name: 'Trainers & Mentors', href: '/trainers' },
-  { name: 'Resume Builder', href: '/resume-builder' },
-  { name: 'Contact Us', href: '/contact' },
+  { name: 'About AKSNOVA', href: withBase('/about') },
+  { name: 'Placement Network', href: withBase('/placements') },
+  { name: 'Trainers & Mentors', href: withBase('/trainers') },
+  { name: 'Resume Builder', href: withBase('/resume-builder') },
+  { name: 'Contact Us', href: withBase('/contact') },
 ];
 ---
 
@@ -40,7 +41,7 @@ const companyLinks = [
     <div class="grid gap-10 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
       <!-- Col 1: Brand & Bio -->
       <div class="sm:col-span-2 md:col-span-1 lg:col-span-2">
-        <a href="/" aria-label="AKSNOVA Homepage">
+        <a href={withBase('/')} aria-label="AKSNOVA Homepage">
           <Logo class="h-9" />
         </a>
         <p class="mt-4 max-w-sm text-sm text-muted-foreground leading-relaxed">
@@ -111,11 +112,11 @@ const companyLinks = [
     <div class="mt-14 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row text-xs text-muted-foreground">
       <p>© {currentYear} AKSNOVA Edutech. All rights reserved. Learn. Build. Get Hired.</p>
       <div class="flex items-center gap-6">
-        <a href="/about" class="hover:text-foreground transition">About</a>
-        <a href="/placements" class="hover:text-foreground transition">Placements</a>
-        <a href="/blog" class="hover:text-foreground transition">Insights</a>
-        <a href="/contact" class="hover:text-foreground transition">Contact</a>
-        <a href="/rss.xml" class="hover:text-foreground transition">RSS Feed</a>
+        <a href={withBase('/about')} class="hover:text-foreground transition">About</a>
+        <a href={withBase('/placements')} class="hover:text-foreground transition">Placements</a>
+        <a href={withBase('/blog')} class="hover:text-foreground transition">Insights</a>
+        <a href={withBase('/contact')} class="hover:text-foreground transition">Contact</a>
+        <a href={withBase('/rss.xml')} class="hover:text-foreground transition">RSS Feed</a>
       </div>
     </div>
   </div>

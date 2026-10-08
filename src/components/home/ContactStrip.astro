@@ -1,4 +1,5 @@
 ---
+import { withBase } from '@/lib/paths';
 // Quick enquiry & contact banner for homepage
 ---
 
@@ -42,13 +43,13 @@
         Get tailored answers about fees, batch timings, EMI options, and syllabus details.
       </p>
       <a
-        href="/contact"
+        href={withBase('/contact')}
         class="mt-2 flex h-12 items-center justify-center rounded-2xl bg-brand text-sm font-bold text-primary-foreground shadow-md transition hover:bg-brand-deep"
       >
         Request a Callback
       </a>
       <p class="text-center text-xs text-muted-foreground">
-        Or visit our <a href="/contact" class="font-semibold text-foreground underline underline-offset-2">contact page</a> for walk-in address and directions.
+        Or visit our <a href={withBase('/contact')} class="font-semibold text-foreground underline underline-offset-2">contact page</a> for walk-in address and directions.
       </p>
     </div>
   </div>

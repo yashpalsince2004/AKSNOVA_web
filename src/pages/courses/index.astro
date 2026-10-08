@@ -3,6 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/common/Breadcrumbs.astro';
 import CourseCard from '@/components/courses/CourseCard.astro';
 import { getCollection } from 'astro:content';
+import { withBase } from '@/lib/paths';
 
 const allCourses = await getCollection('courses');
 const itCourses = allCourses.filter((c) => c.data.category === 'IT');
@@ -119,13 +120,13 @@ const nonItCourses = allCourses.filter((c) => c.data.category === 'NON-IT');
       </p>
       <div class="mt-6 flex flex-wrap justify-center gap-3">
         <a
-          href="/contact"
+          href={withBase('/contact')}
           class="inline-flex h-12 items-center rounded-2xl bg-brand px-6 text-sm font-bold text-primary-foreground shadow-md transition hover:bg-brand-deep"
         >
           Book Free Career Counselling
         </a>
         <a
-          href="/resume-builder"
+          href={withBase('/resume-builder')}
           class="inline-flex h-12 items-center rounded-2xl bg-secondary px-6 text-sm font-bold text-foreground transition hover:bg-accent"
         >
           Check Placement Readiness

@@ -1,4 +1,6 @@
 ---
+import { withBase } from '@/lib/paths';
+
 interface Props {
   class?: string;
 }
@@ -9,7 +11,7 @@ const { class: className = 'h-9' } = Astro.props;
 <div class="flex items-center gap-2.5">
   <!-- Brand logo from verified local assets -->
   <img
-    src="/logos/logo-light.png"
+    src={withBase('/logos/logo-light.png')}
     alt="AKSNOVA Edutech"
     width="160"
     height="36"
@@ -17,7 +19,7 @@ const { class: className = 'h-9' } = Astro.props;
     onerror="this.style.display='none'; this.nextElementSibling.style.display='none'; this.parentElement.querySelector('.logo-fallback').style.display='flex';"
   />
   <img
-    src="/logos/logo-dark.png"
+    src={withBase('/logos/logo-dark.png')}
     alt="AKSNOVA Edutech"
     width="160"
     height="36"

@@ -1,5 +1,7 @@
+import { withBase } from './paths';
+
 // Company artwork from verified local assets and high-res source repositories.
-export const companyLogos: Record<string, string> = {
+export const rawCompanyLogos: Record<string, string> = {
   'TCS': '/logos/companies/tcs-verified.svg',
   'Infosys': '/logos/companies/infosys.svg',
   'Wipro': '/logos/companies/wipro.svg',
@@ -45,10 +47,14 @@ export const companyLogos: Record<string, string> = {
   'Hasba IT Solutions': '/logos/companies/reference-hasba-it.png',
 };
 
+export const companyLogos: Record<string, string> = Object.fromEntries(
+  Object.entries(rawCompanyLogos).map(([k, v]) => [k, withBase(v)])
+);
+
 /**
  * Returns the company artwork pointer and fallback label
  */
-export function getCompanyArtwork(name: string): { logo?: string; fallback: string } {
+export function getCompanyArtwork(name: string): { logo?: string | undefined; fallback: string } {
   const cleanFallback = name.replace(/\s*(Pvt\.? Ltd\.?|Limited|\(I\))\s*/g, ' ').trim();
   return {
     logo: companyLogos[name],

@@ -5,6 +5,7 @@ import BlogCard from '@/components/blog/BlogCard.astro';
 import CategoryChip from '@/components/blog/CategoryChip.astro';
 import { getCollection } from 'astro:content';
 import { BLOG_CATEGORIES, slugifyCategory } from '@/lib/blog-categories';
+import { withBase } from '@/lib/paths';
 
 export async function getStaticPaths() {
   return BLOG_CATEGORIES.map((cat) => ({
@@ -74,7 +75,7 @@ const categoryPosts = allPosts
           Our mentors are drafting new practical guides and tutorials for {categoryName}. Check back shortly or browse other categories.
         </p>
         <a
-          href="/blog"
+          href={withBase('/blog')}
           class="mt-6 inline-flex h-10 items-center justify-center rounded-xl bg-secondary px-5 text-xs font-bold uppercase tracking-wider text-foreground hover:bg-accent transition"
         >
           View All Insights

@@ -1,9 +1,10 @@
 ---
+import { withBase } from '@/lib/paths';
 // Fixed bottom CTA button on mobile viewports
 ---
 
 <a
-  href="/contact"
+  href={withBase('/contact')}
   class="fixed inset-x-4 bottom-4 z-40 flex items-center justify-center rounded-2xl bg-brand py-4 text-center text-sm font-bold text-primary-foreground shadow-lg shadow-brand/20 transition-transform active:scale-95 md:hidden"
 >
   Book free counselling

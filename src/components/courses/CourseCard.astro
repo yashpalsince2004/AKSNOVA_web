@@ -1,4 +1,6 @@
 ---
+import { withBase } from '@/lib/paths';
+
 interface Props {
   title: string;
   slug: string;
@@ -14,7 +16,7 @@ const { title, slug, category, duration, mode, tags, heroImage, index = 0 } = As
 ---
 
 <article class="group relative block overflow-hidden rounded-2xl bg-card transition-all duration-300 hover:-translate-y-1">
-  <a href={`/courses/${slug}`} class="block h-[340px] relative overflow-hidden rounded-2xl">
+  <a href={withBase(`/courses/${slug}`)} class="block h-[340px] relative overflow-hidden rounded-2xl">
     <img
       src={heroImage}
       alt={title}

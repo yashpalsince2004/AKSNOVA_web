@@ -1,4 +1,6 @@
 ---
+import { withBase } from '@/lib/paths';
+
 interface Props {
   category: string;
   active?: boolean;
@@ -18,7 +20,7 @@ const slug = slugify(category);
 ---
 
 <a
-  href={`/blog/category/${slug}`}
+  href={withBase(`/blog/category/${slug}`)}
   class={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
     active
       ? 'bg-foreground text-background shadow-sm'

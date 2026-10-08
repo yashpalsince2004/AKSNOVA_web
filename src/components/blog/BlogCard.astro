@@ -1,4 +1,6 @@
 ---
+import { withBase } from '@/lib/paths';
+
 interface Props {
   slug: string;
   title: string;
@@ -23,7 +25,7 @@ const {
 ---
 
 <a
-  href={`/blog/${slug}`}
+  href={withBase(`/blog/${slug}`)}
   class={`group relative block overflow-hidden rounded-2xl bg-card transition-all duration-300 hover:-translate-y-1 ${
     large ? 'min-h-[420px] lg:h-full' : 'min-h-[240px]'
   }`}

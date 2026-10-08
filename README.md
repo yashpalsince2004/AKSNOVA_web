@@ -259,19 +259,47 @@ Your portfolio is the single most verified credential you present to hiring mana
 
 ## Deployment
 
-The static output in `dist/` can be deployed to any modern static hosting provider:
+### Automated GitHub Pages Deployment (Configured & Ready)
 
-### Cloudflare Pages
+This repository includes a pre-configured GitHub Actions workflow (`.github/workflows/deploy.yml`) that automatically builds and publishes the site to GitHub Pages on every push to `main`.
+
+#### Enabling GitHub Pages in Repository Settings:
+1. Navigate to your repository on GitHub: [`yashpalsince2004/AKSNOVA_web`](https://github.com/yashpalsince2004/AKSNOVA_web)
+2. Go to **Settings** > **Pages** (under Code and automation).
+3. Under **Build and deployment** > **Source**, select **GitHub Actions**.
+4. Push to `main` (or run the workflow manually via the **Actions** tab).
+5. Your site will automatically be live at:
+   ```
+   https://yashpalsince2004.github.io/AKSNOVA_web/
+   ```
+
+#### Subpath vs. Custom Domain Configuration:
+- **Default GitHub Pages Subpath** (`/AKSNOVA_web/`):
+  Handled automatically via `withBase()` and `astro.config.mjs`:
+  ```bash
+  ASTRO_SITE=https://yashpalsince2004.github.io
+  ASTRO_BASE=/AKSNOVA_web
+  ```
+- **Custom Domain** (e.g., `aksnova.in`):
+  If you configure a custom domain in GitHub Pages Settings:
+  Set `ASTRO_BASE=""` and `ASTRO_SITE=https://yourdomain.com` in repository secrets/environment or workflow.
+
+### Alternative Static Hosting Providers
+
+The production build in `dist/` can also be deployed to any static host:
+
+#### Cloudflare Pages
 - **Framework preset**: `Astro`
 - **Build command**: `npm run build`
 - **Build output directory**: `dist`
+- **Environment variables**: `ASTRO_BASE=""`
 
-### Vercel
+#### Vercel
 - **Framework preset**: `Astro`
 - **Build command**: `npm run build`
 - **Output directory**: `dist`
 
-### Netlify
+#### Netlify
 - **Build command**: `npm run build`
 - **Publish directory**: `dist`
 

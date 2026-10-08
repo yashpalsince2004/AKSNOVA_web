@@ -3,6 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/common/Breadcrumbs.astro';
 import { getCollection, render } from 'astro:content';
 import { generateCourseSchema, generateFaqSchema } from '@/lib/seo';
+import { withBase } from '@/lib/paths';
 
 export async function getStaticPaths() {
   const courses = await getCollection('courses');
@@ -96,7 +97,7 @@ const faqSchema = course.data.faqs.length > 0 ? generateFaqSchema(course.data.fa
 
         <div class="mt-8 flex flex-wrap gap-3.5">
           <a
-            href="/contact"
+            href={withBase('/contact')}
             class="inline-flex h-12 items-center rounded-2xl bg-brand px-6 text-sm font-bold text-primary-foreground shadow-md transition hover:bg-brand-deep"
           >
             Download Syllabus & Enquire
@@ -251,11 +252,11 @@ const faqSchema = course.data.faqs.length > 0 ? generateFaqSchema(course.data.fa
       <section class="mt-20 border-t border-border pt-12">
         <div class="flex items-center justify-between">
           <h2 class="text-2xl font-bold text-foreground">Related Guides & Articles</h2>
-          <a href="/blog" class="text-sm font-bold text-brand hover:underline">View all insights</a>
+          <a href={withBase('/blog')} class="text-sm font-bold text-brand hover:underline">View all insights</a>
         </div>
         <div class="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
           {relatedPosts.map((p) => (
-            <a href={`/blog/${p.id.replace(/\.(md|mdx)$/, '')}`} class="group rounded-2xl bg-card border border-border p-5 transition hover:border-brand/40">
+            <a href={withBase(`/blog/${p.id.replace(/\.(md|mdx)$/, '')}`)} class="group rounded-2xl bg-card border border-border p-5 transition hover:border-brand/40">
               <span class="text-xs font-bold text-brand uppercase">{p.data.category}</span>
               <h3 class="mt-2 text-base font-bold text-foreground group-hover:text-brand transition">{p.data.title}</h3>
               <p class="mt-2 text-xs text-muted-foreground line-clamp-2">{p.data.description}</p>
@@ -272,7 +273,7 @@ const faqSchema = course.data.faqs.length > 0 ? generateFaqSchema(course.data.fa
         <p class="mt-2 text-base opacity-90">Batches fill up quickly. Reserve your seat and book your orientation session.</p>
       </div>
       <a
-        href="/contact"
+        href={withBase('/contact')}
         class="inline-flex h-12 items-center rounded-2xl bg-background px-8 text-sm font-bold text-foreground transition hover:opacity-95"
       >
         Book Free Counselling

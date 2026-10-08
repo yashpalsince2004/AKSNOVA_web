@@ -1,6 +1,7 @@
 ---
 import Logo from '@/components/common/Logo.astro';
 import ResumeBuilderApp from '@/components/onboarding/ResumeBuilderApp.tsx';
+import { withBase } from '@/lib/paths';
 import '@/styles/global.css';
 
 const steps = ['Upload', 'Review Profile', 'Preferences'];
@@ -16,7 +17,7 @@ const steps = ['Upload', 'Review Profile', 'Preferences'];
     <meta name="robots" content="noindex, follow" />
     <link rel="canonical" href="https://aksnova.in/resume-builder" />
     <meta property="og:image" content="https://aksnova.in/images/hero.jpg" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/png" href={withBase('/favicon.png')} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -34,7 +35,7 @@ const steps = ['Upload', 'Review Profile', 'Preferences'];
     <header class="border-b border-border bg-background/95 backdrop-blur">
       <div class="mx-auto flex h-20 max-w-[1140px] items-center justify-between gap-4 px-4 md:px-6">
         <div class="flex items-center gap-3">
-          <a href="/" aria-label="AKSNOVA Edutech home">
+          <a href={withBase('/')} aria-label="AKSNOVA Edutech home">
             <Logo />
           </a>
           <span class="hidden rounded-full bg-rb-soft px-2.5 py-0.5 text-xs font-semibold text-rb sm:inline">
@@ -64,7 +65,7 @@ const steps = ['Upload', 'Review Profile', 'Preferences'];
           ))}
         </ol>
 
-        <a href="/" class="text-sm font-semibold text-muted-foreground transition hover:text-foreground">
+        <a href={withBase('/')} class="text-sm font-semibold text-muted-foreground transition hover:text-foreground">
           Back to main site
         </a>
       </div>

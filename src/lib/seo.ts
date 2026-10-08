@@ -10,9 +10,14 @@ export interface SeoProps {
   noindex?: boolean;
 }
 
-export const SITE_URL = 'https://aksnova.in';
+export const SITE_URL = (
+  process.env['ASTRO_SITE']
+    ? `${process.env['ASTRO_SITE']}${process.env['ASTRO_BASE'] || ''}`
+    : 'https://yashpalsince2004.github.io/AKSNOVA_web'
+).replace(/\/+$/, '');
+
 export const SITE_NAME = 'AKSNOVA Edutech';
-export const DEFAULT_OG_IMAGE = '/images/hero.jpg';
+export const DEFAULT_OG_IMAGE = '/logos/logo-dark.png';
 
 export function formatTitle(title?: string): string {
   if (!title) return `${SITE_NAME} | Career-Focused IT & Professional Training`;

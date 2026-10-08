@@ -5,6 +5,7 @@ import BlogCard from '@/components/blog/BlogCard.astro';
 import CategoryChip from '@/components/blog/CategoryChip.astro';
 import { getCollection } from 'astro:content';
 import { BLOG_CATEGORIES } from '@/lib/blog-categories';
+import { withBase } from '@/lib/paths';
 
 const allPosts = await getCollection('blog');
 const publishedPosts = allPosts
@@ -27,7 +28,7 @@ const otherPosts = publishedPosts.filter((p) => p.id !== featuredPost?.id);
       <div class="flex items-center gap-3">
         <span class="eyebrow">AKSNOVA Insights</span>
         <a
-          href="/rss.xml"
+          href={withBase('/rss.xml')}
           aria-label="RSS Feed"
           class="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-0.5 text-[11px] font-bold text-muted-foreground hover:text-foreground transition"
         >

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { withBase } from '@/lib/paths';
 ---
 
 <BaseLayout
@@ -22,19 +23,19 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 
     <div class="mt-8 flex flex-wrap justify-center gap-3">
       <a
-        href="/"
+        href={withBase('/')}
         class="inline-flex h-12 items-center rounded-2xl bg-brand px-6 text-sm font-bold text-primary-foreground shadow-md transition hover:bg-brand-deep"
       >
         Back Home
       </a>
       <a
-        href="/courses"
+        href={withBase('/courses')}
         class="inline-flex h-12 items-center rounded-2xl bg-secondary px-6 text-sm font-bold text-foreground transition hover:bg-accent"
       >
         Explore Courses
       </a>
       <a
-        href="/blog"
+        href={withBase('/blog')}
         class="inline-flex h-12 items-center rounded-2xl bg-secondary px-6 text-sm font-bold text-foreground transition hover:bg-accent"
       >
         Read Insights
