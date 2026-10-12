@@ -38,15 +38,15 @@ The platform showcases comprehensive training tracks, structured learning roadma
 
 ## Tech Stack
 
-| Layer | Technologies |
-|---|---|
-| **Core Framework** | [Astro 7.3.7](https://astro.build) (Static Site Generation / Content Layer) |
-| **Interactive Islands** | [React 19](https://react.dev) (Course Filtering, Resume Builder, Contact Forms) |
-| **Styling System** | [Tailwind CSS v4](https://tailwindcss.com) + `@tailwindcss/vite` + OKLCH Tokens |
-| **Type Safety** | [TypeScript 5.9](https://www.typescriptlang.org/) + Strict Mode |
-| **Content Management** | Astro Content Collections (`astro:content`) + [Zod](https://zod.dev) Schemas |
-| **Search Engine Optimization** | `@astrojs/sitemap`, `@astrojs/rss`, Custom JSON-LD Generators |
-| **Testing & Auditing** | [Vitest](https://vitest.dev), Custom AST/Link Auditing Engine |
+| Layer                          | Technologies                                                                    |
+| ------------------------------ | ------------------------------------------------------------------------------- |
+| **Core Framework**             | [Astro 7.3.7](https://astro.build) (Static Site Generation / Content Layer)     |
+| **Interactive Islands**        | [React 19](https://react.dev) (Course Filtering, Resume Builder, Contact Forms) |
+| **Styling System**             | [Tailwind CSS v4](https://tailwindcss.com) + `@tailwindcss/vite` + OKLCH Tokens |
+| **Type Safety**                | [TypeScript 5.9](https://www.typescriptlang.org/) + Strict Mode                 |
+| **Content Management**         | Astro Content Collections (`astro:content`) + [Zod](https://zod.dev) Schemas    |
+| **Search Engine Optimization** | `@astrojs/sitemap`, `@astrojs/rss`, Custom JSON-LD Generators                   |
+| **Testing & Auditing**         | [Vitest](https://vitest.dev), Custom AST/Link Auditing Engine                   |
 
 ---
 
@@ -130,6 +130,7 @@ npm run dev
 ```
 
 The application will be available at:
+
 - **Local:** `http://localhost:8080/`
 - **Network:** `http://<your-lan-ip>:8080/`
 
@@ -172,6 +173,7 @@ npm run audit
 ```
 
 The audit validates:
+
 - [x] Every page contains a unique, non-empty `<title>` tag.
 - [x] Every page has a descriptive `<meta name="description">` (50–160 chars).
 - [x] Exactly one `<h1>` heading exists per page with valid heading hierarchy.
@@ -181,7 +183,7 @@ The audit validates:
 
 ```text
 ========================================
-       SEO AUDIT SUMMARY RESULTS        
+       SEO AUDIT SUMMARY RESULTS
 ========================================
 Total Pages Audited:    45
 Unique Titles:          43
@@ -229,6 +231,7 @@ placementAssistance: true
 ---
 
 # Course Content Overview
+
 Detailed course syllabus and project descriptions go here...
 ```
 
@@ -264,6 +267,7 @@ Your portfolio is the single most verified credential you present to hiring mana
 This repository includes a pre-configured GitHub Actions workflow (`.github/workflows/deploy.yml`) that automatically builds and publishes the site to GitHub Pages on every push to `main`.
 
 #### Enabling GitHub Pages in Repository Settings:
+
 1. Navigate to your repository on GitHub: [`yashpalsince2004/AKSNOVA_web`](https://github.com/yashpalsince2004/AKSNOVA_web)
 2. Go to **Settings** > **Pages** (under Code and automation).
 3. Under **Build and deployment** > **Source**, select **GitHub Actions**.
@@ -274,6 +278,7 @@ This repository includes a pre-configured GitHub Actions workflow (`.github/work
    ```
 
 #### Subpath vs. Custom Domain Configuration:
+
 - **Default GitHub Pages Subpath** (`/AKSNOVA_web/`):
   Handled automatically via `withBase()` and `astro.config.mjs`:
   ```bash
@@ -289,17 +294,20 @@ This repository includes a pre-configured GitHub Actions workflow (`.github/work
 The production build in `dist/` can also be deployed to any static host:
 
 #### Cloudflare Pages
+
 - **Framework preset**: `Astro`
 - **Build command**: `npm run build`
 - **Build output directory**: `dist`
 - **Environment variables**: `ASTRO_BASE=""`
 
 #### Vercel
+
 - **Framework preset**: `Astro`
 - **Build command**: `npm run build`
 - **Output directory**: `dist`
 
 #### Netlify
+
 - **Build command**: `npm run build`
 - **Publish directory**: `dist`
 
@@ -308,4 +316,4 @@ The production build in `dist/` can also be deployed to any static host:
 ## Copyright & License
 
 Copyright © 2026 **AKSNOVA Edutech**. All rights reserved.  
-*Learn. Build. Get Hired.*
+_Learn. Build. Get Hired._

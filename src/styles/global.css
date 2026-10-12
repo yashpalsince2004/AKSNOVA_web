@@ -46,25 +46,42 @@
 
 /* Keyframes */
 @keyframes rise {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes marquee {
-  to { transform: translateX(-50%); }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes grid-pan {
-  to { background-position: 64px 64px; }
+  to {
+    background-position: 64px 64px;
+  }
 }
 
 @keyframes float-bob {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 @keyframes pn-scroll {
-  to { transform: translate3d(calc(-50% - 6px), 0, 0); }
+  to {
+    transform: translate3d(calc(-50% - 6px), 0, 0);
+  }
 }
 
 /* Utilities */
@@ -84,7 +101,9 @@
 }
 
 @utility shadow-float {
-  box-shadow: 0 20px 45px -20px oklch(0 0 0 / 0.7), 0 3px 10px oklch(0 0 0 / 0.28);
+  box-shadow:
+    0 20px 45px -20px oklch(0 0 0 / 0.7),
+    0 3px 10px oklch(0 0 0 / 0.28);
 }
 
 @utility text-lift {
@@ -92,7 +111,8 @@
 }
 
 @utility tech-grid {
-  background-image: linear-gradient(color-mix(in oklab, var(--brand) 14%, transparent) 1px, transparent 1px),
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--brand) 14%, transparent) 1px, transparent 1px),
     linear-gradient(90deg, color-mix(in oklab, var(--brand) 14%, transparent) 1px, transparent 1px);
   background-size: 64px 64px;
   animation: grid-pan 8s linear infinite;
@@ -114,8 +134,12 @@
 @utility pn-track {
   animation: pn-scroll 40s linear infinite;
   will-change: transform;
-  &:hover { animation-play-state: paused; }
-  @media (prefers-reduced-motion: reduce) { animation-duration: 240s !important; }
+  &:hover {
+    animation-play-state: paused;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    animation-duration: 240s !important;
+  }
 }
 
 @utility pn-reverse {
@@ -127,8 +151,17 @@
 }
 
 @utility pn-glow {
-  background-image: radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in oklab, var(--brand) 22%, transparent), transparent 70%),
-    radial-gradient(ellipse 50% 30% at 50% 100%, color-mix(in oklab, var(--brand) 14%, transparent), transparent 70%);
+  background-image:
+    radial-gradient(
+      ellipse 60% 40% at 50% 0%,
+      color-mix(in oklab, var(--brand) 22%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 50% 30% at 50% 100%,
+      color-mix(in oklab, var(--brand) 14%, transparent),
+      transparent 70%
+    );
 }
 
 /* Base layer adjustments */
@@ -141,20 +174,37 @@
     scroll-behavior: smooth;
   }
 
-  button, input, select, textarea {
+  button,
+  input,
+  select,
+  textarea {
     border-radius: 16px;
   }
 
-  a[class*="bg-brand"], a[class*="bg-background"][class*="px-"], a[class*="border"][class*="px-"] {
+  a[class*="bg-brand"],
+  a[class*="bg-background"][class*="px-"],
+  a[class*="border"][class*="px-"] {
     border-radius: 16px;
   }
 
-  main article, main figure, main form, main [class*="bg-card"][class*="p-"] {
+  main article,
+  main figure,
+  main form,
+  main [class*="bg-card"][class*="p-"] {
     border-radius: 16px;
   }
 
-  body, section, div, header, footer, a, button {
-    transition: background-color 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.4s, color 0.25s;
+  body,
+  section,
+  div,
+  header,
+  footer,
+  a,
+  button {
+    transition:
+      background-color 0.4s cubic-bezier(0.2, 0.7, 0.2, 1),
+      border-color 0.4s,
+      color 0.25s;
   }
 
   body {

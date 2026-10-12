@@ -33,6 +33,7 @@ AI is no longer a niche research field. Companies of every size now hire people 
 Most entry-level AI roles combine programming, data handling and model integration. You will spend more time cleaning data, testing outputs and deploying solutions than designing brand-new mathematical algorithms from scratch.
 
 Modern AI teams look for engineers who understand:
+
 - How to connect proprietary datasets to state-of-the-art models.
 - How to build reliable evaluation pipelines and guardrails.
 - How to write clean, maintainable backend code that serves predictions at scale.
@@ -51,16 +52,17 @@ To become hireable in 2026, focus your learning on these key pillars:
 
 ## A 6-month roadmap to your first AI role
 
-| Month | Focus | Key Deliverable |
-| :--- | :--- | :--- |
-| **Month 1–2** | Python, SQL, Statistics & EDA | Exploratory data analysis dashboard |
-| **Month 3–4** | Machine Learning algorithms & Scikit-Learn | End-to-end customer churn prediction pipeline |
-| **Month 5** | Generative AI, RAG & LLM APIs | Enterprise document QA assistant |
-| **Month 6** | Portfolio polishing, Resume & Mock Interviews | Production deployment + Live portfolio |
+| Month         | Focus                                         | Key Deliverable                               |
+| :------------ | :-------------------------------------------- | :-------------------------------------------- |
+| **Month 1–2** | Python, SQL, Statistics & EDA                 | Exploratory data analysis dashboard           |
+| **Month 3–4** | Machine Learning algorithms & Scikit-Learn    | End-to-end customer churn prediction pipeline |
+| **Month 5**   | Generative AI, RAG & LLM APIs                 | Enterprise document QA assistant              |
+| **Month 6**   | Portfolio polishing, Resume & Mock Interviews | Production deployment + Live portfolio        |
 
 ## High-demand career opportunities
 
 Entry-level roles currently hiring graduates and career switchers include:
+
 - **Associate AI Engineer**
 - **Machine Learning Analyst**
 - **Junior Data Scientist**
@@ -70,7 +72,9 @@ Entry-level roles currently hiring graduates and career switchers include:
 ## Frequently Asked Questions
 
 ### Do I need an advanced mathematics degree to start?
+
 No. School-level calculus and linear algebra combined with focused statistics practice is more than enough to build real-world machine learning systems.
 
 ### Is AI approachable for complete beginners?
+
 Yes. With a structured curriculum, practical hands-on mentorship, and consistent project building, beginners can reach entry-level job readiness within 6 months.

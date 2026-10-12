@@ -3,9 +3,9 @@ import react from "@vitejs/plugin-react";
 import path from "node:path";
 
 export default defineConfig({
-  base: process.env['ASTRO_BASE'] ?? '/AKSNOVA_web/',
+  base: process.env["ASTRO_BASE"] ?? "/AKSNOVA_web/",
   define: {
-    'import.meta.env.BASE_URL': JSON.stringify(process.env['ASTRO_BASE'] ?? '/AKSNOVA_web/'),
+    "import.meta.env.BASE_URL": JSON.stringify(process.env["ASTRO_BASE"] ?? "/AKSNOVA_web/"),
   },
   plugins: [react()],
   test: {

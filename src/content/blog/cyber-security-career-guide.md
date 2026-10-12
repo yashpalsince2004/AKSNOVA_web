@@ -34,12 +34,14 @@ With businesses operating in cloud-first environments, cyber threats and data br
 3. **Information Security Fundamentals:** CIA Triad (Confidentiality, Integrity, Availability), cryptography basics (symmetric vs asymmetric ciphers, hashing, SSL/TLS).
 
 ## Tools of the trade
+
 - **Kali Linux:** The premier security auditing operating system equipped with forensic and penetration testing tools.
 - **Wireshark:** Deep packet inspection and traffic flow analysis.
 - **Nmap:** Network reconnaissance, port scanning, and service version detection.
 - **Burp Suite:** Web vulnerability assessment, request interception, and API security auditing.
 
 ## Career entry points
+
 - Junior SOC Analyst (Security Operations Center)
 - Junior Penetration Tester / Ethical Hacker
 - Information Security Associate

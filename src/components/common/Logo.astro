@@ -3,42 +3,53 @@ import { withBase } from '@/lib/paths';
 
 interface Props {
   class?: string;
+  showText?: boolean;
 }
 
-const { class: className = 'h-9' } = Astro.props;
+const { class: className = 'h-8 sm:h-9', showText = true } = Astro.props;
 ---
 
-<div class="flex items-center gap-2.5">
-  <!-- Brand logo from verified local assets -->
-  <img
-    src={withBase('/logos/logo-light.png')}
-    alt="AKSNOVA Edutech"
-    width="160"
-    height="36"
-    class={`${className} w-auto dark:hidden logo-img object-contain`}
-    onerror="this.style.display='none'; this.nextElementSibling.style.display='none'; this.parentElement.querySelector('.logo-fallback').style.display='flex';"
-  />
-  <img
-    src={withBase('/logos/logo-dark.png')}
-    alt="AKSNOVA Edutech"
-    width="160"
-    height="36"
-    class={`${className} hidden w-auto dark:block logo-img object-contain`}
-    onerror="this.style.display='none'; this.previousElementSibling.style.display='none'; this.parentElement.querySelector('.logo-fallback').style.display='flex';"
-  />
-
-  <!-- High-fidelity vector / emblem fallback if external asset CDN is not active -->
-  <div class="logo-fallback hidden items-center gap-2.5">
-    <div class="relative flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-brand to-brand-deep text-white shadow-sm font-black text-lg tracking-tighter">
-      A
-    </div>
-    <div class="flex flex-col">
-      <span class="font-extrabold tracking-tight text-foreground text-lg leading-none">
-        AKS<span class="text-brand">NOVA</span>
-      </span>
-      <span class="text-[10px] font-bold tracking-widest text-muted-foreground uppercase leading-tight">
-        Edutech
-      </span>
-    </div>
-  </div>
+<div class="flex items-center">
+  {showText ? (
+    <>
+      <!-- Brand logo from verified identity mockup (light theme) -->
+      <img
+        src={withBase('/logos/logo-light.png')}
+        alt="AKSNOVA"
+        width="159"
+        height="36"
+        class={`${className} w-auto dark:hidden logo-img object-contain shrink-0`}
+        loading="eager"
+      />
+      <!-- Brand logo from verified identity mockup (dark theme) -->
+      <img
+        src={withBase('/logos/logo-dark.png')}
+        alt="AKSNOVA"
+        width="159"
+        height="36"
+        class={`${className} hidden w-auto dark:block logo-img object-contain shrink-0`}
+        loading="eager"
+      />
+    </>
+  ) : (
+    <>
+      <!-- Emblem-only fallback -->
+      <img
+        src={withBase('/logos/aksnova-icon-light.svg')}
+        alt="AKSNOVA logo"
+        width="38"
+        height="38"
+        class={`${className} w-auto dark:hidden logo-img object-contain shrink-0`}
+        loading="eager"
+      />
+      <img
+        src={withBase('/logos/aksnova-icon-dark.svg')}
+        alt="AKSNOVA logo"
+        width="38"
+        height="38"
+        class={`${className} hidden w-auto dark:block logo-img object-contain shrink-0`}
+        loading="eager"
+      />
+    </>
+  )}
 </div>

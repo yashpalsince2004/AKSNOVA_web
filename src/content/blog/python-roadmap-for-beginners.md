@@ -40,6 +40,7 @@ for i in range(3):
 ```
 
 Key concepts to master in your first two weeks:
+
 - Variables and dynamic types (`int`, `float`, `str`, `bool`)
 - Conditional logic (`if`, `elif`, `else`)
 - Loops (`for` and `while`)
@@ -64,6 +65,7 @@ print(f"Passing scores: {passing}")
 ## Step 3: Object-oriented programming (OOP)
 
 Once you are comfortable with functions, learn how to organize code using classes and objects:
+
 - Encapsulation: Keeping state and behavior grouped together.
 - Inheritance: Reusing established logic across related models.
 - Polymorphism: Writing clean code that works across multiple data types.

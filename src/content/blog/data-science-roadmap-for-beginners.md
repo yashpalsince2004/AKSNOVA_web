@@ -49,6 +49,7 @@ ORDER BY total_students DESC;
 ## Stage 2: Exploratory Data Analysis (EDA)
 
 Using Python tools like **Pandas**, **NumPy**, **Matplotlib**, and **Seaborn**:
+
 - Identify missing values and impute them logically.
 - Detect statistical outliers and skewed distributions.
 - Compute correlation matrices to see how variables interact.
@@ -56,6 +57,7 @@ Using Python tools like **Pandas**, **NumPy**, **Matplotlib**, and **Seaborn**:
 ## Stage 3: Supervised Machine Learning
 
 Start by mastering supervised learning algorithms:
+
 - **Regression:** Predict continuous numbers such as housing prices, salary expectations, or sales volume.
 - **Classification:** Predict categorical classes such as loan approval, spam detection, or customer churn.
 
@@ -64,6 +66,7 @@ Always evaluate your models using metrics like Mean Absolute Error (MAE), Precis
 ## Career Opportunities
 
 Graduates completing this curriculum qualify for:
+
 - Data Analyst
 - Junior Data Scientist
 - Business Intelligence Analyst

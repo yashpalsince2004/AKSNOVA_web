@@ -32,6 +32,7 @@ Generative AI produces original text, images, audio, and code. In recent years, 
 Large Language Models are deep neural networks trained on vast text corpora. At their core, they predict the most probable next token given a sequence of preceding tokens.
 
 Key building blocks include:
+
 - **Transformers & Attention:** The neural network architecture that allows the model to weigh the importance of different words in a context window.
 - **Embeddings:** High-dimensional vector representations that capture semantic similarity between words and concepts.
 - **Context Window:** The maximum number of tokens an LLM can process simultaneously in a single prompt-response cycle.
@@ -57,6 +58,7 @@ console.log(data.summary);
 ## Moving from Simple Prompts to RAG (Retrieval-Augmented Generation)
 
 When standard prompts are not enough, RAG connects external company knowledge to the language model:
+
 1. Document chunking and vector indexing.
 2. Semantic similarity search over an embedded database.
 3. Injecting retrieved context into the LLM prompt for grounded, hallucination-free answers.

@@ -29,20 +29,24 @@ relatedPosts:
 Modern full stack development requires more than building simple CRUD interfaces. Companies demand engineers capable of architecting scalable systems from database schema design to responsive client interfaces.
 
 ## 1. Modern Frontend Architecture
+
 - **Semantic HTML & Modern CSS:** Flexbox, Grid, custom properties, responsive breakpoints, and accessibility standards (WCAG).
 - **TypeScript:** Strict type contracts, generics, and compile-time defect prevention.
 - **Modern React:** Hooks, state machines, component composition, and server rendering concepts.
 
 ## 2. Robust Backend Engineering
+
 - **Node.js & Express / Fastify:** Non-blocking asynchronous I/O, middleware pipelines, error boundaries, and rate limiting.
 - **RESTful API & GraphQL Design:** Resource modeling, pagination, idempotency, and status codes.
 - **Authentication & Security:** JWT tokens, HTTP-only secure cookies, OAuth2, and password hashing with Argon2 or bcrypt.
 
 ## 3. Databases & Data Modeling
+
 - **Relational Databases (PostgreSQL / MySQL):** Normalization, indexing strategies, foreign keys, and transaction ACID properties.
 - **NoSQL & In-Memory Caching (Redis / MongoDB):** Session storage, caching layers, and unstructured document persistence.
 
 ## 4. DevOps & Cloud Delivery
+
 - Docker containerization for uniform development and production execution environments.
 - CI/CD automation pipelines on GitHub Actions.
 - Cloud deployment on AWS or Cloudflare.

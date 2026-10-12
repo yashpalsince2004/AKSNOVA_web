@@ -1,0 +1,219 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/common/Breadcrumbs.astro';
+import { withBase } from '@/lib/paths';
+
+const journeyPhases = [
+  {
+    number: '01',
+    title: 'Learn',
+    subtitle: 'Mentor-Led Interactive Foundations',
+    desc: 'Master fundamentals and advanced patterns through live, hands-on sessions guided by working industry practitioners. No passive watching — you code along from day one.',
+    deliverables: [
+      'Comprehensive syllabus aligned with 2026 hiring standards',
+      'Daily coding challenges and assignment evaluations',
+      'Small interactive batches with instant doubt clearance',
+    ],
+    badge: 'Month 1–2',
+  },
+  {
+    number: '02',
+    title: 'Build',
+    subtitle: 'Production-Grade Capstone Projects',
+    desc: 'Develop real-world software applications, analytics dashboards, and cloud infrastructures. Everything you build is documented, committed to Git, and deployed live.',
+    deliverables: [
+      '3+ end-to-end capstone projects for your public portfolio',
+      'Best coding standards, clean architecture, and testing',
+      'Deployed live on AWS, Azure, Docker, or Vercel',
+    ],
+    badge: 'Month 2–4',
+  },
+  {
+    number: '03',
+    title: 'Certify',
+    subtitle: 'Verifiable Industry Credential',
+    desc: 'Earn an official AKSNOVA diploma certification upon completing technical milestones, code assessments, and project defenses verified by senior engineers.',
+    deliverables: [
+      'Verifiable digital credential recognized by top recruiters',
+      'Portfolio evaluation report and skills score card',
+      'Showcase-ready badge for LinkedIn and CV',
+    ],
+    badge: 'Milestone',
+  },
+  {
+    number: '04',
+    title: 'Intern',
+    subtitle: 'Real-World Hands-on Internship',
+    desc: 'Work on live business briefs, client problem statements, and real team sprints. Gain authentic corporate work experience before attending your first job interview.',
+    deliverables: [
+      'Experience working in Agile/Scrum sprint cycles',
+      'Collaboration with product teams and senior developers',
+      'Official internship completion certificate and letter',
+    ],
+    badge: 'Practical Immersion',
+  },
+  {
+    number: '05',
+    title: 'Prepare',
+    subtitle: 'Technical Mocks & Interview Mastery',
+    desc: 'Polish your resume with our AI tools, practice algorithmic coding rounds, and attend 1-on-1 mock technical and HR interviews with senior industry interviewers.',
+    deliverables: [
+      'ATS-optimized resume tailored to target job descriptions',
+      'Mock interviews with detailed feedback and scorecards',
+      'Soft skills, salary negotiation, and communication coaching',
+    ],
+    badge: 'Career Readiness',
+  },
+  {
+    number: '06',
+    title: 'Get Hired',
+    subtitle: 'Direct Placement Drives with 250+ Partners',
+    desc: 'Get fast-tracked into technical interview rounds across our network of 250+ tech companies, MNCs, and high-growth startups until you accept your offer letter.',
+    deliverables: [
+      'Direct interview drives scheduled by our placement cell',
+      'Dedicated placement coordinator supporting your applications',
+      'Continued support through offer letter review and onboarding',
+    ],
+    badge: 'Placement Assistance',
+  },
+];
+
+const highlights = [
+  ['92%', 'Placement Assistance Rate'],
+  ['250+', 'Active Hiring Partners'],
+  ['120+', 'Production Capstone Projects'],
+  ['1-on-1', 'Personal Mentor Coaching'],
+];
+---
+
+<BaseLayout
+  title="Career Journey | Learn. Build. Get Hired. | AKSNOVA Edutech"
+  description="Discover the structured 6-step learning to placement journey at AKSNOVA Edutech. From live coding and capstone projects to corporate internships and job placement."
+  canonical="/journey"
+>
+  <div class="mx-auto max-w-7xl px-4 py-8 md:px-6">
+    <Breadcrumbs items={[{ name: 'Career Journey', url: '/journey' }]} />
+
+    <!-- Hero Section -->
+    <header class="mt-4 max-w-3xl">
+      <p class="eyebrow">Your Career Roadmap</p>
+      <h1 class="mt-3 text-3xl font-extrabold tracking-tight md:text-5xl text-foreground">
+        A Proven 6-Step Path from First Class to First Job Offer
+      </h1>
+      <p class="mt-4 text-base md:text-lg text-muted-foreground leading-relaxed">
+        At AKSNOVA, upskilling is never about passive watching. We engineered an end-to-end career transition roadmap designed backwards from what engineering leads and hiring managers actually test for.
+      </p>
+    </header>
+
+    <!-- Highlights Strip -->
+    <section aria-label="Key Outcomes" class="mt-10 grid grid-cols-2 gap-4 rounded-3xl border border-border/80 bg-card p-6 shadow-xs md:grid-cols-4 md:p-8">
+      {highlights.map(([stat, label]) => (
+        <div class="text-center md:text-left">
+          <p class="text-2xl font-black text-brand md:text-3xl">{stat}</p>
+          <p class="mt-1 text-xs md:text-sm font-medium text-muted-foreground">{label}</p>
+        </div>
+      ))}
+    </section>
+
+    <!-- Detailed 6-Step Journey Timeline -->
+    <section aria-labelledby="journey-steps-heading" class="mt-16">
+      <div class="max-w-2xl">
+        <p class="eyebrow">Step-by-Step Breakdown</p>
+        <h2 id="journey-steps-heading" class="mt-2 text-2xl font-bold tracking-tight md:text-3xl text-foreground">
+          How Every Step Moves You Closer to Your Goal
+        </h2>
+      </div>
+
+      <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {journeyPhases.map((phase) => (
+          <article class="flex flex-col justify-between rounded-3xl border border-border/70 bg-card p-7 shadow-xs transition-all duration-300 hover:border-brand/40 hover:shadow-md">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-3xl font-black text-brand/30 tracking-tight">{phase.number}</span>
+                <span class="rounded-full bg-secondary px-3 py-1 text-xs font-bold text-foreground">
+                  {phase.badge}
+                </span>
+              </div>
+
+              <h3 class="mt-4 text-xl font-bold text-foreground">
+                {phase.title}
+              </h3>
+              <p class="text-xs font-semibold text-brand">{phase.subtitle}</p>
+
+              <p class="mt-3 text-sm text-muted-foreground leading-relaxed">
+                {phase.desc}
+              </p>
+
+              <div class="mt-6 border-t border-border/60 pt-4">
+                <p class="text-xs font-bold uppercase tracking-wider text-foreground">Key Milestones:</p>
+                <ul class="mt-2.5 space-y-2 text-xs text-muted-foreground">
+                  {phase.deliverables.map((item) => (
+                    <li class="flex items-start gap-2">
+                      <svg class="h-4 w-4 shrink-0 text-emerald-500 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- Placement Network Section -->
+    <section class="mt-16 rounded-3xl border border-border/80 bg-secondary/30 p-8 md:p-12">
+      <div class="max-w-3xl">
+        <p class="eyebrow">Hiring Ecosystem</p>
+        <h2 class="mt-2 text-2xl font-bold tracking-tight md:text-3xl text-foreground">
+          Connected with Top Recruiters Across Tech & Core Domains
+        </h2>
+        <p class="mt-3 text-sm md:text-base text-muted-foreground leading-relaxed">
+          Our placement cell actively connects eligible learners with top MNCs, fast-scaling product startups, and consulting firms. From resume referrals to on-campus recruitment drives, we stand with you throughout your hiring journey.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a
+            href={withBase('/placements')}
+            class="inline-flex h-11 items-center justify-center rounded-2xl bg-brand px-5 text-sm font-bold text-primary-foreground transition hover:bg-brand-deep"
+          >
+            Explore Placement Network
+          </a>
+          <a
+            href={withBase('/contact')}
+            class="inline-flex h-11 items-center justify-center rounded-2xl bg-card border border-border px-5 text-sm font-bold text-foreground transition hover:bg-secondary"
+          >
+            Speak to a Counselor
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action Banner -->
+    <section class="mt-16 rounded-3xl bg-brand p-8 text-primary-foreground md:p-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+      <div class="max-w-2xl">
+        <h2 class="text-2xl font-extrabold tracking-tight md:text-3xl">
+          Ready to Begin Your Learning Journey?
+        </h2>
+        <p class="mt-2 text-sm md:text-base text-primary-foreground/90">
+          Book a free 1-on-1 counseling session with our senior advisors. We'll map your current skills to the right diploma program and placement roadmap.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-3 shrink-0">
+        <a
+          href={withBase('/contact')}
+          class="inline-flex h-12 items-center justify-center rounded-2xl bg-background px-6 text-sm font-bold text-foreground shadow-md transition hover:bg-secondary"
+        >
+          Book Free Counselling
+        </a>
+        <a
+          href={withBase('/courses')}
+          class="inline-flex h-12 items-center justify-center rounded-2xl border border-primary-foreground/30 bg-brand-deep/50 px-6 text-sm font-bold text-primary-foreground transition hover:bg-brand-deep"
+        >
+          Browse Programs
+        </a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

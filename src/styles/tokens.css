@@ -38,7 +38,8 @@
   --panel: oklch(0.14 0.004 100 / 0.5);
   --logo-card: oklch(1 0 0);
   --logo-ink: oklch(0.2 0.01 30);
-  --font-sans: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans:
+    "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   /* Resume Builder accent (blue) */
   --rb: oklch(0.55 0.23 268);

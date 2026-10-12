@@ -42,5 +42,6 @@ Machine learning allows computational systems to learn patterns directly from em
 ## Overfitting vs. Underfitting
 
 A critical skill for any machine learning engineer is diagnosing model bias and variance:
+
 - **High Bias (Underfitting):** The model is too simple to capture trends. Fix by engineering more features or selecting more expressive architectures.
 - **High Variance (Overfitting):** The model memorizes training noise and fails on unseen validation samples. Fix through regularization, dropout, pruning, and collecting more training instances.

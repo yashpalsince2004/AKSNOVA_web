@@ -1,7 +1,7 @@
-import fs from 'node:fs';
-import path from 'node:path';
+import fs from "node:fs";
+import path from "node:path";
 
-const DIST_DIR = path.resolve('dist');
+const DIST_DIR = path.resolve("dist");
 
 if (!fs.existsSync(DIST_DIR)) {
   console.error('dist directory not found. Please run "npm run build" first.');
@@ -16,7 +16,7 @@ function getHtmlFiles(dir) {
     const stat = fs.statSync(fullPath);
     if (stat.isDirectory()) {
       results = results.concat(getHtmlFiles(fullPath));
-    } else if (file.endsWith('.html')) {
+    } else if (file.endsWith(".html")) {
       results.push(fullPath);
     }
   }
@@ -36,15 +36,15 @@ let totalWarnings = 0;
 
 for (const filePath of htmlFiles) {
   const relPath = path.relative(DIST_DIR, filePath);
-  const normalizedUrl = '/' + relPath.replace(/index\.html$/, '').replace(/\.html$/, '');
-  allPagePaths.add(normalizedUrl === '/' ? '/' : normalizedUrl.replace(/\/$/, ''));
+  const normalizedUrl = "/" + relPath.replace(/index\.html$/, "").replace(/\.html$/, "");
+  allPagePaths.add(normalizedUrl === "/" ? "/" : normalizedUrl.replace(/\/$/, ""));
 }
 
 for (const filePath of htmlFiles) {
   const relPath = path.relative(DIST_DIR, filePath);
-  const content = fs.readFileSync(filePath, 'utf-8');
-  const is404 = relPath === '404.html';
-  const isPrivate = is404 || relPath.includes('resume-builder');
+  const content = fs.readFileSync(filePath, "utf-8");
+  const is404 = relPath === "404.html";
+  const isPrivate = is404 || relPath.includes("resume-builder");
 
   // Title check
   const titleMatch = content.match(/<title>([^<]*)<\/title>/i);
@@ -55,7 +55,9 @@ for (const filePath of htmlFiles) {
     totalErrors++;
   } else if (!isPrivate) {
     if (titles.has(title)) {
-      console.warn(`⚠️  [${relPath}] Duplicate title found: "${title}" (also in ${titles.get(title)})`);
+      console.warn(
+        `⚠️  [${relPath}] Duplicate title found: "${title}" (also in ${titles.get(title)})`,
+      );
       totalWarnings++;
     } else {
       titles.set(title, relPath);
@@ -63,7 +65,9 @@ for (const filePath of htmlFiles) {
   }
 
   // Description check
-  const descMatch = content.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']*)["'][^>]*>/i);
+  const descMatch = content.match(
+    /<meta[^>]*name=["']description["'][^>]*content=["']([^"']*)["'][^>]*>/i,
+  );
   const description = descMatch ? descMatch[1].trim() : null;
 
   if (!description && !is404) {
@@ -71,7 +75,9 @@ for (const filePath of htmlFiles) {
     totalErrors++;
   } else if (description && !isPrivate) {
     if (descriptions.has(description)) {
-      console.warn(`⚠️  [${relPath}] Duplicate meta description found: "${description.slice(0, 40)}..." (also in ${descriptions.get(description)})`);
+      console.warn(
+        `⚠️  [${relPath}] Duplicate meta description found: "${description.slice(0, 40)}..." (also in ${descriptions.get(description)})`,
+      );
       totalWarnings++;
     } else {
       descriptions.set(description, relPath);
@@ -89,17 +95,21 @@ for (const filePath of htmlFiles) {
   }
 
   // Canonical check
-  const canonicalMatch = content.match(/<link[^>]*rel=["']canonical["'][^>]*href=["']([^"']*)["'][^>]*>/i);
+  const canonicalMatch = content.match(
+    /<link[^>]*rel=["']canonical["'][^>]*href=["']([^"']*)["'][^>]*>/i,
+  );
   if (!canonicalMatch && !is404) {
     console.error(`❌ [${relPath}] Missing canonical link!`);
     totalErrors++;
-  } else if (canonicalMatch && !canonicalMatch[1].startsWith('https://')) {
+  } else if (canonicalMatch && !canonicalMatch[1].startsWith("https://")) {
     console.error(`❌ [${relPath}] Canonical is not absolute: ${canonicalMatch[1]}`);
     totalErrors++;
   }
 
   // OG Image check
-  const ogImageMatch = content.match(/<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']*)["'][^>]*>/i);
+  const ogImageMatch = content.match(
+    /<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']*)["'][^>]*>/i,
+  );
   if (!ogImageMatch && !is404) {
     console.error(`❌ [${relPath}] Missing og:image!`);
     totalErrors++;
@@ -118,36 +128,35 @@ for (const filePath of htmlFiles) {
   let linkMatch;
   while ((linkMatch = linkRegex.exec(content)) !== null) {
     const href = linkMatch[1];
-    if (href.startsWith('/') && !href.startsWith('//')) {
-      const cleanHref = href.split('?')[0].replace(/\/$/, '') || '/';
+    if (href.startsWith("/") && !href.startsWith("//")) {
+      const cleanHref = href.split("?")[0].replace(/\/$/, "") || "/";
       internalLinks.add(cleanHref);
     }
   }
 }
 
 // Broken links check
-const BASE_PATH = (process.env.ASTRO_BASE ?? '/AKSNOVA_web').replace(/\/+$/, '');
+const BASE_PATH = (process.env.ASTRO_BASE ?? "/AKSNOVA_web").replace(/\/+$/, "");
 console.log(`\n🔗 Verifying ${internalLinks.size} unique internal links...`);
 for (const link of internalLinks) {
   // Strip base prefix if link starts with it
-  const pathWithoutBase = (BASE_PATH && link.startsWith(BASE_PATH))
-    ? (link.slice(BASE_PATH.length) || '/')
-    : link;
+  const pathWithoutBase =
+    BASE_PATH && link.startsWith(BASE_PATH) ? link.slice(BASE_PATH.length) || "/" : link;
 
   if (
-    pathWithoutBase.startsWith('/images/') ||
-    pathWithoutBase.startsWith('/_astro/') ||
-    pathWithoutBase.startsWith('/__l5e/') ||
-    pathWithoutBase.startsWith('/favicon.') ||
-    pathWithoutBase.startsWith('/logos/')
+    pathWithoutBase.startsWith("/images/") ||
+    pathWithoutBase.startsWith("/_astro/") ||
+    pathWithoutBase.startsWith("/__l5e/") ||
+    pathWithoutBase.startsWith("/favicon.") ||
+    pathWithoutBase.startsWith("/logos/")
   ) {
     continue;
   }
 
-  const cleanLink = pathWithoutBase.replace(/\/$/, '') || '/';
+  const cleanLink = pathWithoutBase.replace(/\/$/, "") || "/";
   const fileExact = path.join(DIST_DIR, cleanLink);
   const fileHtml = path.join(DIST_DIR, `${cleanLink}.html`);
-  const fileIndex = path.join(DIST_DIR, cleanLink, 'index.html');
+  const fileIndex = path.join(DIST_DIR, cleanLink, "index.html");
 
   if (
     !allPagePaths.has(cleanLink) &&
@@ -160,21 +169,21 @@ for (const link of internalLinks) {
   }
 }
 
-console.log('\n========================================');
-console.log('       SEO AUDIT SUMMARY RESULTS        ');
-console.log('========================================');
+console.log("\n========================================");
+console.log("       SEO AUDIT SUMMARY RESULTS        ");
+console.log("========================================");
 console.log(`Total Pages Audited:    ${htmlFiles.length}`);
 console.log(`Unique Titles:          ${titles.size}`);
 console.log(`Unique Descriptions:    ${descriptions.size}`);
 console.log(`Internal Links Checked: ${internalLinks.size}`);
 console.log(`Total Errors:           ${totalErrors}`);
 console.log(`Total Warnings:         ${totalWarnings}`);
-console.log('========================================\n');
+console.log("========================================\n");
 
 if (totalErrors > 0) {
-  console.error('Audit failed with errors.');
+  console.error("Audit failed with errors.");
   process.exit(1);
 } else {
-  console.log('✅ All pages passed SEO audit successfully!');
+  console.log("✅ All pages passed SEO audit successfully!");
   process.exit(0);
 }

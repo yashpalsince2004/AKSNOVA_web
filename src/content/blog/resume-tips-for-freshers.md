@@ -31,7 +31,7 @@ Technical recruiters spend an average of six to eight seconds reviewing an appli
 
 1. **Stick strictly to one page:** Unless you have five years of industry experience, keep your resume concise, dense with signal, and contained on a single page.
 2. **Lead with impactful technical projects:** Place your projects section above education if you have built real applications. Highlight the business problem, tech stack, and your specific role.
-3. **Quantify achievements wherever possible:** Rather than writing *"Built a sentiment analyzer"*, write *"Built an NLP sentiment analyzer processing 10k customer reviews with 89% F1-score"*.
+3. **Quantify achievements wherever possible:** Rather than writing _"Built a sentiment analyzer"_, write _"Built an NLP sentiment analyzer processing 10k customer reviews with 89% F1-score"_.
 4. **Link live demos and clean GitHub repositories:** Recruiters want to click and see working code. Ensure your repository has an informative README with architecture diagrams and setup instructions.
 5. **Tailor technical keywords to the job description:** Pass ATS (Applicant Tracking System) scans by including exact technologies mentioned in the job post (e.g. Docker, TypeScript, PostgreSQL).
 6. **Use a clean, single-column layout:** Multi-column formats and heavy decorative tables often fail ATS parsing. Clean typography and standard headers work best.
