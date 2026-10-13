@@ -53,13 +53,15 @@ export function useChatbot({
   const userEmailRef = useRef("");
   const userPhoneRef = useRef("");
   const userQualificationRef = useRef("");
+  const isEmailSkippedRef = useRef(false);
 
   const syncAndSaveLeadData = useCallback(() => {
     saveSessionLeadData({
       phone: userPhoneRef.current,
       name: userNameRef.current,
       qualification: userQualificationRef.current,
-      email: userEmailRef.current,
+      email: userEmailRef.current || null,
+      emailSkipped: isEmailSkippedRef.current,
     });
   }, []);
 
@@ -102,6 +104,9 @@ export function useChatbot({
       if (savedLead.email) {
         userEmailRef.current = savedLead.email;
         setUserEmail(savedLead.email);
+      }
+      if (savedLead.emailSkipped) {
+        isEmailSkippedRef.current = true;
       }
     }
 
@@ -268,7 +273,109 @@ export function useChatbot({
     setPhoneTouched(false);
   };
 
-  // Chat counselor & career transition handlers
+  // Helper to submit lead enquiry to Supabase Edge Function
+  const submitLeadEnquiry = async (
+    targetQual: string,
+    currentMessages: ChatMessage[],
+    isRetry = false,
+  ) => {
+    const targetPhone = userPhoneRef.current || chatPhoneNumber;
+    const targetName = userNameRef.current || userName || "Prospective Student";
+    const targetEmail = userEmailRef.current || null;
+
+    isSubmittingRef.current = true;
+    setIsTyping(true);
+
+    try {
+      const [res] = await Promise.all([
+        submitStudentEnquiry(
+          {
+            student_name: targetName,
+            phone_number: targetPhone,
+            qualification: targetQual,
+            email: targetEmail,
+          },
+          isRetry ? { bypassCache: true } : undefined,
+        ),
+        new Promise((resolve) => setTimeout(resolve, 600)),
+      ]);
+
+      setIsTyping(false);
+
+      let botReplyText = "";
+      let nextOptions: string[] | null = null;
+      let nextInputMode: ChatInputMode = null;
+
+      if (res.success) {
+        if (targetQual === "Graduate or above") {
+          botReplyText = "Please wait while I connect you with our Admission Counselor!";
+          nextInputMode = "text";
+          nextOptions = null;
+        } else {
+          const effectiveQual = userQualificationRef.current || targetQual;
+          const currentName = userNameRef.current || userName;
+          const greeting =
+            currentName && currentName !== "Prospective Student"
+              ? `Thank you, ${currentName}!`
+              : "Thank you!";
+          botReplyText = `${greeting} We have noted your qualification (${effectiveQual}). Our senior career counselor will connect with you shortly between 9 AM to 9 PM to recommend programs suited to your background.`;
+          nextOptions = ["Explore Courses", "Explore other domains"];
+          nextInputMode = null;
+        }
+      } else {
+        if (targetQual === "Graduate or above") {
+          botReplyText = `We could not record your details with the counselor server (${res.error || "server unavailable"}). Would you like to retry?`;
+          nextOptions = [
+            "Retry connecting to counselor",
+            "Explore Courses",
+            "Explore other domains",
+          ];
+        } else {
+          botReplyText = `We could not record your request at this moment (${res.error || "server unavailable"}). Please tap "Retry Request" to try again.`;
+          nextOptions = ["Retry Request", "Explore Courses", "Explore other domains"];
+        }
+      }
+
+      const botMsg: ChatMessage = {
+        id: `bot-${Date.now()}`,
+        sender: "bot",
+        text: botReplyText,
+        timestamp: getTimestamp(),
+      };
+
+      const finalMessages = [...currentMessages, botMsg];
+      setMessages(finalMessages);
+      setQuickOptions(nextOptions);
+      setChatInputMode(nextInputMode);
+
+      saveSessionMessages(finalMessages, nextOptions);
+    } catch {
+      setIsTyping(false);
+      const isGraduate = targetQual === "Graduate or above";
+      const botMsg: ChatMessage = {
+        id: `bot-err-${Date.now()}`,
+        sender: "bot",
+        text: isGraduate
+          ? "Network error occurred while connecting to Admission Counselor. Please tap Retry below."
+          : "Network error occurred while connecting to the admission service. Please tap Retry Request below.",
+        timestamp: getTimestamp(),
+      };
+      const nextOptions = isGraduate
+        ? ["Retry connecting to counselor", "Explore Courses", "Explore other domains"]
+        : ["Retry Request", "Explore Courses", "Explore other domains"];
+      const finalMessages = [...currentMessages, botMsg];
+      setMessages(finalMessages);
+      setQuickOptions(nextOptions);
+      setChatInputMode(null);
+
+      saveSessionMessages(finalMessages, nextOptions);
+    } finally {
+      isSubmittingRef.current = false;
+      setTimeout(() => scrollToBottom(), 50);
+    }
+  };
+
+  // Step 1: Name submit
   const isChatNameValid = chatNameInput.trim().length > 0;
 
   const handleChatNameSubmit = (e: React.SyntheticEvent) => {
@@ -312,6 +419,7 @@ export function useChatbot({
     }, 600);
   };
 
+  // Step 2: Phone submit
   const handleChatPhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value;
     let digits = raw.replace(/\D/g, "");
@@ -347,22 +455,24 @@ export function useChatbot({
 
     setTimeout(() => {
       setIsTyping(false);
+      // Always ask for email next (with a skip button in the email field)
       const botMsg: ChatMessage = {
         id: `bot-${Date.now()}`,
         sender: "bot",
-        text: "Please share your highest qualification.",
+        text: "Please provide your email id for course curriculum and updates. ✍️",
         timestamp: getTimestamp(),
       };
       const finalMessages = [...newMessages, botMsg];
-      const nextOptions = [...QUALIFICATION_OPTIONS];
       setMessages(finalMessages);
-      setQuickOptions(nextOptions);
+      setQuickOptions(null);
+      setChatInputMode("email");
 
-      saveSessionMessages(finalMessages, nextOptions);
+      saveSessionMessages(finalMessages, null);
       setTimeout(() => scrollToBottom(), 50);
     }, 600);
   };
 
+  // Step 3: Email submit & Email skip
   const isCurrentChatEmailValid = isChatEmailValid(chatEmailInput);
 
   const handleChatEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -377,11 +487,8 @@ export function useChatbot({
     const submittedEmail = chatEmailInput.trim().toLowerCase();
     setUserEmail(submittedEmail);
     userEmailRef.current = submittedEmail;
+    isEmailSkippedRef.current = false;
     syncAndSaveLeadData();
-
-    const targetName = userNameRef.current || userName || "Prospective Student";
-    const targetPhone = userPhoneRef.current || chatPhoneNumber;
-    const targetQual = userQualificationRef.current || "Graduate or above";
 
     const userMsg: ChatMessage = {
       id: `user-${Date.now()}`,
@@ -399,92 +506,75 @@ export function useChatbot({
 
     saveSessionMessages(newMessages, null);
 
-    if (!targetPhone) {
+    setTimeout(() => {
       setIsTyping(false);
-      const botMsg: ChatMessage = {
-        id: `bot-${Date.now()}`,
-        sender: "bot",
-        text: "Please provide your contact number first so we can connect you with our counselor.",
-        timestamp: getTimestamp(),
-      };
-      const finalMessages = [...newMessages, botMsg];
-      setMessages(finalMessages);
-      setQuickOptions(null);
-      setChatInputMode("phone");
-      return;
-    }
-
-    isSubmittingRef.current = true;
-    try {
-      const [res] = await Promise.all([
-        submitStudentEnquiry({
-          student_name: targetName,
-          phone_number: targetPhone,
-          qualification: targetQual,
-          email: submittedEmail,
-        }),
-        new Promise((resolve) => setTimeout(resolve, 600)),
-      ]);
-
-      setIsTyping(false);
-
-      if (res.success) {
+      if (userQualificationRef.current) {
+        submitLeadEnquiry(userQualificationRef.current, newMessages);
+      } else {
         const botMsg: ChatMessage = {
           id: `bot-${Date.now()}`,
           sender: "bot",
-          text: "Please wait while I connect you with our Admission Counselor!",
+          text: "Please share your highest qualification.",
           timestamp: getTimestamp(),
         };
         const finalMessages = [...newMessages, botMsg];
-        setMessages(finalMessages);
-        setQuickOptions(null);
-        setChatInputMode("text");
-
-        saveSessionMessages(finalMessages, null);
-      } else {
-        const botMsg: ChatMessage = {
-          id: `bot-err-${Date.now()}`,
-          sender: "bot",
-          text: `We could not record your details with the counselor server (${res.error || "server unavailable"}). Would you like to retry?`,
-          timestamp: getTimestamp(),
-        };
-        const nextOptions = [
-          "Retry connecting to counselor",
-          "Explore Courses",
-          "Explore other domains",
-        ];
-        const finalMessages = [...newMessages, botMsg];
+        const nextOptions = [...QUALIFICATION_OPTIONS];
         setMessages(finalMessages);
         setQuickOptions(nextOptions);
-        setChatInputMode(null);
 
         saveSessionMessages(finalMessages, nextOptions);
+        setTimeout(() => scrollToBottom(), 50);
       }
-    } catch {
-      setIsTyping(false);
-      const botMsg: ChatMessage = {
-        id: `bot-err-${Date.now()}`,
-        sender: "bot",
-        text: "Network error occurred while connecting to Admission Counselor. Please tap Retry below.",
-        timestamp: getTimestamp(),
-      };
-      const nextOptions = [
-        "Retry connecting to counselor",
-        "Explore Courses",
-        "Explore other domains",
-      ];
-      const finalMessages = [...newMessages, botMsg];
-      setMessages(finalMessages);
-      setQuickOptions(nextOptions);
-      setChatInputMode(null);
-
-      saveSessionMessages(finalMessages, nextOptions);
-    } finally {
-      isSubmittingRef.current = false;
-      setTimeout(() => scrollToBottom(), 50);
-    }
+    }, 600);
   };
 
+  const handleChatEmailSkip = () => {
+    if (isTyping || isSubmittingRef.current) return;
+
+    userEmailRef.current = "";
+    setUserEmail("");
+    isEmailSkippedRef.current = true;
+    syncAndSaveLeadData();
+
+    const userMsg: ChatMessage = {
+      id: `user-${Date.now()}`,
+      sender: "user",
+      text: "Skip",
+      timestamp: getTimestamp(),
+    };
+
+    const newMessages = [...messages, userMsg];
+    setMessages(newMessages);
+    setChatEmailInput("");
+    setChatInputMode(null);
+    setIsTyping(true);
+    setTimeout(() => scrollToBottom(), 50);
+
+    saveSessionMessages(newMessages, null);
+
+    setTimeout(() => {
+      setIsTyping(false);
+      if (userQualificationRef.current) {
+        submitLeadEnquiry(userQualificationRef.current, newMessages);
+      } else {
+        const botMsg: ChatMessage = {
+          id: `bot-${Date.now()}`,
+          sender: "bot",
+          text: "Please share your highest qualification.",
+          timestamp: getTimestamp(),
+        };
+        const finalMessages = [...newMessages, botMsg];
+        const nextOptions = [...QUALIFICATION_OPTIONS];
+        setMessages(finalMessages);
+        setQuickOptions(nextOptions);
+
+        saveSessionMessages(finalMessages, nextOptions);
+        setTimeout(() => scrollToBottom(), 50);
+      }
+    }, 600);
+  };
+
+  // Open note submission for live chat agent
   const isChatTextValid = chatTextInput.trim().length > 0;
 
   const handleChatTextSubmit = (e: React.SyntheticEvent) => {
@@ -541,31 +631,35 @@ export function useChatbot({
 
     saveSessionMessages(newMessages, null, true);
 
+    // If clicking a qualification option:
     if ((QUALIFICATION_OPTIONS as readonly string[]).includes(optionText)) {
       userQualificationRef.current = optionText;
       syncAndSaveLeadData();
-    }
 
-    const isQualificationLead =
-      optionText === "Pursuing Graduation" || optionText === "Class 12 or below";
-    const isRetry =
-      optionText === "Retry Request" || optionText === "Retry connecting to counselor";
-
-    // Counselor Lead Submission Path (Class 12 or below, Pursuing Graduation, or Retry)
-    if (isQualificationLead || (isRetry && userQualificationRef.current !== "Graduate or above")) {
-      const targetQual = isRetry
-        ? userQualificationRef.current || "Pursuing Graduation"
-        : optionText;
-      const targetPhone = userPhoneRef.current || chatPhoneNumber;
-      const targetName = userNameRef.current || userName || "Prospective Student";
-      const targetEmail = null;
-
-      if (!targetPhone) {
+      // Ensure every field is collected: Name -> Phone -> Email (with skip)
+      if (!userNameRef.current) {
         setIsTyping(false);
         const botMsg: ChatMessage = {
           id: `bot-${Date.now()}`,
           sender: "bot",
-          text: "Please provide your 10-digit mobile number so our counselor will connect with you.",
+          text: "May I know your name please to begin with?",
+          timestamp: getTimestamp(),
+        };
+        const finalMessages = [...newMessages, botMsg];
+        setMessages(finalMessages);
+        setQuickOptions(null);
+        setChatInputMode("name");
+        saveSessionMessages(finalMessages, null);
+        setTimeout(() => scrollToBottom(), 50);
+        return;
+      }
+
+      if (!userPhoneRef.current) {
+        setIsTyping(false);
+        const botMsg: ChatMessage = {
+          id: `bot-${Date.now()}`,
+          sender: "bot",
+          text: "Please provide your contact number.",
           timestamp: getTimestamp(),
         };
         const finalMessages = [...newMessages, botMsg];
@@ -577,104 +671,12 @@ export function useChatbot({
         return;
       }
 
-      isSubmittingRef.current = true;
-      try {
-        const [res] = await Promise.all([
-          submitStudentEnquiry(
-            {
-              student_name: targetName,
-              phone_number: targetPhone,
-              qualification: targetQual,
-              email: targetEmail,
-            },
-            isRetry ? { bypassCache: true } : undefined,
-          ),
-          new Promise((resolve) => setTimeout(resolve, 600)),
-        ]);
-
-        setIsTyping(false);
-
-        let botReplyText = "";
-        let nextOptions: string[] | null = null;
-
-        if (res.success) {
-          const effectiveQual = userQualificationRef.current || targetQual;
-          const currentName = userNameRef.current || userName;
-          const greeting =
-            currentName && currentName !== "Prospective Student"
-              ? `Thank you, ${currentName}!`
-              : "Thank you!";
-          botReplyText = `${greeting} We have noted your qualification (${effectiveQual}). Our senior career counselor will connect with you shortly between 9 AM to 9 PM to recommend programs suited to your background.`;
-          nextOptions = ["Explore Courses", "Explore other domains"];
-        } else {
-          botReplyText = `We could not record your request at this moment (${res.error || "server unavailable"}). Please tap "Retry Request" to try again.`;
-          nextOptions = ["Retry Request", "Explore Courses", "Explore other domains"];
-        }
-
-        const botMsg: ChatMessage = {
-          id: `bot-${Date.now()}`,
-          sender: "bot",
-          text: botReplyText,
-          timestamp: getTimestamp(),
-        };
-
-        const finalMessages = [...newMessages, botMsg];
-        setMessages(finalMessages);
-        setQuickOptions(nextOptions);
-        setChatInputMode(null);
-
-        saveSessionMessages(finalMessages, nextOptions);
-      } catch {
-        setIsTyping(false);
-        const botMsg: ChatMessage = {
-          id: `bot-err-${Date.now()}`,
-          sender: "bot",
-          text: "Network error occurred while connecting to the admission service. Please tap Retry Request below.",
-          timestamp: getTimestamp(),
-        };
-        const finalMessages = [...newMessages, botMsg];
-        const nextOptions = ["Retry Request", "Explore Courses", "Explore other domains"];
-        setMessages(finalMessages);
-        setQuickOptions(nextOptions);
-        setChatInputMode(null);
-
-        saveSessionMessages(finalMessages, nextOptions);
-      } finally {
-        isSubmittingRef.current = false;
-        setTimeout(() => scrollToBottom(), 50);
-      }
-      return;
-    }
-
-    // Graduate Retry Path
-    if (isRetry && userQualificationRef.current === "Graduate or above") {
-      const targetPhone = userPhoneRef.current || chatPhoneNumber;
-      const targetName = userNameRef.current || userName || "Prospective Student";
-      const targetEmail = userEmailRef.current || null;
-
-      if (!targetPhone) {
+      if (!userEmailRef.current && !isEmailSkippedRef.current) {
         setIsTyping(false);
         const botMsg: ChatMessage = {
           id: `bot-${Date.now()}`,
           sender: "bot",
-          text: "Please provide your 10-digit mobile number so our counselor will connect with you.",
-          timestamp: getTimestamp(),
-        };
-        const finalMessages = [...newMessages, botMsg];
-        setMessages(finalMessages);
-        setQuickOptions(null);
-        setChatInputMode("phone");
-        saveSessionMessages(finalMessages, null);
-        setTimeout(() => scrollToBottom(), 50);
-        return;
-      }
-
-      if (!targetEmail) {
-        setIsTyping(false);
-        const botMsg: ChatMessage = {
-          id: `bot-${Date.now()}`,
-          sender: "bot",
-          text: "Please provide your email id for the live chat agent to assist you further. ✍️",
+          text: "Please provide your email id for course curriculum and updates. ✍️",
           timestamp: getTimestamp(),
         };
         const finalMessages = [...newMessages, botMsg];
@@ -686,75 +688,15 @@ export function useChatbot({
         return;
       }
 
-      isSubmittingRef.current = true;
-      try {
-        const [res] = await Promise.all([
-          submitStudentEnquiry(
-            {
-              student_name: targetName,
-              phone_number: targetPhone,
-              qualification: "Graduate or above",
-              email: targetEmail,
-            },
-            { bypassCache: true },
-          ),
-          new Promise((resolve) => setTimeout(resolve, 600)),
-        ]);
+      // All 3 fields have been collected! Submit lead enquiry to Supabase
+      await submitLeadEnquiry(optionText, newMessages);
+      return;
+    }
 
-        setIsTyping(false);
-        let botReplyText = "";
-        let nextOptions: string[] | null = null;
-        let nextInputMode: ChatInputMode = null;
-
-        if (res.success) {
-          botReplyText = "Please wait while I connect you with our Admission Counselor!";
-          nextInputMode = "text";
-          nextOptions = null;
-        } else {
-          botReplyText = `We could not record your details with the counselor server (${res.error || "server unavailable"}). Would you like to retry?`;
-          nextOptions = [
-            "Retry connecting to counselor",
-            "Explore Courses",
-            "Explore other domains",
-          ];
-        }
-
-        const botMsg: ChatMessage = {
-          id: `bot-${Date.now()}`,
-          sender: "bot",
-          text: botReplyText,
-          timestamp: getTimestamp(),
-        };
-
-        const finalMessages = [...newMessages, botMsg];
-        setMessages(finalMessages);
-        setQuickOptions(nextOptions);
-        setChatInputMode(nextInputMode);
-
-        saveSessionMessages(finalMessages, nextOptions);
-      } catch {
-        setIsTyping(false);
-        const botMsg: ChatMessage = {
-          id: `bot-err-${Date.now()}`,
-          sender: "bot",
-          text: "Network error occurred while connecting to Admission Counselor. Please tap Retry below.",
-          timestamp: getTimestamp(),
-        };
-        const finalMessages = [...newMessages, botMsg];
-        const nextOptions = [
-          "Retry connecting to counselor",
-          "Explore Courses",
-          "Explore other domains",
-        ];
-        setMessages(finalMessages);
-        setQuickOptions(nextOptions);
-        setChatInputMode(null);
-
-        saveSessionMessages(finalMessages, nextOptions);
-      } finally {
-        isSubmittingRef.current = false;
-        setTimeout(() => scrollToBottom(), 50);
-      }
+    // Retry option
+    if (optionText === "Retry Request" || optionText === "Retry connecting to counselor") {
+      const targetQual = userQualificationRef.current || "Pursuing Graduation";
+      await submitLeadEnquiry(targetQual, newMessages, true);
       return;
     }
 
@@ -779,17 +721,45 @@ export function useChatbot({
           "Take your time! You can explore our job-ready diploma courses, student placement records, and free learning roadmaps whenever you're ready.";
         nextOptions = ["Explore Courses", "Wish to talk to counselor", "Explore other domains"];
       } else if (optionText.toLowerCase() === "wish to talk to counselor") {
-        botReplyText =
-          "Please provide your 10-digit mobile number so our counselor will connect with you.";
-        nextOptions = null;
-        nextInputMode = "phone";
+        // Collect Name -> Phone -> Email (with skip)
+        if (!userNameRef.current) {
+          botReplyText = "May I know your name please to begin with?";
+          nextOptions = null;
+          nextInputMode = "name";
+        } else if (!userPhoneRef.current) {
+          botReplyText = "Please provide your contact number.";
+          nextOptions = null;
+          nextInputMode = "phone";
+        } else if (!userEmailRef.current && !isEmailSkippedRef.current) {
+          botReplyText = "Please provide your email id for course curriculum and updates. ✍️";
+          nextOptions = null;
+          nextInputMode = "email";
+        } else {
+          botReplyText = "Please share your highest qualification.";
+          nextOptions = [...QUALIFICATION_OPTIONS];
+          nextInputMode = null;
+        }
       } else if (
         optionText === "I am looking for career growth/transition" ||
         optionText.toLowerCase().includes("career growth")
       ) {
-        botReplyText = "May I know your name please to begin with?";
-        nextOptions = null;
-        nextInputMode = "name";
+        if (!userNameRef.current) {
+          botReplyText = "May I know your name please to begin with?";
+          nextOptions = null;
+          nextInputMode = "name";
+        } else if (!userPhoneRef.current) {
+          botReplyText = "Please provide your contact number.";
+          nextOptions = null;
+          nextInputMode = "phone";
+        } else if (!userEmailRef.current && !isEmailSkippedRef.current) {
+          botReplyText = "Please provide your email id for course curriculum and updates. ✍️";
+          nextOptions = null;
+          nextInputMode = "email";
+        } else {
+          botReplyText = "Please share your highest qualification.";
+          nextOptions = [...QUALIFICATION_OPTIONS];
+          nextInputMode = null;
+        }
       } else if (
         optionText === "Learn about AKSNOVA programs" ||
         optionText.toLowerCase().includes("learn about")
@@ -804,15 +774,6 @@ export function useChatbot({
       } else if (optionText === "Explore other domains") {
         botReplyText = "Please select domain of your interest!";
         nextOptions = [...AKSNOVA_DOMAIN_OPTIONS];
-      } else if (
-        optionText === "Graduate or above" ||
-        optionText.toLowerCase().includes("graduate and above") ||
-        optionText.toLowerCase().includes("graduate or above")
-      ) {
-        botReplyText =
-          "Please provide your email id for the live chat agent to assist you further. ✍️";
-        nextOptions = null;
-        nextInputMode = "email";
       } else if (optionText === "Explore Courses") {
         botReplyText =
           "You can check out our complete course catalog with detailed modules, projects, and roadmaps in our Courses section!";
@@ -881,6 +842,7 @@ export function useChatbot({
     handleChatPhoneSubmit,
     handleChatEmailChange,
     handleChatEmailSubmit,
+    handleChatEmailSkip,
     handleChatTextSubmit,
     handleSelectOption,
   };

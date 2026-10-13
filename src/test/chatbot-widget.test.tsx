@@ -220,7 +220,7 @@ describe("ChatbotWidget Component & Speed Dial Roll-up Flow", () => {
     expect(screen.getByText("Select an option above")).toBeInTheDocument();
   });
 
-  it("shows number input at bottom when 'Wish to talk to counselor' is selected and validates 10 digits without leading 0", async () => {
+  it("sequentially collects Name, Phone with validation, and Email with Skip button when 'Wish to talk to counselor' is selected", async () => {
     render(<ChatbotWidget />);
     openChatPanel();
 
@@ -246,45 +246,56 @@ describe("ChatbotWidget Component & Speed Dial Roll-up Flow", () => {
       vi.advanceTimersByTime(600);
     });
 
-    // Bot asks for number
-    expect(
-      screen.getByText(
-        /Please provide your 10-digit mobile number so our counselor will connect with you/i,
-      ),
-    ).toBeInTheDocument();
+    // Step 1: Bot asks for name
+    expect(screen.getByText(/May I know your name please to begin with\?/i)).toBeInTheDocument();
+    const nameInput = screen.getByPlaceholderText("Enter your name...") as HTMLInputElement;
+    const sendNameBtn = screen.getByRole("button", { name: /send name/i });
+    expect(sendNameBtn).toBeDisabled();
 
-    // Bottom input area is now visible
-    const chatInput = screen.getByPlaceholderText(
+    act(() => {
+      fireEvent.change(nameInput, { target: { value: "Aman" } });
+    });
+    expect(sendNameBtn).not.toBeDisabled();
+    act(() => {
+      fireEvent.click(sendNameBtn);
+    });
+    act(() => {
+      vi.advanceTimersByTime(600);
+    });
+
+    // Step 2: Bot asks for number
+    expect(screen.getByText(/Please provide your contact number\./i)).toBeInTheDocument();
+    const phoneInput = screen.getByPlaceholderText(
       "Enter 10-digit mobile number",
     ) as HTMLInputElement;
-    const sendBtn = screen.getByRole("button", { name: /send number/i });
-    expect(chatInput).toBeInTheDocument();
-    expect(sendBtn).toBeDisabled();
+    const sendPhoneBtn = screen.getByRole("button", { name: /send number/i });
+    expect(phoneInput).toBeInTheDocument();
+    expect(sendPhoneBtn).toBeDisabled();
 
     // Reject letters
     act(() => {
-      fireEvent.change(chatInput, { target: { value: "abc98xyz" } });
+      fireEvent.change(phoneInput, { target: { value: "abc98xyz" } });
     });
-    expect(chatInput.value).toBe("98");
-    expect(sendBtn).toBeDisabled();
+    expect(phoneInput.value).toBe("98");
+    expect(sendPhoneBtn).toBeDisabled();
 
     // Reject leading 0
     act(() => {
-      fireEvent.change(chatInput, { target: { value: "0" } });
+      fireEvent.change(phoneInput, { target: { value: "0" } });
     });
-    expect(chatInput.value).toBe("");
-    expect(sendBtn).toBeDisabled();
+    expect(phoneInput.value).toBe("");
+    expect(sendPhoneBtn).toBeDisabled();
 
     // Limit to 10 digits
     act(() => {
-      fireEvent.change(chatInput, { target: { value: "9876543210999" } });
+      fireEvent.change(phoneInput, { target: { value: "9876543210999" } });
     });
-    expect(chatInput.value).toBe("9876543210");
-    expect(sendBtn).not.toBeDisabled();
+    expect(phoneInput.value).toBe("9876543210");
+    expect(sendPhoneBtn).not.toBeDisabled();
 
     // Submit number
     act(() => {
-      fireEvent.click(sendBtn);
+      fireEvent.click(sendPhoneBtn);
     });
 
     // User message posted
@@ -295,11 +306,30 @@ describe("ChatbotWidget Component & Speed Dial Roll-up Flow", () => {
       vi.advanceTimersByTime(600);
     });
 
+    // Step 3: Bot asks for email with Skip button
+    expect(
+      screen.getByText(/Please provide your email id for course curriculum and updates/i),
+    ).toBeInTheDocument();
+    const emailInput = screen.getByPlaceholderText("Enter your email ID...") as HTMLInputElement;
+    const skipEmailBtn = screen.getByRole("button", { name: /skip email/i });
+    expect(emailInput).toBeInTheDocument();
+    expect(skipEmailBtn).toBeInTheDocument();
+
+    // Click Skip email
+    act(() => {
+      fireEvent.click(skipEmailBtn);
+    });
+    expect(screen.getByText("Skip")).toBeInTheDocument();
+
+    act(() => {
+      vi.advanceTimersByTime(600);
+    });
+
+    // Step 4: Bot asks for qualification
     expect(screen.getByText("Please share your highest qualification.")).toBeInTheDocument();
     expect(screen.getByText("Graduate or above")).toBeInTheDocument();
     expect(screen.getByText("Pursuing Graduation")).toBeInTheDocument();
     expect(screen.getByText("Class 12 or below")).toBeInTheDocument();
-    expect(screen.queryByPlaceholderText("Enter 10-digit mobile number")).not.toBeInTheDocument();
 
     // Select qualification option
     const qualOption = screen.getByText("Pursuing Graduation");
@@ -486,39 +516,22 @@ describe("ChatbotWidget Component & Speed Dial Roll-up Flow", () => {
     // User message posted
     expect(screen.getByText("+91 9876543210")).toBeInTheDocument();
 
-    // Bot asks for qualification
-    act(() => {
-      vi.advanceTimersByTime(600);
-    });
-
-    expect(screen.getByText("Please share your highest qualification.")).toBeInTheDocument();
-    expect(screen.getByText("Graduate or above")).toBeInTheDocument();
-    expect(screen.getByText("Pursuing Graduation")).toBeInTheDocument();
-    expect(screen.getByText("Class 12 or below")).toBeInTheDocument();
-    expect(screen.queryByPlaceholderText("Enter 10-digit mobile number")).not.toBeInTheDocument();
-
-    // User selects "Graduate or above"
-    const gradOption = screen.getByText("Graduate or above");
-    act(() => {
-      fireEvent.click(gradOption);
-    });
-
-    // Bot asks for email ID: "Please provide your email id for the live chat agent to assist you further. ✍️"
+    // Step 3: Bot asks for email with Skip button
     act(() => {
       vi.advanceTimersByTime(600);
     });
 
     expect(
-      screen.getByText(
-        "Please provide your email id for the live chat agent to assist you further. ✍️",
-      ),
+      screen.getByText(/Please provide your email id for course curriculum and updates\. ✍️/i),
     ).toBeInTheDocument();
 
-    // Email input field and Send button appear
+    // Email input field, Skip button, and Send button appear
     const emailInput = screen.getByPlaceholderText("Enter your email ID...") as HTMLInputElement;
     const sendEmailBtn = screen.getByRole("button", { name: /send email/i });
+    const skipEmailBtn = screen.getByRole("button", { name: /skip email/i });
     expect(emailInput).toBeInTheDocument();
     expect(sendEmailBtn).toBeDisabled();
+    expect(skipEmailBtn).toBeInTheDocument();
 
     // Rule: empty or whitespace keeps send button disabled
     act(() => {
@@ -551,6 +564,24 @@ describe("ChatbotWidget Component & Speed Dial Roll-up Flow", () => {
 
     // Email message posted by user
     expect(screen.getByText("rahulsharma@gmail.com")).toBeInTheDocument();
+
+    // Step 4: Bot asks for qualification
+    await act(async () => {
+      vi.advanceTimersByTime(600);
+      await Promise.resolve();
+    });
+
+    expect(screen.getByText("Please share your highest qualification.")).toBeInTheDocument();
+    expect(screen.getByText("Graduate or above")).toBeInTheDocument();
+    expect(screen.getByText("Pursuing Graduation")).toBeInTheDocument();
+    expect(screen.getByText("Class 12 or below")).toBeInTheDocument();
+    expect(screen.queryByPlaceholderText("Enter 10-digit mobile number")).not.toBeInTheDocument();
+
+    // User selects "Graduate or above"
+    const gradOption = screen.getByText("Graduate or above");
+    await act(async () => {
+      fireEvent.click(gradOption);
+    });
 
     // Bot responds: "Please wait while I connect you with our Admission Counselor!"
     await act(async () => {
@@ -748,16 +779,38 @@ describe("ChatbotWidget Component & Speed Dial Roll-up Flow", () => {
         vi.advanceTimersByTime(600);
       });
 
-      // User enters phone
+      // 3. User enters name
+      const nameInput = screen.getByPlaceholderText("Enter your name...") as HTMLInputElement;
+      const sendNameBtn = screen.getByRole("button", { name: /send name/i });
+      act(() => {
+        fireEvent.change(nameInput, { target: { value: "Aman" } });
+      });
+      act(() => {
+        fireEvent.click(sendNameBtn);
+      });
+      act(() => {
+        vi.advanceTimersByTime(600);
+      });
+
+      // 4. User enters phone
       const phoneInput = screen.getByPlaceholderText(
         "Enter 10-digit mobile number",
       ) as HTMLInputElement;
-      const sendBtn = screen.getByRole("button", { name: /send number/i });
+      const sendPhoneBtn = screen.getByRole("button", { name: /send number/i });
       act(() => {
         fireEvent.change(phoneInput, { target: { value: "9876543210" } });
       });
       act(() => {
-        fireEvent.click(sendBtn);
+        fireEvent.click(sendPhoneBtn);
+      });
+      act(() => {
+        vi.advanceTimersByTime(600);
+      });
+
+      // 5. User clicks skip on email
+      const skipEmailBtn = screen.getByRole("button", { name: /skip email/i });
+      act(() => {
+        fireEvent.click(skipEmailBtn);
       });
       act(() => {
         vi.advanceTimersByTime(600);
@@ -846,6 +899,100 @@ describe("ChatbotWidget Component & Speed Dial Roll-up Flow", () => {
           /We have noted your qualification \(Pursuing Graduation\)\. Our senior career counselor will connect with you shortly/i,
         ),
       ).toBeInTheDocument();
+    });
+
+    it("submits enquiry with provided email when user enters email instead of skipping", async () => {
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: async () => ({ success: true }),
+      });
+      vi.stubGlobal("fetch", fetchMock);
+
+      render(<ChatbotWidget />);
+      const launcher = screen.getByRole("button", { name: /chatbot options/i });
+      act(() => {
+        fireEvent.click(launcher);
+      });
+      const chatBtn = screen.getByRole("button", { name: /chat with us/i });
+      act(() => {
+        fireEvent.click(chatBtn);
+      });
+      act(() => {
+        vi.advanceTimersByTime(1400);
+      });
+
+      // 1. User clicks 'Wish to talk to counselor'
+      const exploringBtn = screen.getByText("I am just exploring");
+      act(() => {
+        fireEvent.click(exploringBtn);
+      });
+      act(() => {
+        vi.advanceTimersByTime(600);
+      });
+
+      const counselorBtn = screen.getByText("Wish to talk to counselor");
+      act(() => {
+        fireEvent.click(counselorBtn);
+      });
+      act(() => {
+        vi.advanceTimersByTime(600);
+      });
+
+      // 2. Enters name
+      const nameInput = screen.getByPlaceholderText("Enter your name...") as HTMLInputElement;
+      const sendNameBtn = screen.getByRole("button", { name: /send name/i });
+      act(() => {
+        fireEvent.change(nameInput, { target: { value: "Rohan" } });
+        fireEvent.click(sendNameBtn);
+      });
+      act(() => {
+        vi.advanceTimersByTime(600);
+      });
+
+      // 3. Enters phone
+      const phoneInput = screen.getByPlaceholderText(
+        "Enter 10-digit mobile number",
+      ) as HTMLInputElement;
+      const sendPhoneBtn = screen.getByRole("button", { name: /send number/i });
+      act(() => {
+        fireEvent.change(phoneInput, { target: { value: "9876543210" } });
+        fireEvent.click(sendPhoneBtn);
+      });
+      act(() => {
+        vi.advanceTimersByTime(600);
+      });
+
+      // 4. Enters email instead of skipping
+      const emailInput = screen.getByPlaceholderText("Enter your email ID...") as HTMLInputElement;
+      const sendEmailBtn = screen.getByRole("button", { name: /send email/i });
+      act(() => {
+        fireEvent.change(emailInput, { target: { value: "rohan@example.com" } });
+      });
+      await act(async () => {
+        fireEvent.click(sendEmailBtn);
+      });
+      act(() => {
+        vi.advanceTimersByTime(600);
+      });
+
+      // 5. Selects qualification
+      const qualOption = screen.getByText("Pursuing Graduation");
+      await act(async () => {
+        fireEvent.click(qualOption);
+      });
+      await act(async () => {
+        vi.advanceTimersByTime(600);
+        await Promise.resolve();
+      });
+
+      expect(fetchMock).toHaveBeenCalled();
+      const lastCall = fetchMock.mock.calls[fetchMock.mock.calls.length - 1];
+      expect(lastCall).toBeDefined();
+      const body = JSON.parse(lastCall![1].body);
+      expect(body.email).toBe("rohan@example.com");
+      expect(body.student_name).toBe("Rohan");
+      expect(body.phone_number).toBe("9876543210");
     });
   });
 });

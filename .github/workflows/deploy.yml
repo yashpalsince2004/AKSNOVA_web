@@ -35,6 +35,8 @@ jobs:
         env:
           ASTRO_SITE: https://yashpalsince2004.github.io
           ASTRO_BASE: /AKSNOVA_web
+          PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL || 'https://aehbrvlqyavkfgmkadtl.supabase.co' }}
+          PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_r2sRtssLVNSAzT9eOvvn9A_V-84vPxR' }}
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3

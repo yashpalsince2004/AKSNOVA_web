@@ -17,6 +17,7 @@ export function loadSavedLeadData(): SavedLeadData | null {
       name: typeof parsed.name === "string" ? parsed.name : undefined,
       qualification: typeof parsed.qualification === "string" ? parsed.qualification : undefined,
       email: typeof parsed.email === "string" ? parsed.email : undefined,
+      emailSkipped: typeof parsed.emailSkipped === "boolean" ? parsed.emailSkipped : undefined,
     };
   } catch {
     return null;

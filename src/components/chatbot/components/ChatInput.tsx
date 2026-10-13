@@ -18,6 +18,7 @@ export interface ChatInputProps {
   emailInput: string;
   onEmailChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onEmailSubmit: (e: React.SyntheticEvent) => void;
+  onEmailSkip?: (() => void) | undefined;
   isEmailValid: boolean;
   // Text
   textInput: string;
@@ -39,6 +40,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   emailInput,
   onEmailChange,
   onEmailSubmit,
+  onEmailSkip,
   isEmailValid,
   textInput,
   onTextChange,
@@ -147,6 +149,17 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             className="flex-1 bg-transparent px-2.5 py-1 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
             autoFocus
           />
+          {onEmailSkip && (
+            <button
+              type="button"
+              onClick={onEmailSkip}
+              id="chat-email-skip-button"
+              aria-label="Skip email"
+              className="rounded-lg border border-border/70 bg-secondary px-2.5 py-1 text-xs font-semibold text-muted-foreground transition-all hover:bg-secondary/80 hover:text-foreground active:scale-95 cursor-pointer shadow-2xs"
+            >
+              Skip
+            </button>
+          )}
           <button
             type="submit"
             disabled={!isEmailValid}
@@ -161,7 +174,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           </button>
         </div>
         <div className="mt-1 flex items-center justify-between px-1 text-[10px] text-muted-foreground">
-          <span>Valid email format required (e.g. name@example.com)</span>
+          <span>Optional — you can tap Skip or enter your email</span>
           {emailInput.length > 0 && (
             <span
               className={

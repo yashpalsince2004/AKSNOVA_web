@@ -52,6 +52,7 @@ export default function ChatbotWidget({
     handleChatPhoneSubmit,
     handleChatEmailChange,
     handleChatEmailSubmit,
+    handleChatEmailSkip,
     handleChatTextSubmit,
     handleSelectOption,
   } = useChatbot({
@@ -118,6 +119,7 @@ export default function ChatbotWidget({
             emailInput={chatEmailInput}
             onEmailChange={handleChatEmailChange}
             onEmailSubmit={handleChatEmailSubmit}
+            onEmailSkip={handleChatEmailSkip}
             isEmailValid={isCurrentChatEmailValid}
             textInput={chatTextInput}
             onTextChange={setChatTextInput}

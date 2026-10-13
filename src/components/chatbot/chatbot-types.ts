@@ -20,6 +20,7 @@ export interface SavedLeadData {
   name?: string | undefined;
   qualification?: string | undefined;
   email?: string | null | undefined;
+  emailSkipped?: boolean | undefined;
 }
 
 export const STORAGE_KEY_SEEN = "aksnova_chat_welcome_seen_v1";
