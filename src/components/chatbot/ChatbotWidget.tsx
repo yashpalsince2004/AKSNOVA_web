@@ -8,6 +8,7 @@ import {
   DOMAIN_DETAILS,
 } from "@/data/chatbot-courses";
 import { withBase } from "@/lib/paths";
+import { submitStudentEnquiry } from "@/lib/lead-submission";
 
 const QUALIFICATION_OPTIONS = ["Graduate or above", "Pursuing Graduation", "Class 12 or below"];
 
@@ -62,6 +63,8 @@ export default function ChatbotWidget({
   const isSequenceRunningRef = useRef(false);
   const userNameRef = useRef("");
   const userEmailRef = useRef("");
+  const userPhoneRef = useRef("");
+  const userQualificationRef = useRef("");
 
   // Default initial questions requested by the user
   const activeInitialQuestions = useMemo(
@@ -257,6 +260,60 @@ export default function ChatbotWidget({
       // ignore storage error
     }
 
+    if (QUALIFICATION_OPTIONS.includes(optionText)) {
+      userQualificationRef.current = optionText;
+    }
+
+    const isQualificationLead =
+      optionText === "Pursuing Graduation" || optionText === "Class 12 or below";
+    const isRetry =
+      optionText === "Retry Request" || optionText === "Retry connecting to counselor";
+
+    if (isQualificationLead || isRetry) {
+      const targetQual = isRetry
+        ? userQualificationRef.current || "Pursuing Graduation"
+        : optionText;
+      const targetPhone = userPhoneRef.current || chatPhoneNumber;
+      const targetName = userNameRef.current || userName || "Prospective Student";
+      const targetEmail =
+        isRetry && targetQual === "Graduate or above" ? userEmailRef.current || null : null;
+
+      if (targetPhone) {
+        submitStudentEnquiry({
+          student_name: targetName,
+          phone_number: targetPhone,
+          qualification: targetQual,
+          email: targetEmail,
+        })
+          .then((res) => {
+            if (!res.success) {
+              setMessages((prev) => [
+                ...prev,
+                {
+                  id: `bot-err-${Date.now()}`,
+                  sender: "bot",
+                  text: `We could not record your request at this moment (${res.error || "network error"}). Please tap "Retry Request" to try again.`,
+                  timestamp: getTimestamp(),
+                },
+              ]);
+              setQuickOptions(["Retry Request", "Explore Courses", "Explore other domains"]);
+            }
+          })
+          .catch(() => {
+            setMessages((prev) => [
+              ...prev,
+              {
+                id: `bot-err-${Date.now()}`,
+                sender: "bot",
+                text: "Network error occurred while recording your request. Please tap Retry Request below.",
+                timestamp: getTimestamp(),
+              },
+            ]);
+            setQuickOptions(["Retry Request", "Explore Courses", "Explore other domains"]);
+          });
+      }
+    }
+
     // 2. Compute the bot's contextual response after short typing delay
     if (timerRef.current) clearTimeout(timerRef.current);
 
@@ -265,7 +322,7 @@ export default function ChatbotWidget({
 
       let botReplyText = "";
       let nextOptions: string[] | null = null;
-      let nextInputMode: "name" | "phone" | "email" | null = null;
+      let nextInputMode: "name" | "phone" | "email" | "text" | null = null;
 
       if (optionText.toLowerCase() === "i am just exploring") {
         // Step 2 from prompt:
@@ -314,11 +371,19 @@ export default function ChatbotWidget({
           "Please provide your email id for the live chat agent to assist you further. ✍️";
         nextOptions = null;
         nextInputMode = "email";
-      } else if (optionText === "Pursuing Graduation" || optionText === "Class 12 or below") {
+      } else if (
+        isQualificationLead ||
+        (isRetry && userQualificationRef.current !== "Graduate or above")
+      ) {
+        const effectiveQual = userQualificationRef.current || optionText;
         const currentName = userNameRef.current || userName;
         const greeting = currentName ? `Thank you, ${currentName}!` : "Thank you!";
-        botReplyText = `${greeting} We have noted your qualification (${optionText}). Our senior career counselor will connect with you shortly between 9 AM to 9 PM to recommend programs suited to your background.`;
+        botReplyText = `${greeting} We have noted your qualification (${effectiveQual}). Our senior career counselor will connect with you shortly between 9 AM to 9 PM to recommend programs suited to your background.`;
         nextOptions = ["Explore Courses", "Explore other domains"];
+      } else if (isRetry && userQualificationRef.current === "Graduate or above") {
+        botReplyText = "Please wait while I connect you with our Admission Counselor!";
+        nextInputMode = "text";
+        nextOptions = null;
       } else if (optionText === "Explore Courses") {
         botReplyText =
           "You can check out our complete course catalog with detailed modules, projects, and roadmaps in our Courses section!";
@@ -484,6 +549,7 @@ export default function ChatbotWidget({
     if (!isChatPhoneValid) return;
 
     const submittedPhone = chatPhoneNumber;
+    userPhoneRef.current = submittedPhone;
     const userMsg: ChatMessage = {
       id: `user-${Date.now()}`,
       sender: "user",
@@ -542,6 +608,53 @@ export default function ChatbotWidget({
     const submittedEmail = chatEmailInput.trim().toLowerCase();
     setUserEmail(submittedEmail);
     userEmailRef.current = submittedEmail;
+
+    const targetName = userNameRef.current || userName || "Prospective Student";
+    const targetPhone = userPhoneRef.current || chatPhoneNumber;
+    const targetQual = userQualificationRef.current || "Graduate or above";
+
+    if (targetPhone) {
+      submitStudentEnquiry({
+        student_name: targetName,
+        phone_number: targetPhone,
+        qualification: targetQual,
+        email: submittedEmail,
+      })
+        .then((res) => {
+          if (!res.success) {
+            setMessages((prev) => [
+              ...prev,
+              {
+                id: `bot-err-${Date.now()}`,
+                sender: "bot",
+                text: `We could not record your details with the counselor server (${res.error || "server unavailable"}). Would you like to retry?`,
+                timestamp: getTimestamp(),
+              },
+            ]);
+            setQuickOptions([
+              "Retry connecting to counselor",
+              "Explore Courses",
+              "Explore other domains",
+            ]);
+          }
+        })
+        .catch(() => {
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: `bot-err-${Date.now()}`,
+              sender: "bot",
+              text: "Network error occurred while connecting to Admission Counselor. Please tap Retry below.",
+              timestamp: getTimestamp(),
+            },
+          ]);
+          setQuickOptions([
+            "Retry connecting to counselor",
+            "Explore Courses",
+            "Explore other domains",
+          ]);
+        });
+    }
 
     const userMsg: ChatMessage = {
       id: `user-${Date.now()}`,

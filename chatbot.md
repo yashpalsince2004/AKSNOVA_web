@@ -7,6 +7,7 @@ This document provides a comprehensive breakdown of the **AKSNOVA Interactive Ca
 ## 1. Overview & Purpose
 
 The **AKSNOVA Chatbot Widget** is an interactive, guided career advising assistant embedded into the public website. Its core purposes are:
+
 1. **Interactive Course Discovery**: Guide prospective students through AKSNOVA's professional diploma programs and advanced IT certifications based on their learning goals and background.
 2. **Lead Generation & Counselor Routing**: Collect validated contact details (Name, 10-digit Mobile Number, Email, Highest Educational Qualification) to connect students with live academic counselors.
 3. **Instant Callback Service**: Offer a dedicated "Call Me Back" modal with guaranteed callbacks between 9:00 AM and 9:00 PM and direct 24/7 hotline numbers.
@@ -30,6 +31,7 @@ src/
 ```
 
 ### Component Integration
+
 - **Layout Host**: In `src/layouts/BaseLayout.astro`, rendered as `<ChatbotWidget client:idle />`. Hydrated with `client:idle` to optimize initial page load performance and preserve the static-first architecture.
 
 ---
@@ -38,19 +40,19 @@ src/
 
 ### 3.1 Key State Variables
 
-| State | Type | Description |
-|---|---|---|
-| `isOpen` | `boolean` | Controls visibility of the main chatbot window. |
-| `isSpeedDialOpen` | `boolean` | Controls the expanded circular speed dial launcher. |
-| `isCallbackModalOpen` | `boolean` | Toggles the dedicated "Request a call back" modal. |
-| `messages` | `ChatMessage[]` | Chronological list of chat bubbles (`bot` or `user`). |
-| `quickOptions` | `string[] \| null` | Pill/button options available for user selection. |
-| `isTyping` | `boolean` | Controls animated typing indicator and disables inputs during delay. |
-| `chatInputMode` | `"name" \| "phone" \| "email" \| "text" \| null` | Controls which input form is rendered in the bottom tray. |
-| `userName` | `string` | Stores collected user full name. |
-| `userEmail` | `string` | Stores collected user email address. |
-| `phoneNumber` / `chatPhoneNumber` | `string` | Stores collected 10-digit contact numbers. |
-| `hasUnread` | `boolean` | Displays animated red pulse notification until first opened. |
+| State                             | Type                                             | Description                                                          |
+| --------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------- |
+| `isOpen`                          | `boolean`                                        | Controls visibility of the main chatbot window.                      |
+| `isSpeedDialOpen`                 | `boolean`                                        | Controls the expanded circular speed dial launcher.                  |
+| `isCallbackModalOpen`             | `boolean`                                        | Toggles the dedicated "Request a call back" modal.                   |
+| `messages`                        | `ChatMessage[]`                                  | Chronological list of chat bubbles (`bot` or `user`).                |
+| `quickOptions`                    | `string[] \| null`                               | Pill/button options available for user selection.                    |
+| `isTyping`                        | `boolean`                                        | Controls animated typing indicator and disables inputs during delay. |
+| `chatInputMode`                   | `"name" \| "phone" \| "email" \| "text" \| null` | Controls which input form is rendered in the bottom tray.            |
+| `userName`                        | `string`                                         | Stores collected user full name.                                     |
+| `userEmail`                       | `string`                                         | Stores collected user email address.                                 |
+| `phoneNumber` / `chatPhoneNumber` | `string`                                         | Stores collected 10-digit contact numbers.                           |
+| `hasUnread`                       | `boolean`                                        | Displays animated red pulse notification until first opened.         |
 
 ### 3.2 Storage Keys (`sessionStorage`)
 
@@ -104,15 +106,17 @@ flowchart TD
 ## 5. Detailed Conversation Branches & Responses Generated
 
 ### 5.1 Welcome Sequence
+
 When a user clicks "Chat with us" for the first time:
+
 1. **Message 1 (Immediate)**:
-   > "Hey! Welcome to AKSNOVA!  
-   >  
+   > "Hey! Welcome to AKSNOVA!
+   >
    > Ab Aage Ki Socho 🤔💭 and start exploring."
 2. **Typing Indicator**: Runs for 1,400ms (`AKSNOVA is typing...`).
 3. **Message 2 (After 1.4s)**:
-   > "We have a wide range of programs for you across Data Science, Full Stack Development, Cloud Computing, Cyber Security, and Advanced IT Certifications.  
-   >  
+   > "We have a wide range of programs for you across Data Science, Full Stack Development, Cloud Computing, Cyber Security, and Advanced IT Certifications.
+   >
    > Are you ready to start upskilling?"
 4. **Suggested Options Displayed**:
    - `I am looking for career growth/transition`
@@ -140,6 +144,7 @@ When a user clicks "Chat with us" for the first time:
      - `Class 12 or below`
 
 #### Outcome 1: "Graduate or above"
+
 - **Bot replies**:
   > "Please provide your email id for the live chat agent to assist you further. ✍️"
 - **Input Tray**: Email input field with live validation formatting.
@@ -152,6 +157,7 @@ When a user clicks "Chat with us" for the first time:
     > "Thank you for your message! Our Admission Counselor has received your note and will reply shortly."
 
 #### Outcome 2: "Pursuing Graduation" or "Class 12 or below"
+
 - **Bot replies**:
   > "Thank you, {Name}! We have noted your qualification ({Qualification}). Our senior career counselor will connect with you shortly between 9 AM to 9 PM to recommend programs suited to your background."
 - **Next Options**:
@@ -177,10 +183,12 @@ When a user clicks "Chat with us" for the first time:
    - `Graphic Design & UI/UX`
 
 #### Selecting a Domain
+
 When any domain is selected (e.g. `Data Science & Analytics`), the bot fetches the curated curriculum summary from `DOMAIN_DETAILS`:
+
 - **Bot replies**:
-  > "{Domain Summary}  
-  >  
+  > "{Domain Summary}
+  >
   > Would you like to review full curriculum details or connect with our career advisor?"
 - **Next Options**:
   - `Explore Courses`
@@ -200,11 +208,12 @@ When any domain is selected (e.g. `Data Science & Analytics`), the bot fetches t
    - `Wish to talk to counselor`
 
 #### Subsequent actions:
-- **`Not sure of a specific program`** $\rightarrow$ Bot replies *"Please select domain of your interest!"* and displays the 9 domain buttons.
+
+- **`Not sure of a specific program`** $\rightarrow$ Bot replies _"Please select domain of your interest!"_ and displays the 9 domain buttons.
 - **`I'm just looking around`** $\rightarrow$ Bot replies:
   > "Take your time! You can explore our job-ready diploma courses, student placement records, and free learning roadmaps whenever you're ready."  
-  Presents options: `Explore Courses`, `Wish to talk to counselor`, `Explore other domains`.
-- **`Wish to talk to counselor`** $\rightarrow$ Bot replies *"Please provide your 10-digit mobile number so our counselor will connect with you."* and opens the phone input form.
+  > Presents options: `Explore Courses`, `Wish to talk to counselor`, `Explore other domains`.
+- **`Wish to talk to counselor`** $\rightarrow$ Bot replies _"Please provide your 10-digit mobile number so our counselor will connect with you."_ and opens the phone input form.
 
 ---
 
@@ -212,10 +221,10 @@ When any domain is selected (e.g. `Data Science & Analytics`), the bot fetches t
 
 - **`Explore Courses`**:
   > "You can check out our complete course catalog with detailed modules, projects, and roadmaps in our Courses section!"  
-  Options: `Wish to talk to counselor`, `Explore other domains`.
+  > Options: `Wish to talk to counselor`, `Explore other domains`.
 - **`Explore other domains`**:
   > "Please select domain of your interest!"  
-  Displays all 9 domain pills.
+  > Displays all 9 domain pills.
 
 ---
 
@@ -223,13 +232,13 @@ When any domain is selected (e.g. `Data Science & Analytics`), the bot fetches t
 
 The widget collects four primary types of prospective learner data:
 
-| Field | Source / Mode | Validation Rules | Sanitization / Handling |
-|---|---|---|---|
-| **Name** | Chat Name Input Tray | - Minimum 1 non-whitespace character.<br>- Send button disabled until typed. | Stored in React state & `userNameRef`. Trimmed of leading/trailing spaces. |
-| **Phone Number** | Chat Counselor Phone Input & Callback Modal | - Exact regex: `/^[1-9][0-9]{9}$/`.<br>- Only numeric digits permitted.<br>- Leading `0` automatically stripped.<br>- Fixed length limit of 10 digits. | Prefixed with `+91` in chat logs. Validates before submit button is enabled. |
-| **Email Address** | Chat Email Input Tray | - Regex: `/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/`.<br>- At least 2-character TLD required. | All whitespace automatically removed on keypress. Lowercased upon submission. |
-| **Qualification** | Chat Quick-Reply Pills | - Strict enum selection: `Graduate or above`, `Pursuing Graduation`, `Class 12 or below`. | Recorded directly in chat narrative. |
-| **Counselor Query** | Chat Free Text Tray | - Minimum 1 character.<br>- Send button enabled when non-empty. | Appended to conversation log for admission team follow-up. |
+| Field               | Source / Mode                               | Validation Rules                                                                                                                                       | Sanitization / Handling                                                       |
+| ------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| **Name**            | Chat Name Input Tray                        | - Minimum 1 non-whitespace character.<br>- Send button disabled until typed.                                                                           | Stored in React state & `userNameRef`. Trimmed of leading/trailing spaces.    |
+| **Phone Number**    | Chat Counselor Phone Input & Callback Modal | - Exact regex: `/^[1-9][0-9]{9}$/`.<br>- Only numeric digits permitted.<br>- Leading `0` automatically stripped.<br>- Fixed length limit of 10 digits. | Prefixed with `+91` in chat logs. Validates before submit button is enabled.  |
+| **Email Address**   | Chat Email Input Tray                       | - Regex: `/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/`.<br>- At least 2-character TLD required.                                                 | All whitespace automatically removed on keypress. Lowercased upon submission. |
+| **Qualification**   | Chat Quick-Reply Pills                      | - Strict enum selection: `Graduate or above`, `Pursuing Graduation`, `Class 12 or below`.                                                              | Recorded directly in chat narrative.                                          |
+| **Counselor Query** | Chat Free Text Tray                         | - Minimum 1 character.<br>- Send button enabled when non-empty.                                                                                        | Appended to conversation log for admission team follow-up.                    |
 
 ---
 
@@ -238,20 +247,23 @@ The widget collects four primary types of prospective learner data:
 In addition to guided chat, the widget includes a fast-path callback popup:
 
 ### UI Features
+
 - Accessible from speed dial by tapping **"Call me back"**.
 - Dimmed / dull dark backdrop (`bg-black/60 backdrop-blur-xs`).
 - Dismissible via corner close button (`✕`), background backdrop tap, or `Escape` key.
 - Phone number input matching the same strict 10-digit validation rules.
 - Lists 3 guarantee bullet points:
-  1. *Non-biased career guidance*
-  2. *Counselling based on your skills and preference*
-  3. *No repetitive calls, only as per convenience (9 AM to 9 PM)*
+  1. _Non-biased career guidance_
+  2. _Counselling based on your skills and preference_
+  3. _No repetitive calls, only as per convenience (9 AM to 9 PM)_
 - **Direct Support Helplines**:
   - 🇮🇳 Indian Nationals: `1800 210 2020` (`tel:18002102020`)
   - 🌐 Foreign Nationals: `+91 8045604032` (`tel:+918045604032`)
 
 ### Success Confirmation State
+
 Upon submitting a valid number:
+
 - Displays a custom emerald green **scalloped 3D rosette badge** with white checkmark.
 - Header: `"Thanks for update"`
 - Subtitle: `"Out team will reach out to you shortly"`
@@ -280,6 +292,7 @@ Upon submitting a valid number:
 ## 9. Automated Testing & Quality Assurance
 
 The widget is covered by **Vitest & React Testing Library** in `src/test/chatbot-widget.test.tsx`:
+
 - Initial rendering, floating trigger, and notification badge tests.
 - Two-step welcome sequence timing and typing indicator lifecycle.
 - Complete branching flows:
@@ -291,4 +304,34 @@ The widget is covered by **Vitest & React Testing Library** in `src/test/chatbot
 
 ---
 
-*Document created for AKSNOVA Edutech engineering and product teams.*
+## 10. Supabase Lead Integration Architecture
+
+### 10.1 Lead Collection & Storage
+
+Student enquiries collected through the chatbot are securely transmitted to the Supabase database table `public.student_enquiries`.
+
+- **Submission Endpoint**: Supabase Edge Function (`/functions/v1/submit-enquiry`).
+- **Client Service**: `src/lib/lead-submission.ts` handles client-side input validation, 10-digit Indian phone normalization (`^[1-9][0-9]{9}$`), in-session duplicate suppression, and error handling.
+- **Service-Side Security**: The Edge Function validates incoming payloads, checks allowed CORS origins, enforces rate limiting, and securely inserts rows into PostgreSQL using the server-side `SUPABASE_SERVICE_ROLE_KEY`.
+
+### 10.2 Qualification to Profession Normalization
+
+The three student-facing qualification choices are mapped to the database `profession` column:
+
+| Chatbot Selection     | Database Value (`profession`) |
+| --------------------- | ----------------------------- |
+| `Graduate or above`   | `Graduate or above`           |
+| `Pursuing Graduation` | `Undergraduate`               |
+| `Class 12 or below`   | `Class 12 or below`           |
+
+### 10.3 Missing Email Policy
+
+For branches where only name, mobile number, and educational qualification are collected (`Pursuing Graduation` and `Class 12 or below`), `email` is stored as `NULL` (via migration `20261013000000_make_email_nullable.sql`). Fake or placeholder addresses are strictly forbidden.
+
+### 10.4 Row-Level Security (RLS)
+
+RLS is strictly enforced on `public.student_enquiries`. Anonymous visitors have no `SELECT`, `UPDATE`, or `DELETE` access, preventing unauthorized inspection or enumeration of prospective students' personal data.
+
+---
+
+_Document created for AKSNOVA Edutech engineering and product teams._
