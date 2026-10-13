@@ -68,12 +68,26 @@ export function validateLeadPayload(payload: LeadPayload): { valid: boolean; err
   return { valid: true };
 }
 
+export interface SubmissionConfigOverrides {
+  supabaseUrl?: string;
+  anonKey?: string;
+  endpoint?: string;
+  bypassCache?: boolean;
+}
+
+/**
+ * Clears the in-memory cache of submitted leads (useful for testing and retries).
+ */
+export function clearSubmittedLeadsCache(): void {
+  submittedLeadsCache.clear();
+}
+
 /**
  * Dispatches the student enquiry to the Supabase Edge Function `submit-enquiry`.
  */
 export async function submitStudentEnquiry(
   payload: LeadPayload,
-  configOverrides?: { supabaseUrl?: string; anonKey?: string; endpoint?: string },
+  configOverrides?: SubmissionConfigOverrides,
 ): Promise<LeadSubmissionResult> {
   const validation = validateLeadPayload(payload);
   if (!validation.valid) {
@@ -90,11 +104,11 @@ export async function submitStudentEnquiry(
 
   // Duplicate guard: prevent re-submitting same student & phone in the active session
   const cacheKey = `${normalizedPhone}:${profession}`;
-  if (submittedLeadsCache.has(cacheKey)) {
+  if (!configOverrides?.bypassCache && submittedLeadsCache.has(cacheKey)) {
     return { success: true, duplicate: true };
   }
 
-  const supabaseUrl =
+  const rawSupabaseUrl =
     configOverrides?.supabaseUrl ||
     (typeof import.meta !== "undefined" && import.meta.env
       ? import.meta.env["PUBLIC_SUPABASE_URL"] || import.meta.env["SUPABASE_URL"]
@@ -104,7 +118,7 @@ export async function submitStudentEnquiry(
       : "") ||
     "";
 
-  const anonKey =
+  const rawAnonKey =
     configOverrides?.anonKey ||
     (typeof import.meta !== "undefined" && import.meta.env
       ? import.meta.env["PUBLIC_SUPABASE_ANON_KEY"] || import.meta.env["SUPABASE_ANON_KEY"]
@@ -114,6 +128,9 @@ export async function submitStudentEnquiry(
       : "") ||
     "";
 
+  const supabaseUrl = rawSupabaseUrl ? rawSupabaseUrl.trim().replace(/\/+$/, "") : "";
+  const anonKey = rawAnonKey ? rawAnonKey.trim() : "";
+
   if (!supabaseUrl || !anonKey) {
     return {
       success: false,
@@ -121,8 +138,7 @@ export async function submitStudentEnquiry(
     };
   }
 
-  const endpoint =
-    configOverrides?.endpoint || `${supabaseUrl.replace(/\/+$/, "")}/functions/v1/submit-enquiry`;
+  const endpoint = configOverrides?.endpoint || `${supabaseUrl}/functions/v1/submit-enquiry`;
 
   try {
     const controller = new AbortController();

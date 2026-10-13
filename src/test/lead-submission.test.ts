@@ -179,4 +179,127 @@ describe("Lead Submission Service", () => {
     expect(result.success).toBe(false);
     expect(result.error).toContain("Network error");
   });
+
+  it("submits Class 12 or below counselor lead with email null and verified payload", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ success: true }),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await submitStudentEnquiry(
+      {
+        student_name: "Prospective Student",
+        phone_number: "9876543210",
+        qualification: "Class 12 or below",
+        email: null,
+      },
+      {
+        supabaseUrl: "https://test.supabase.co/  ",
+        anonKey: "  test-anon-key  ",
+      },
+    );
+
+    expect(result.success).toBe(true);
+    expect(fetchMock).toHaveBeenCalledWith(
+      "https://test.supabase.co/functions/v1/submit-enquiry",
+      expect.objectContaining({
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: "test-anon-key",
+          Authorization: "Bearer test-anon-key",
+        },
+        body: JSON.stringify({
+          student_name: "Prospective Student",
+          phone_number: "9876543210",
+          profession: "Class 12 or below",
+          email: null,
+        }),
+      }),
+    );
+  });
+
+  it("bypasses duplicate cache when bypassCache is explicitly true (retry path)", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ success: true, duplicate: true }),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    // Initial call
+    await submitStudentEnquiry(
+      {
+        student_name: "Karan",
+        phone_number: "9765432109",
+        qualification: "Class 12 or below",
+      },
+      {
+        supabaseUrl: "https://test.supabase.co",
+        anonKey: "test-anon-key",
+      },
+    );
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+
+    // Retry call with bypassCache: true
+    await submitStudentEnquiry(
+      {
+        student_name: "Karan",
+        phone_number: "9765432109",
+        qualification: "Class 12 or below",
+      },
+      {
+        supabaseUrl: "https://test.supabase.co",
+        anonKey: "test-anon-key",
+        bypassCache: true,
+      },
+    );
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("does not cache failed requests so retry can reach network again", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 500,
+        json: async () => ({ error: "Internal server error" }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => ({ success: true }),
+      });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const first = await submitStudentEnquiry(
+      {
+        student_name: "Deepak",
+        phone_number: "9654321098",
+        qualification: "Pursuing Graduation",
+      },
+      {
+        supabaseUrl: "https://test.supabase.co",
+        anonKey: "test-anon-key",
+      },
+    );
+    expect(first.success).toBe(false);
+
+    // Subsequent call should reach network again since first failed
+    const second = await submitStudentEnquiry(
+      {
+        student_name: "Deepak",
+        phone_number: "9654321098",
+        qualification: "Pursuing Graduation",
+      },
+      {
+        supabaseUrl: "https://test.supabase.co",
+        anonKey: "test-anon-key",
+      },
+    );
+    expect(second.success).toBe(true);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
 });

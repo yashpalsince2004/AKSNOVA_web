@@ -2,6 +2,7 @@ import { describe, expect, it, beforeEach, vi, afterEach } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import ChatbotWidget from "@/components/chatbot/ChatbotWidget";
 import { DIPLOMA_PROGRAMS_DATA } from "@/data/chatbot-courses";
+import { clearSubmittedLeadsCache } from "@/lib/lead-submission";
 
 describe("Chatbot Course Data & Program Catalog (PDF Specification)", () => {
   it("contains all 8 Professional Diploma Programs from the PDF", () => {
@@ -39,6 +40,7 @@ describe("Chatbot Course Data & Program Catalog (PDF Specification)", () => {
 describe("ChatbotWidget Component & Speed Dial Roll-up Flow", () => {
   beforeEach(() => {
     sessionStorage.clear();
+    clearSubmittedLeadsCache();
     vi.useFakeTimers();
   });
 
@@ -218,7 +220,7 @@ describe("ChatbotWidget Component & Speed Dial Roll-up Flow", () => {
     expect(screen.getByText("Select an option above")).toBeInTheDocument();
   });
 
-  it("shows number input at bottom when 'Wish to talk to counselor' is selected and validates 10 digits without leading 0", () => {
+  it("shows number input at bottom when 'Wish to talk to counselor' is selected and validates 10 digits without leading 0", async () => {
     render(<ChatbotWidget />);
     openChatPanel();
 
@@ -301,11 +303,12 @@ describe("ChatbotWidget Component & Speed Dial Roll-up Flow", () => {
 
     // Select qualification option
     const qualOption = screen.getByText("Pursuing Graduation");
-    act(() => {
+    await act(async () => {
       fireEvent.click(qualOption);
     });
-    act(() => {
+    await act(async () => {
       vi.advanceTimersByTime(600);
+      await Promise.resolve();
     });
     expect(
       screen.getByText(
@@ -382,7 +385,7 @@ describe("ChatbotWidget Component & Speed Dial Roll-up Flow", () => {
     expect(screen.getByText("Data Science & Analytics")).toBeInTheDocument();
   });
 
-  it("handles 'I am looking for career growth/transition' flow with name input followed by validated 10-digit phone input", () => {
+  it("handles 'I am looking for career growth/transition' flow with name input followed by validated 10-digit phone input", async () => {
     render(<ChatbotWidget />);
     openChatPanel();
 
@@ -542,7 +545,7 @@ describe("ChatbotWidget Component & Speed Dial Roll-up Flow", () => {
     expect(sendEmailBtn).not.toBeDisabled();
 
     // Submit valid email
-    act(() => {
+    await act(async () => {
       fireEvent.click(sendEmailBtn);
     });
 
@@ -550,8 +553,9 @@ describe("ChatbotWidget Component & Speed Dial Roll-up Flow", () => {
     expect(screen.getByText("rahulsharma@gmail.com")).toBeInTheDocument();
 
     // Bot responds: "Please wait while I connect you with our Admission Counselor!"
-    act(() => {
+    await act(async () => {
       vi.advanceTimersByTime(600);
+      await Promise.resolve();
     });
 
     expect(
@@ -699,6 +703,149 @@ describe("ChatbotWidget Component & Speed Dial Roll-up Flow", () => {
       expect(
         screen.queryByRole("dialog", { name: /request a call back/i }),
       ).not.toBeInTheDocument();
+    });
+  });
+
+  describe("Counselor Enquiry Submission & Error Handling Flow", () => {
+    beforeEach(() => {
+      sessionStorage.clear();
+      clearSubmittedLeadsCache();
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    const setupCounselorPhoneFlow = async () => {
+      const launcher = screen.getByRole("button", { name: /chatbot options/i });
+      act(() => {
+        fireEvent.click(launcher);
+      });
+      const chatBtn = screen.getByRole("button", { name: /chat with us/i });
+      act(() => {
+        fireEvent.click(chatBtn);
+      });
+      act(() => {
+        vi.advanceTimersByTime(1400);
+      });
+
+      // 1. Click 'I am just exploring'
+      const exploringBtn = screen.getByText("I am just exploring");
+      act(() => {
+        fireEvent.click(exploringBtn);
+      });
+      act(() => {
+        vi.advanceTimersByTime(600);
+      });
+
+      // 2. User clicks 'Wish to talk to counselor'
+      const counselorBtn = screen.getByText("Wish to talk to counselor");
+      act(() => {
+        fireEvent.click(counselorBtn);
+      });
+      act(() => {
+        vi.advanceTimersByTime(600);
+      });
+
+      // User enters phone
+      const phoneInput = screen.getByPlaceholderText(
+        "Enter 10-digit mobile number",
+      ) as HTMLInputElement;
+      const sendBtn = screen.getByRole("button", { name: /send number/i });
+      act(() => {
+        fireEvent.change(phoneInput, { target: { value: "9876543210" } });
+      });
+      act(() => {
+        fireEvent.click(sendBtn);
+      });
+      act(() => {
+        vi.advanceTimersByTime(600);
+      });
+    };
+
+    it("submits 'Class 12 or below' counselor enquiry and shows confirmation upon success", async () => {
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: async () => ({ success: true }),
+      });
+      vi.stubGlobal("fetch", fetchMock);
+
+      render(<ChatbotWidget />);
+      await setupCounselorPhoneFlow();
+
+      const qualOption = screen.getByText("Class 12 or below");
+      await act(async () => {
+        fireEvent.click(qualOption);
+      });
+      await act(async () => {
+        vi.advanceTimersByTime(600);
+        await Promise.resolve();
+      });
+
+      expect(fetchMock).toHaveBeenCalled();
+      expect(
+        screen.getByText(
+          /We have noted your qualification \(Class 12 or below\)\. Our senior career counselor will connect with you shortly/i,
+        ),
+      ).toBeInTheDocument();
+      expect(screen.getByText("Explore Courses")).toBeInTheDocument();
+      expect(screen.getByText("Explore other domains")).toBeInTheDocument();
+    });
+
+    it("displays failure message and 'Retry Request' when server fails, without claiming success", async () => {
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 500,
+        json: async () => ({ error: "Database offline" }),
+      });
+      vi.stubGlobal("fetch", fetchMock);
+
+      render(<ChatbotWidget />);
+      await setupCounselorPhoneFlow();
+
+      const qualOption = screen.getByText("Pursuing Graduation");
+      await act(async () => {
+        fireEvent.click(qualOption);
+      });
+      await act(async () => {
+        vi.advanceTimersByTime(600);
+        await Promise.resolve();
+      });
+
+      // Must NOT show success message
+      expect(
+        screen.queryByText(/Our senior career counselor will connect with you shortly/i),
+      ).not.toBeInTheDocument();
+
+      // Must show error message and Retry Request option
+      expect(
+        screen.getByText(/We could not record your request at this moment \(Database offline\)/i),
+      ).toBeInTheDocument();
+      expect(screen.getByText("Retry Request")).toBeInTheDocument();
+
+      // When retrying with server back online
+      fetchMock.mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => ({ success: true }),
+      });
+
+      const retryBtn = screen.getByText("Retry Request");
+      await act(async () => {
+        fireEvent.click(retryBtn);
+      });
+      await act(async () => {
+        vi.advanceTimersByTime(600);
+        await Promise.resolve();
+      });
+
+      expect(
+        screen.getByText(
+          /We have noted your qualification \(Pursuing Graduation\)\. Our senior career counselor will connect with you shortly/i,
+        ),
+      ).toBeInTheDocument();
     });
   });
 });

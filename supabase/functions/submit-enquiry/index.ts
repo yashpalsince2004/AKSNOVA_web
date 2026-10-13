@@ -7,6 +7,8 @@ const ALLOWED_ORIGINS = [
   "http://localhost:4321",
   "http://localhost:5173",
   "http://127.0.0.1:8080",
+  "http://127.0.0.1:4321",
+  "http://127.0.0.1:5173",
 ];
 
 const VALID_PROFESSIONS = ["Graduate or above", "Undergraduate", "Class 12 or below"] as const;
@@ -117,9 +119,12 @@ serve(async (req: Request) => {
     }
 
     // 5. Connect to Supabase using server-side service role key
-    const supabaseUrl = Deno.env.get("SUPABASE_URL");
-    const supabaseServiceKey =
+    const rawSupabaseUrl = Deno.env.get("SUPABASE_URL");
+    const rawServiceKey =
       Deno.env.get("AKSNOVA_SERVICE_ROLE_KEY") || Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+
+    const supabaseUrl = rawSupabaseUrl ? rawSupabaseUrl.trim() : null;
+    const supabaseServiceKey = rawServiceKey ? rawServiceKey.trim() : null;
 
     if (!supabaseUrl || !supabaseServiceKey) {
       console.error("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in environment.");
