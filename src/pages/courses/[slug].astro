@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/common/Breadcrumbs.astro';
+import DataScienceCourseDetail from '@/components/courses/DataScienceCourseDetail.astro';
+import { dataScienceCourseData } from '@/data/courses/data-science';
 import { getCollection, render } from 'astro:content';
 import { generateCourseSchema, generateFaqSchema } from '@/lib/seo';
 import { withBase } from '@/lib/paths';
@@ -18,6 +20,7 @@ const { Content } = await render(course);
 
 const slug = course.id.replace(/\.(md|mdx)$/, '');
 const courseUrl = `/courses/${slug}`;
+const isDataScience = slug === 'data-science-ai';
 
 // Related items
 const allCourses = await getCollection('courses');
@@ -32,26 +35,34 @@ const relatedPosts = allPosts
 
 // Schemas
 const courseSchema = generateCourseSchema({
-  title: course.data.title,
-  description: course.data.description,
+  title: isDataScience ? dataScienceCourseData.title : course.data.title,
+  description: isDataScience ? dataScienceCourseData.overview : course.data.description,
   url: courseUrl,
-  duration: course.data.duration,
-  mode: course.data.mode,
+  duration: isDataScience ? dataScienceCourseData.highlights.duration : course.data.duration,
+  mode: isDataScience ? 'Interactive Live Sessions' : course.data.mode,
 });
 
-const faqSchema = course.data.faqs.length > 0 ? generateFaqSchema(course.data.faqs) : null;
+const activeFaqs = isDataScience ? dataScienceCourseData.faqs : course.data.faqs;
+const faqSchema = activeFaqs.length > 0 ? generateFaqSchema(activeFaqs) : null;
 ---
 
 <BaseLayout
-  title={course.data.seoTitle || `${course.data.title} Course | AKSNOVA Edutech`}
-  description={course.data.seoDescription || course.data.description}
+  title={isDataScience ? `${dataScienceCourseData.title} | AKSNOVA Edutech` : (course.data.seoTitle || `${course.data.title} Course | AKSNOVA Edutech`)}
+  description={isDataScience ? dataScienceCourseData.overview : (course.data.seoDescription || course.data.description)}
   canonical={courseUrl}
   ogImage={course.data.heroImage}
 >
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(courseSchema)} />
   {faqSchema && <script type="application/ld+json" slot="head" set:html={JSON.stringify(faqSchema)} />}
 
-  <div class="mx-auto max-w-7xl px-4 py-8 md:px-6">
+  {isDataScience ? (
+    <DataScienceCourseDetail
+      courseUrl={courseUrl}
+      relatedCourses={relatedCourses}
+      relatedPosts={relatedPosts}
+    />
+  ) : (
+    <div class="mx-auto max-w-7xl px-4 py-8 md:px-6">
     <Breadcrumbs
       items={[
         { name: 'Courses', url: '/courses' },
@@ -280,4 +291,5 @@ const faqSchema = course.data.faqs.length > 0 ? generateFaqSchema(course.data.fa
       </a>
     </div>
   </div>
+  )}
 </BaseLayout>

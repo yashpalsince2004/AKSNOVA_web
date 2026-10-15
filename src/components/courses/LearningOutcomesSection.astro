@@ -1,0 +1,85 @@
+---
+import type { LearningStage } from '@/data/courses/data-science';
+
+interface Props {
+  outcomes: string[];
+  disclaimer: string;
+  progression: LearningStage[];
+  progressionNote: string;
+}
+
+const { outcomes, disclaimer, progression, progressionNote } = Astro.props;
+---
+
+<section id="outcomes" class="scroll-mt-24 space-y-16">
+  <!-- 1. Expected Learning Outcomes -->
+  <div>
+    <div class="max-w-2xl mb-8">
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-brand/10 text-brand mb-3">
+        Competency Matrix
+      </span>
+      <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+        Expected Learning Outcomes
+      </h2>
+      <p class="mt-2 text-sm sm:text-base text-muted-foreground leading-relaxed">
+        Upon completing the full learning pathway and successfully practicing the relevant assignments, learners work toward the following capabilities:
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {outcomes.map((outcome, idx) => (
+        <div class="rounded-2xl border border-border bg-card p-5 flex items-start gap-3.5 transition-all hover:border-brand/30">
+          <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand text-xs font-bold mt-0.5">
+            {idx + 1}
+          </span>
+          <p class="text-xs sm:text-sm font-medium text-foreground leading-relaxed">
+            {outcome}
+          </p>
+        </div>
+      ))}
+    </div>
+
+    <!-- Official Outcomes Disclaimer -->
+    <div class="mt-6 rounded-xl border border-border/70 bg-secondary/40 p-4 text-xs text-muted-foreground">
+      <span class="font-bold text-foreground">Important Note:</span> {disclaimer}
+    </div>
+  </div>
+
+  <!-- 2. Overall Learning Progression (7 Stages) -->
+  <div id="learning-pathway" class="scroll-mt-24 pt-4 border-t border-border">
+    <div class="max-w-2xl mb-8">
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-brand/10 text-brand mb-3">
+        Pedagogical Architecture
+      </span>
+      <h3 class="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+        Overall Learning Progression
+      </h3>
+      <p class="mt-2 text-sm sm:text-base text-muted-foreground leading-relaxed">
+        {progressionNote}
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-3">
+      {progression.map((stage) => (
+        <div class="relative rounded-2xl border border-border bg-card p-4 flex flex-col justify-between transition-all hover:border-brand/40">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-brand">
+                STAGE {stage.stage}
+              </span>
+            </div>
+            <h4 class="text-xs sm:text-sm font-bold text-foreground mb-1 leading-snug">
+              {stage.title}
+            </h4>
+            <p class="text-[11px] font-semibold text-muted-foreground mb-2">
+              {stage.domain}
+            </p>
+          </div>
+          <p class="text-[11px] text-muted-foreground/80 leading-normal border-t border-border/50 pt-2">
+            {stage.description}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

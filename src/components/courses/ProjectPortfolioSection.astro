@@ -1,0 +1,86 @@
+---
+import type { PracticalProject } from '@/data/courses/data-science';
+
+interface Props {
+  projects: PracticalProject[];
+}
+
+const { projects } = Astro.props;
+---
+
+<section id="projects" class="scroll-mt-24">
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+    <div class="max-w-2xl">
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-brand/10 text-brand mb-3">
+        Applied Capstone Work
+      </span>
+      <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+        Practical Project Portfolio
+      </h2>
+      <p class="mt-2 text-sm sm:text-base text-muted-foreground leading-relaxed">
+        The program advertises more than 30 projects and case studies. The 7 core named projects below form a structured progression from descriptive analytics to predictive modeling.
+      </p>
+    </div>
+
+    <div class="shrink-0 flex items-center gap-2">
+      <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-secondary text-foreground text-xs font-bold">
+        <span class="h-2 w-2 rounded-full bg-brand"></span>
+        30+ Case Studies Advertised
+      </span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {projects.map((proj) => (
+      <div class="group rounded-2xl border border-border bg-card p-6 flex flex-col justify-between transition-all duration-300 hover:border-brand/40 hover:shadow-md">
+        <div>
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-brand/10 text-brand text-xs font-extrabold tracking-wider">
+              PROJECT 0{proj.number}
+            </span>
+            <span class="text-[11px] font-semibold text-muted-foreground truncate max-w-[180px]">
+              {proj.domain}
+            </span>
+          </div>
+
+          <h3 class="text-lg font-bold text-foreground group-hover:text-brand transition-colors mb-2.5">
+            {proj.title}
+          </h3>
+
+          <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-4">
+            {proj.description}
+          </p>
+
+          <div class="rounded-xl bg-secondary/50 border border-border/50 p-3 mb-4">
+            <span class="block text-[11px] font-bold text-foreground mb-1 uppercase tracking-wider">
+              Project Outcome
+            </span>
+            <p class="text-xs text-muted-foreground leading-relaxed">
+              {proj.outcome}
+            </p>
+          </div>
+        </div>
+
+        <div>
+          {proj.tools && proj.tools.length > 0 && (
+            <div class="mb-4 flex flex-wrap gap-1.5">
+              {proj.tools.map((t) => (
+                <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-secondary text-[11px] font-semibold text-foreground">
+                  {t}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <div class="pt-3 border-t border-border/60 flex flex-wrap gap-1.5">
+            {proj.skills.map((s) => (
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-background border border-border text-[11px] font-medium text-muted-foreground">
+                {s}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

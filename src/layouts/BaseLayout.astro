@@ -2,6 +2,7 @@
 import SEO from '@/components/common/SEO.astro';
 import Navbar from '@/components/common/Navbar.astro';
 import Footer from '@/components/common/Footer.astro';
+import CareerConnectForm from '@/components/common/CareerConnectForm.astro';
 import MobileCta from '@/components/common/MobileCta.astro';
 import ChatbotWidget from '@/components/chatbot/ChatbotWidget';
 import { withBase } from '@/lib/paths';
@@ -17,6 +18,7 @@ interface Props {
   modifiedTime?: string;
   author?: string;
   noindex?: boolean;
+  showConnectForm?: boolean;
 }
 
 const {
@@ -29,18 +31,19 @@ const {
   modifiedTime,
   author,
   noindex = false,
+  showConnectForm = true,
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="dark" suppress-hydration-warning>
+<html lang="en" suppress-hydration-warning>
   <head>
-    <!-- Prevent theme flickering before paint -->
+    <!-- Prevent theme flickering before paint: defaults to system theme -->
     <script is:inline>
       try {
-        const t = localStorage.getItem('theme') || 'dark';
-        const d = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-        document.documentElement.classList.toggle('dark', d);
+        const t = localStorage.getItem('theme');
+        const isDark = t === 'dark' || ((!t || t === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.classList.toggle('dark', isDark);
       } catch (e) {}
     </script>
 
@@ -68,6 +71,7 @@ const {
     <main class="flex-1">
       <slot />
     </main>
+    {showConnectForm && <CareerConnectForm />}
     <Footer />
     <MobileCta />
     <ChatbotWidget client:idle />

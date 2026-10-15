@@ -1,89 +1,132 @@
 ---
-// Theme Toggle with zero hydration cost - purely native inline JS
+// Single button theme toggle with zero hydration cost - purely native inline JS
 ---
 
-<div class="theme-toggle-group flex items-center rounded-full bg-secondary p-1">
-  <button
-    type="button"
-    data-theme-val="light"
-    aria-label="Light theme"
-    class="theme-btn rounded-full p-1.5 text-muted-foreground transition-colors hover:text-foreground"
+<button
+  type="button"
+  class="theme-toggle-btn inline-flex h-9 w-9 items-center justify-center rounded-full border border-border/70 bg-secondary/80 text-foreground transition-all duration-200 hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+  aria-label="Toggle theme"
+  title="Toggle theme"
+>
+  <!-- Sun icon (visible in dark mode, switches to light) -->
+  <svg
+    class="theme-sun-icon hidden h-4 w-4 transition-transform duration-200 hover:rotate-45 dark:block"
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
   >
-    <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="4"></circle>
-      <path d="M12 2v2"></path>
-      <path d="M12 20v2"></path>
-      <path d="m4.93 4.93 1.41 1.41"></path>
-      <path d="m17.66 17.66 1.41 1.41"></path>
-      <path d="M2 12h2"></path>
-      <path d="M20 12h2"></path>
-      <path d="m6.34 17.66-1.41 1.41"></path>
-      <path d="m19.07 4.93-1.41 1.41"></path>
-    </svg>
-  </button>
-  <button
-    type="button"
-    data-theme-val="system"
-    aria-label="System theme"
-    class="theme-btn rounded-full p-1.5 text-muted-foreground transition-colors hover:text-foreground"
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2"></path>
+    <path d="M12 20v2"></path>
+    <path d="m4.93 4.93 1.41 1.41"></path>
+    <path d="m17.66 17.66 1.41 1.41"></path>
+    <path d="M2 12h2"></path>
+    <path d="M20 12h2"></path>
+    <path d="m6.34 17.66-1.41 1.41"></path>
+    <path d="m19.07 4.93-1.41 1.41"></path>
+  </svg>
+
+  <!-- Moon icon (visible in light mode, switches to dark) -->
+  <svg
+    class="theme-moon-icon block h-4 w-4 transition-transform duration-200 hover:-rotate-12 dark:hidden"
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
   >
-    <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <rect width="20" height="14" x="2" y="3" rx="2"></rect>
-      <line x1="8" x2="16" y1="21" y2="21"></line>
-      <line x1="12" x2="12" y1="17" y2="21"></line>
-    </svg>
-  </button>
-  <button
-    type="button"
-    data-theme-val="dark"
-    aria-label="Dark theme"
-    class="theme-btn rounded-full p-1.5 text-muted-foreground transition-colors hover:text-foreground"
-  >
-    <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-    </svg>
-  </button>
-</div>
+    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+  </svg>
+</button>
 
 <script is:inline>
-  function updateThemeUI(t) {
-    document.querySelectorAll('.theme-toggle-group').forEach((group) => {
-      group.querySelectorAll('.theme-btn').forEach((btn) => {
-        const val = btn.getAttribute('data-theme-val');
-        if (val === t) {
-          btn.classList.add('bg-brand', 'text-primary-foreground');
-          btn.classList.remove('text-muted-foreground');
-        } else {
-          btn.classList.remove('bg-brand', 'text-primary-foreground');
-          btn.classList.add('text-muted-foreground');
+  (() => {
+    function getSystemPrefersDark() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+
+    function isDarkActive() {
+      return document.documentElement.classList.contains('dark');
+    }
+
+    function updateThemeUI() {
+      const isDark = isDarkActive();
+      document.querySelectorAll('.theme-toggle-btn').forEach((btn) => {
+        const nextAction = isDark ? 'Switch to light theme' : 'Switch to dark theme';
+        btn.setAttribute('aria-label', nextAction);
+        btn.setAttribute('title', nextAction);
+      });
+    }
+
+    function applyTheme(isDark, persist = true) {
+      document.documentElement.classList.toggle('dark', isDark);
+      if (persist) {
+        try {
+          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        } catch (_) {}
+      }
+      updateThemeUI();
+    }
+
+    function toggleTheme() {
+      const currentlyDark = isDarkActive();
+      applyTheme(!currentlyDark, true);
+    }
+
+    function initTheme() {
+      let saved = null;
+      try {
+        saved = localStorage.getItem('theme');
+      } catch (_) {}
+
+      const isDark = saved === 'dark' || ((!saved || saved === 'system') && getSystemPrefersDark());
+      document.documentElement.classList.toggle('dark', isDark);
+      updateThemeUI();
+    }
+
+    // Attach click listeners to all instances on the page
+    document.querySelectorAll('.theme-toggle-btn').forEach((btn) => {
+      if (!btn.dataset.themeBound) {
+        btn.dataset.themeBound = 'true';
+        btn.addEventListener('click', toggleTheme);
+      }
+    });
+
+    // Run initialization
+    initTheme();
+
+    // Register system & storage listeners once
+    if (!window.__themeToggleInitialized) {
+      window.__themeToggleInitialized = true;
+
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        let saved = null;
+        try {
+          saved = localStorage.getItem('theme');
+        } catch (_) {}
+        if (!saved || saved === 'system') {
+          applyTheme(e.matches, false);
         }
       });
-    });
-  }
 
-  function applyTheme(t) {
-    localStorage.setItem('theme', t);
-    const isDark = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    document.documentElement.classList.toggle('dark', isDark);
-    updateThemeUI(t);
-  }
-
-  // Initialize
-  const current = localStorage.getItem('theme') || 'dark';
-  updateThemeUI(current);
-
-  // Setup click listeners
-  document.querySelectorAll('.theme-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const targetTheme = btn.getAttribute('data-theme-val');
-      if (targetTheme) applyTheme(targetTheme);
-    });
-  });
-
-  // Listen for system changes if system theme selected
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-    if (localStorage.getItem('theme') === 'system') {
-      applyTheme('system');
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'theme') {
+          const isDark = e.newValue === 'dark' || ((!e.newValue || e.newValue === 'system') && getSystemPrefersDark());
+          applyTheme(isDark, false);
+        }
+      });
     }
-  });
+  })();
 </script>

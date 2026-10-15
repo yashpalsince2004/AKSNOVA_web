@@ -1,0 +1,52 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import DataScienceCourseDetail from '@/components/courses/DataScienceCourseDetail.astro';
+import { getCollection } from 'astro:content';
+import { generateCourseSchema, generateFaqSchema, generateBreadcrumbSchema } from '@/lib/seo';
+import { dataScienceCourseData } from '@/data/courses/data-science';
+
+const allCourses = await getCollection('courses');
+const relatedCourses = allCourses
+  .filter((c) => c.id !== 'data-science-ai.md' && c.data.category === 'IT')
+  .slice(0, 3);
+
+const allPosts = await getCollection('blog');
+const relatedPosts = allPosts
+  .filter((p) => p.data.relatedCourses.some((rc) => rc.toLowerCase().includes('data science') || rc.toLowerCase().includes('ai')))
+  .slice(0, 3);
+
+const courseUrl = '/courses/data-science';
+const data = dataScienceCourseData;
+
+const courseSchema = generateCourseSchema({
+  title: data.title,
+  description: data.overview,
+  url: courseUrl,
+  duration: data.highlights.duration,
+  mode: 'Interactive Live Training',
+});
+
+const faqSchema = generateFaqSchema(data.faqs);
+const breadcrumbSchema = generateBreadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Courses', url: '/courses' },
+  { name: data.title, url: courseUrl },
+]);
+---
+
+<BaseLayout
+  title={`${data.title} | AKSNOVA Edutech`}
+  description={data.overview}
+  canonical="/courses/data-science-ai"
+  ogImage="/images/courses/datascience.jpg"
+>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(courseSchema)} />
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <DataScienceCourseDetail
+    courseUrl="/courses/data-science-ai"
+    relatedCourses={relatedCourses}
+    relatedPosts={relatedPosts}
+  />
+</BaseLayout>

@@ -1,0 +1,101 @@
+---
+import { withBase } from '@/lib/paths';
+
+const navLinks = [
+  { label: 'Overview', href: '#overview' },
+  { label: 'Highlights', href: '#highlights' },
+  { label: 'Curriculum', href: '#curriculum' },
+  { label: 'Tech Stack', href: '#tech-stack' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'Outcomes', href: '#outcomes' },
+  { label: 'Career & Certs', href: '#career-support' },
+  { label: 'FAQs', href: '#faqs' },
+];
+---
+
+<nav
+  id="sticky-course-nav"
+  class="sticky top-16 z-30 w-full border-y border-border/80 bg-background/95 backdrop-blur-md transition-all py-2.5 hidden md:block"
+  aria-label="Course section navigation"
+>
+  <div class="mx-auto max-w-7xl px-4 md:px-6 flex items-center justify-between gap-4">
+    <!-- Links Strip -->
+    <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class="course-nav-link whitespace-nowrap rounded-full px-3.5 py-1.5 text-xs font-semibold text-muted-foreground transition-all hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+
+    <!-- Quick CTA -->
+    <div class="shrink-0 flex items-center gap-2.5">
+      <a
+        href={withBase('/contact')}
+        class="inline-flex h-8 items-center rounded-full bg-brand px-4 text-xs font-bold text-primary-foreground shadow-xs transition hover:bg-brand-deep active:scale-95"
+      >
+        Enquire Now
+      </a>
+    </div>
+  </div>
+</nav>
+
+<style>
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .course-nav-link.active {
+    background-color: var(--color-foreground, #000000);
+    color: var(--color-background, #ffffff);
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    const nav = document.getElementById('sticky-course-nav');
+    if (!nav) return;
+
+    const links = Array.from(nav.querySelectorAll('.course-nav-link'));
+    const sectionIds = links
+      .map((l) => l.getAttribute('href'))
+      .filter((h) => h && h.startsWith('#'))
+      .map((h) => h.slice(1));
+
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
+
+    function onScroll() {
+      const scrollPos = window.scrollY + 120;
+      let currentId = '';
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const sec = sections[i];
+        if (sec.offsetTop <= scrollPos) {
+          currentId = sec.id;
+          break;
+        }
+      }
+
+      links.forEach((l) => {
+        const target = l.getAttribute('href')?.slice(1);
+        if (target === currentId) {
+          l.classList.add('active');
+        } else {
+          l.classList.remove('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+</script>

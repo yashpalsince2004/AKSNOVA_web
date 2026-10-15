@@ -8,7 +8,7 @@ const steps = ['Upload', 'Review Profile', 'Preferences'];
 ---
 
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -24,8 +24,8 @@ const steps = ['Upload', 'Review Profile', 'Preferences'];
 
     <script is:inline>
       try {
-        const t = localStorage.getItem('theme') || 'dark';
-        const d = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        const t = localStorage.getItem('theme');
+        const d = t === 'dark' || ((!t || t === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches);
         document.documentElement.classList.toggle('dark', d);
       } catch (e) {}
     </script>

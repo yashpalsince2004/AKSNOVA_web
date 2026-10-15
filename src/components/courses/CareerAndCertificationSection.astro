@@ -1,0 +1,83 @@
+---
+interface Props {
+  careerComponents: string[];
+  careerDisclaimer: string;
+  certifications: string[];
+  certDisclaimer: string;
+}
+
+const { careerComponents, careerDisclaimer, certifications, certDisclaimer } = Astro.props;
+---
+
+<section id="career-support" class="scroll-mt-24 space-y-12">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+    <!-- Career Preparation Card -->
+    <div class="rounded-3xl border border-border bg-card p-6 sm:p-8 flex flex-col justify-between h-full">
+      <div>
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-brand/10 text-brand mb-3">
+          Professional Readiness
+        </span>
+        <h3 class="text-2xl font-bold tracking-tight text-foreground mb-3">
+          Career Preparation & Professional Development
+        </h3>
+        <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-6">
+          The program advertises dedicated career-support components designed to prepare learners for technical discussions and industry evaluations.
+        </p>
+
+        <ul class="space-y-3 mb-6">
+          {careerComponents.map((item) => (
+            <li class="flex items-start gap-3 text-xs sm:text-sm text-foreground">
+              <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 mt-0.5">
+                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </span>
+              <span class="font-medium leading-relaxed">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="rounded-xl border border-border/70 bg-secondary/50 p-3.5 text-[11px] text-muted-foreground leading-relaxed">
+        <span class="font-bold text-foreground">Verification Notice:</span> {careerDisclaimer}
+      </div>
+    </div>
+
+    <!-- Certification Information Card -->
+    <div class="rounded-3xl border border-border bg-card p-6 sm:p-8 flex flex-col justify-between h-full">
+      <div>
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-brand/10 text-brand mb-3">
+          Credentials
+        </span>
+        <h3 class="text-2xl font-bold tracking-tight text-foreground mb-3">
+          Certification Information
+        </h3>
+        <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-6">
+          The program advertises the following certification credentials to validate practical mastery and coursework completion:
+        </p>
+
+        <div class="space-y-4 mb-6">
+          {certifications.map((cert, i) => (
+            <div class="rounded-2xl border border-border/80 bg-background/90 p-4 flex items-center gap-4 transition-all hover:border-brand/30">
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand font-extrabold text-sm">
+                0{i + 1}
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-foreground">
+                  {cert}
+                </h4>
+                <p class="text-xs text-muted-foreground">
+                  Advertised curriculum credential
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="rounded-xl border border-border/70 bg-secondary/50 p-3.5 text-[11px] text-muted-foreground leading-relaxed">
+        <span class="font-bold text-foreground">Advisory Notice:</span> {certDisclaimer}
+      </div>
+    </div>
+  </div>
+</section>

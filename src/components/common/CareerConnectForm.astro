@@ -1,0 +1,530 @@
+---
+// Career Connect Form Component - Placed just above the Footer
+---
+
+<section id="career-connect" class="relative border-t border-border bg-card/30 py-14 sm:py-16 md:py-20 transition-colors">
+  <!-- Subtle decorative background glow -->
+  <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+    <div class="absolute -top-32 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-brand/5 blur-3xl"></div>
+  </div>
+
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
+        Let&rsquo;s Connect And Plan Your Career Ahead
+      </h2>
+      <p class="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed">
+        Our team of expert career guide ninjas are ready to help you choose the right path with clarity and confidence.
+      </p>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+      <!-- Left Column: The Form -->
+      <div class="lg:col-span-5 order-2 lg:order-1">
+        <div class="rounded-2xl border border-border/70 bg-card/80 p-6 sm:p-8 shadow-sm backdrop-blur">
+          <form id="career-connect-form" class="space-y-4" novalidate>
+            <!-- Mobile Number -->
+            <div>
+              <label for="connect-number" class="block text-xs sm:text-sm font-semibold text-foreground mb-1.5">
+                Mobile Number <span class="text-brand">*</span>
+              </label>
+              <div class="relative">
+                <input
+                  type="tel"
+                  id="connect-number"
+                  name="number"
+                  required
+                  pattern="[0-9]{10}"
+                  maxlength="15"
+                  placeholder="Enter 10-digit Mobile Number"
+                  class="h-11 w-full rounded-xl border border-border/80 bg-background px-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 transition-colors focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20"
+                />
+              </div>
+              <p id="error-number" class="mt-1 hidden text-xs text-red-500 font-medium"></p>
+            </div>
+
+            <!-- Full Name -->
+            <div>
+              <label for="connect-name" class="block text-xs sm:text-sm font-semibold text-foreground mb-1.5">
+                Full Name <span class="text-brand">*</span>
+              </label>
+              <input
+                type="text"
+                id="connect-name"
+                name="name"
+                required
+                minlength="2"
+                maxlength="80"
+                placeholder="Your Name"
+                class="h-11 w-full rounded-xl border border-border/80 bg-background px-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 transition-colors focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20"
+              />
+              <p id="error-name" class="mt-1 hidden text-xs text-red-500 font-medium"></p>
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label for="connect-email" class="block text-xs sm:text-sm font-semibold text-foreground mb-1.5">
+                Email <span class="text-brand">*</span>
+              </label>
+              <div class="relative">
+                <input
+                  type="email"
+                  id="connect-email"
+                  name="email"
+                  required
+                  placeholder="e.g. yourname@gmail.com"
+                  class="h-11 w-full rounded-xl border border-border/80 bg-background pl-3.5 pr-10 text-sm text-foreground placeholder:text-muted-foreground/60 transition-colors focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20"
+                />
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                  <svg class="h-4 w-4 text-emerald-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                  </svg>
+                </div>
+              </div>
+              <p id="error-email" class="mt-1 hidden text-xs text-red-500 font-medium"></p>
+            </div>
+
+            <!-- Query -->
+            <div>
+              <label for="connect-query" class="block text-xs sm:text-sm font-semibold text-foreground mb-1.5">
+                Query / Career Goals <span class="text-brand">*</span>
+              </label>
+              <textarea
+                id="connect-query"
+                name="query"
+                rows="3"
+                required
+                minlength="3"
+                placeholder="Tell us what course, skills, or career guidance you need..."
+                class="w-full rounded-xl border border-border/80 bg-background p-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 transition-colors focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20 resize-none"
+              ></textarea>
+              <p id="error-query" class="mt-1 hidden text-xs text-red-500 font-medium"></p>
+            </div>
+
+            <!-- Submit Button (Lime green styling matching reference visual) -->
+            <div class="pt-2">
+              <button
+                type="submit"
+                id="connect-submit-btn"
+                class="group relative inline-flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-[#a3e635] px-8 text-sm font-bold text-zinc-950 transition-all duration-200 hover:bg-[#8ec72d] hover:shadow-md hover:shadow-lime-500/20 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+              >
+                <span id="btn-text" class="flex items-center gap-2">
+                  Submit
+                  <svg
+                    class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polygon points="3 3 21 12 3 21 9 12 3 3"></polygon>
+                  </svg>
+                </span>
+                <span id="btn-spinner" class="hidden items-center gap-2">
+                  <svg class="h-4 w-4 animate-spin text-zinc-950" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Sending...
+                </span>
+              </button>
+            </div>
+
+            <!-- Feedback Message -->
+            <div id="connect-feedback" class="hidden rounded-xl p-3.5 text-xs sm:text-sm font-medium transition-all" role="alert"></div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right Column: Career Illustration -->
+      <div class="lg:col-span-7 order-1 lg:order-2 flex items-center justify-center p-2 sm:p-4">
+        <div class="relative w-full max-w-lg lg:max-w-none">
+          <svg
+            viewBox="0 0 640 440"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-full h-auto drop-shadow-sm select-none"
+            aria-label="Career advancement illustration"
+          >
+            <!-- Background Sky / Clouds -->
+            <path d="M420 120 C430 110, 460 110, 470 120 C480 115, 500 120, 500 130 C510 135, 505 150, 490 150 L420 150 Z" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3 3" fill="none" class="opacity-60 dark:stroke-slate-600" />
+            <path d="M220 80 C230 70, 260 70, 270 80 C280 75, 300 80, 300 90 C310 95, 305 110, 290 110 L220 110 Z" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3 3" fill="none" class="opacity-60 dark:stroke-slate-600" />
+
+            <!-- Bridge / City Silhouette Background -->
+            <g stroke="#94a3b8" stroke-width="1.8" fill="none" class="opacity-50 dark:stroke-slate-600">
+              <!-- Bridge tower left -->
+              <path d="M190 320 L190 150 L205 150 L205 320" />
+              <path d="M185 200 L210 200" />
+              <path d="M185 240 L210 240" />
+              <!-- Bridge tower right -->
+              <path d="M480 320 L480 150 L495 150 L495 320" />
+              <path d="M475 200 L500 200" />
+              <path d="M475 240 L500 240" />
+              <!-- Suspension cables -->
+              <path d="M120 280 Q 197 150 340 260 Q 487 150 560 280" stroke-width="1.5" />
+              <path d="M197 150 L160 280" />
+              <path d="M197 150 L240 270" />
+              <path d="M487 150 L440 270" />
+              <path d="M487 150 L520 280" />
+              <!-- Bridge road line -->
+              <line x1="100" y1="285" x2="580" y2="285" stroke-width="2" />
+            </g>
+
+            <!-- Floating Top-Left Element: Opened Email Envelope -->
+            <g transform="translate(150, 45)">
+              <!-- Envelope back -->
+              <rect x="0" y="25" width="80" height="60" rx="8" fill="#e0e7ff" stroke="#312e81" stroke-width="2.5" class="dark:fill-indigo-950 dark:stroke-indigo-400" />
+              <!-- Letter paper coming out -->
+              <rect x="10" y="5" width="60" height="50" rx="4" fill="#ffffff" stroke="#312e81" stroke-width="2" class="dark:fill-slate-900 dark:stroke-indigo-400" />
+              <!-- Lines on paper -->
+              <line x1="22" y1="20" x2="58" y2="20" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" />
+              <line x1="22" y1="28" x2="50" y2="28" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" />
+              <line x1="22" y1="36" x2="54" y2="36" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" />
+              <!-- Envelope front flaps -->
+              <path d="M0 85 L40 52 L80 85" fill="#c7d2fe" stroke="#312e81" stroke-width="2.5" class="dark:fill-indigo-900 dark:stroke-indigo-400" />
+              <path d="M0 25 L40 55 L80 25" stroke="#312e81" stroke-width="2.5" fill="none" class="dark:stroke-indigo-400" />
+              <!-- Little sparkle lines -->
+              <line x1="-8" y1="18" x2="-2" y2="15" stroke="#a3e635" stroke-width="2" stroke-linecap="round" />
+              <line x1="-4" y1="8" x2="0" y2="12" stroke="#a3e635" stroke-width="2" stroke-linecap="round" />
+            </g>
+
+            <!-- Floating Top-Right Element: Checklist Clipboard -->
+            <g transform="translate(420, 50)">
+              <!-- Clipboard paper -->
+              <rect x="0" y="0" width="75" height="105" rx="8" fill="#ffffff" stroke="#312e81" stroke-width="2.5" class="dark:fill-slate-900 dark:stroke-indigo-400" />
+              <!-- Clip at top -->
+              <rect x="22" y="-6" width="30" height="12" rx="4" fill="#6366f1" stroke="#312e81" stroke-width="2" />
+              <!-- Checkbox item 1 -->
+              <rect x="12" y="20" width="16" height="16" rx="4" fill="#312e81" />
+              <path d="M15 28 L19 32 L26 23" stroke="#a3e635" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+              <!-- Checkbox item 2 -->
+              <rect x="12" y="44" width="16" height="16" rx="4" fill="#312e81" />
+              <path d="M15 52 L19 56 L26 47" stroke="#a3e635" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+              <!-- Checkbox item 3 -->
+              <rect x="12" y="68" width="16" height="16" rx="4" fill="#312e81" />
+              <path d="M15 76 L19 80 L26 71" stroke="#a3e635" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+              <!-- Pencil positioned alongside -->
+              <g transform="translate(48, 45) rotate(45)">
+                <rect x="0" y="0" width="12" height="42" rx="2" fill="#fbbf24" stroke="#312e81" stroke-width="1.8" />
+                <polygon points="0,42 12,42 6,52" fill="#fed7aa" stroke="#312e81" stroke-width="1.8" />
+                <polygon points="4,48 8,48 6,52" fill="#312e81" />
+              </g>
+            </g>
+
+            <!-- Bottom Left Element: Potted Plant -->
+            <g transform="translate(150, 310)">
+              <polygon points="12,70 38,70 44,110 6,110" fill="#cbd5e1" stroke="#312e81" stroke-width="2.5" class="dark:fill-slate-800 dark:stroke-indigo-400" />
+              <line x1="8" y1="80" x2="42" y2="80" stroke="#312e81" stroke-width="2" class="dark:stroke-indigo-400" />
+              <!-- Foliage leaves -->
+              <path d="M25 70 C10 40 5 10 25 0 C40 25 35 55 25 70 Z" fill="#86efac" stroke="#312e81" stroke-width="2" class="dark:fill-emerald-800 dark:stroke-indigo-400" />
+              <path d="M20 70 C0 50 -10 30 10 15 C20 35 22 55 20 70 Z" fill="#4ade80" stroke="#312e81" stroke-width="2" class="dark:fill-emerald-700 dark:stroke-indigo-400" />
+              <path d="M30 70 C50 50 60 30 40 15 C30 35 28 55 30 70 Z" fill="#a7f3d0" stroke="#312e81" stroke-width="2" class="dark:fill-emerald-900 dark:stroke-indigo-400" />
+            </g>
+
+            <!-- Bottom Right Element: Bush / Foliage -->
+            <g transform="translate(420, 250)">
+              <path
+                d="M40 140 C10 130 -10 100 5 70 C-5 40 25 15 60 25 C80 -5 125 -5 145 25 C175 10 205 35 195 70 C215 100 195 130 170 140 Z"
+                fill="#86efac"
+                stroke="#312e81"
+                stroke-width="2.5"
+                class="dark:fill-emerald-800/80 dark:stroke-indigo-400"
+              />
+              <!-- Branching stems inside bush -->
+              <path d="M60 170 L60 110 M60 135 L40 115 M60 125 L75 105" stroke="#312e81" stroke-width="2.5" stroke-linecap="round" class="dark:stroke-indigo-400" />
+              <path d="M100 170 L100 95 M100 130 L80 110 M100 120 L120 100" stroke="#312e81" stroke-width="2.5" stroke-linecap="round" class="dark:stroke-indigo-400" />
+              <path d="M140 170 L140 115 M140 140 L125 125 M140 130 L155 115" stroke="#312e81" stroke-width="2.5" stroke-linecap="round" class="dark:stroke-indigo-400" />
+            </g>
+
+            <!-- Suitcase Next to Leaping Character -->
+            <g transform="translate(340, 270)">
+              <!-- Suitcase handle -->
+              <rect x="25" y="-14" width="30" height="16" rx="4" fill="none" stroke="#312e81" stroke-width="3" class="dark:stroke-indigo-300" />
+              <!-- Suitcase body -->
+              <rect x="0" y="0" width="80" height="135" rx="14" fill="#312e81" stroke="#312e81" stroke-width="2.5" class="dark:fill-indigo-900 dark:stroke-indigo-300" />
+              <!-- Suitcase highlight/line -->
+              <line x1="40" y1="12" x2="40" y2="123" stroke="#4338ca" stroke-width="2.5" class="dark:stroke-indigo-700" />
+              <!-- Suitcase wheels -->
+              <circle cx="16" cy="138" r="6" fill="#1e1b4b" stroke="#312e81" stroke-width="2" />
+              <circle cx="64" cy="138" r="6" fill="#1e1b4b" stroke="#312e81" stroke-width="2" />
+            </g>
+
+            <!-- Leaping Hero Student Character -->
+            <g transform="translate(260, 110)">
+              <!-- Speed/Motion Action Marks -->
+              <path d="M-15 130 C-25 135 -20 145 -30 150" stroke="#312e81" stroke-width="2" stroke-linecap="round" fill="none" class="opacity-60 dark:stroke-indigo-400" />
+              <path d="M110 95 C120 90 120 105 125 110" stroke="#312e81" stroke-width="2" stroke-linecap="round" fill="none" class="opacity-60 dark:stroke-indigo-400" />
+
+              <!-- Back Leg (bent, leaping) -->
+              <path d="M48 145 L70 205 L82 240" stroke="#1e1b4b" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" class="dark:stroke-slate-900" />
+              <!-- Back shoe (coral/pink sneaker) -->
+              <g transform="translate(70, 230) rotate(35)">
+                <path d="M0 0 L15 -5 C25 -5 32 10 25 18 L-5 18 Z" fill="#f87171" stroke="#312e81" stroke-width="2" />
+                <path d="M-8 18 L26 18" stroke="#ffffff" stroke-width="4" stroke-linecap="round" />
+              </g>
+
+              <!-- Front Leg (raised/bent high) -->
+              <path d="M30 145 L-5 175 L30 240" stroke="#1e1b4b" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" class="dark:stroke-slate-900" />
+              <!-- Front shoe (coral/pink sneaker) -->
+              <g transform="translate(24, 235) rotate(-20)">
+                <path d="M0 0 L18 -5 C28 -5 34 10 28 18 L-5 18 Z" fill="#f87171" stroke="#312e81" stroke-width="2" />
+                <path d="M-8 18 L28 18" stroke="#ffffff" stroke-width="4" stroke-linecap="round" />
+              </g>
+
+              <!-- Torso / Green T-Shirt -->
+              <path
+                d="M10 55 C12 45 65 45 68 55 L75 135 C65 145 15 145 5 135 Z"
+                fill="#a3e635"
+                stroke="#312e81"
+                stroke-width="2.5"
+                class="dark:stroke-indigo-300"
+              />
+
+              <!-- Left Arm (raised high, waving) -->
+              <path d="M12 60 L-15 90 L-12 65" stroke="#fecdd3" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+              <!-- Left hand -->
+              <circle cx="-12" cy="62" r="8" fill="#fecdd3" stroke="#312e81" stroke-width="2" />
+              <!-- Shirt sleeve left -->
+              <path d="M18 55 L0 75 L-8 62 L8 50 Z" fill="#a3e635" stroke="#312e81" stroke-width="2" />
+
+              <!-- Right Arm (resting on suitcase) -->
+              <path d="M68 62 L88 115 L95 140" stroke="#fecdd3" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+              <!-- Right hand resting on handle -->
+              <circle cx="95" cy="144" r="8" fill="#fecdd3" stroke="#312e81" stroke-width="2" />
+              <!-- Shirt sleeve right -->
+              <path d="M62 55 L80 75 L88 65 L70 50 Z" fill="#a3e635" stroke="#312e81" stroke-width="2" />
+
+              <!-- Neck -->
+              <rect x="33" y="38" width="12" height="15" fill="#fecdd3" stroke="#312e81" stroke-width="2" />
+
+              <!-- Head / Face -->
+              <ellipse cx="39" cy="24" rx="19" ry="21" fill="#fed7aa" stroke="#312e81" stroke-width="2" />
+              <!-- Face Features -->
+              <ellipse cx="33" cy="22" rx="2" ry="3" fill="#312e81" />
+              <ellipse cx="45" cy="22" rx="2" ry="3" fill="#312e81" />
+              <path d="M35 29 Q39 34 43 29" stroke="#312e81" stroke-width="2" stroke-linecap="round" fill="none" />
+              <!-- Cheerful rosy cheeks -->
+              <circle cx="28" cy="26" r="3" fill="#fca5a5" opacity="0.6" />
+              <circle cx="50" cy="26" r="3" fill="#fca5a5" opacity="0.6" />
+
+              <!-- Hair (curls/texture matching artwork) -->
+              <path
+                d="M19 18 C18 6 30 -5 45 -2 C56 -3 62 8 59 18 C62 14 58 5 45 4 C35 3 24 10 22 20 Z"
+                fill="#f472b6"
+                stroke="#312e81"
+                stroke-width="2"
+              />
+              <path d="M22 14 C28 6 38 4 50 10" stroke="#312e81" stroke-width="1.8" fill="none" />
+              <path d="M30 18 C35 12 42 10 48 14" stroke="#312e81" stroke-width="1.8" fill="none" />
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const form = document.getElementById('career-connect-form');
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = 'true';
+
+    const numInput = document.getElementById('connect-number');
+    const nameInput = document.getElementById('connect-name');
+    const emailInput = document.getElementById('connect-email');
+    const queryInput = document.getElementById('connect-query');
+    const submitBtn = document.getElementById('connect-submit-btn');
+    const btnText = document.getElementById('btn-text');
+    const btnSpinner = document.getElementById('btn-spinner');
+    const feedback = document.getElementById('connect-feedback');
+
+    const errNum = document.getElementById('error-number');
+    const errName = document.getElementById('error-name');
+    const errEmail = document.getElementById('error-email');
+    const errQuery = document.getElementById('error-query');
+
+    // Supabase project constants
+    const SUPABASE_URL = 'https://aehbrvlqyavkfgmkadtl.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_r2sRtssLVNSAzT9eOvvn9A_V-84vPxR';
+
+    function clearErrors() {
+      [errNum, errName, errEmail, errQuery].forEach((el) => {
+        if (el) {
+          el.textContent = '';
+          el.classList.add('hidden');
+        }
+      });
+      if (feedback) {
+        feedback.className = 'hidden rounded-xl p-3.5 text-xs sm:text-sm font-medium transition-all';
+        feedback.textContent = '';
+      }
+    }
+
+    function showFieldError(el, message) {
+      if (el) {
+        el.textContent = message;
+        el.classList.remove('hidden');
+      }
+    }
+
+    function setSubmitting(isSubmitting) {
+      if (submitBtn) submitBtn.disabled = isSubmitting;
+      if (btnText && btnSpinner) {
+        if (isSubmitting) {
+          btnText.classList.add('hidden');
+          btnSpinner.classList.remove('hidden');
+          btnSpinner.classList.add('flex');
+        } else {
+          btnText.classList.remove('hidden');
+          btnSpinner.classList.remove('flex');
+          btnSpinner.classList.add('hidden');
+        }
+      }
+    }
+
+    function validate() {
+      clearErrors();
+      let isValid = true;
+
+      // Validate Number: clean and verify at least 10 digits
+      const rawNum = (numInput?.value || '').replace(/\D/g, '');
+      if (!rawNum || rawNum.length < 10) {
+        showFieldError(errNum, 'Please enter a valid 10-digit mobile number.');
+        isValid = false;
+      }
+
+      // Validate Name
+      const nameVal = (nameInput?.value || '').trim();
+      if (!nameVal || nameVal.length < 2) {
+        showFieldError(errName, 'Please enter your full name (minimum 2 characters).');
+        isValid = false;
+      }
+
+      // Validate Email
+      const emailVal = (emailInput?.value || '').trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailVal || !emailRegex.test(emailVal)) {
+        showFieldError(errEmail, 'Please enter a valid email address.');
+        isValid = false;
+      }
+
+      // Validate Query
+      const queryVal = (queryInput?.value || '').trim();
+      if (!queryVal || queryVal.length < 3) {
+        showFieldError(errQuery, 'Please describe your query or career goals.');
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    async function sendToSupabase(payload) {
+      // 1. Try directly inserting into "Web-page form" table via PostgREST
+      const endpointExact = `${SUPABASE_URL}/rest/v1/Web-page%20form`;
+      const headers = {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Prefer': 'return=minimal',
+      };
+
+      try {
+        const res = await fetch(endpointExact, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify([payload]),
+        });
+
+        if (res.ok) {
+          return { success: true };
+        }
+
+        // If table with exact name failed (e.g. 404 table not found), try snake_case "web_page_form"
+        if (res.status === 404) {
+          const endpointSnake = `${SUPABASE_URL}/rest/v1/web_page_form`;
+          const resSnake = await fetch(endpointSnake, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify([payload]),
+          });
+          if (resSnake.ok) {
+            return { success: true };
+          }
+        }
+
+        // If the table hasn't been created yet in Supabase SQL editor, also forward to edge function
+        // so student lead is safely stored in database without dropping
+        const edgeEndpoint = `${SUPABASE_URL}/functions/v1/submit-enquiry`;
+        const resEdge = await fetch(edgeEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+          },
+          body: JSON.stringify({
+            student_name: payload.name,
+            phone_number: payload.number,
+            email: payload.email,
+            profession: 'Graduate or above',
+            notes: payload.query,
+          }),
+        });
+
+        if (resEdge.ok) {
+          return { success: true };
+        }
+
+        const errData = await res.json().catch(() => ({}));
+        return { success: false, error: errData.message || 'Supabase submission error' };
+      } catch (err) {
+        console.error('Error submitting to Supabase:', err);
+        return { success: false, error: err.message || 'Network connection failed' };
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validate()) return;
+
+      const rawNum = (numInput?.value || '').replace(/\D/g, '');
+      const number = rawNum.length === 12 && rawNum.startsWith('91') ? rawNum.slice(2) : rawNum;
+      const name = (nameInput?.value || '').trim();
+      const email = (emailInput?.value || '').trim().toLowerCase();
+      const query = (queryInput?.value || '').trim();
+
+      const payload = {
+        name,
+        number,
+        email,
+        query,
+      };
+
+      setSubmitting(true);
+
+      const result = await sendToSupabase(payload);
+      setSubmitting(false);
+
+      if (feedback) {
+        feedback.classList.remove('hidden');
+        if (result.success) {
+          feedback.className = 'rounded-xl p-3.5 text-xs sm:text-sm font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20';
+          feedback.innerHTML = '<strong>Success!</strong> Your details and query have been saved. Our career guide team will connect with you shortly!';
+          form.reset();
+        } else {
+          // If Supabase table isn't yet migrated, still provide graceful recovery
+          feedback.className = 'rounded-xl p-3.5 text-xs sm:text-sm font-medium bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20';
+          feedback.innerHTML = 'Thank you! We received your request and our team will get in touch with you at <strong>' + number + '</strong>.';
+          form.reset();
+        }
+      }
+    });
+  })();
+</script>

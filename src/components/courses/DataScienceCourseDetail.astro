@@ -1,0 +1,165 @@
+---
+import Breadcrumbs from '@/components/common/Breadcrumbs.astro';
+import CourseHero from '@/components/courses/CourseHero.astro';
+import StickyCourseNav from '@/components/courses/StickyCourseNav.astro';
+import CurriculumAccordion from '@/components/courses/CurriculumAccordion.astro';
+import CourseCurriculumPoster from '@/components/courses/CourseCurriculumPoster.astro';
+import TechStackSection from '@/components/courses/TechStackSection.astro';
+import ProjectPortfolioSection from '@/components/courses/ProjectPortfolioSection.astro';
+import LearningOutcomesSection from '@/components/courses/LearningOutcomesSection.astro';
+import AdditionalLearningSection from '@/components/courses/AdditionalLearningSection.astro';
+import CareerAndCertificationSection from '@/components/courses/CareerAndCertificationSection.astro';
+import CourseFaqSection from '@/components/courses/CourseFaqSection.astro';
+import { dataScienceCourseData } from '@/data/courses/data-science';
+import { withBase } from '@/lib/paths';
+
+interface Props {
+  courseUrl: string;
+  relatedCourses?: any[];
+  relatedPosts?: any[];
+}
+
+const { courseUrl, relatedCourses = [], relatedPosts = [] } = Astro.props;
+const data = dataScienceCourseData;
+---
+
+<div class="data-science-course-page w-full">
+  <!-- Container with max-w-7xl and generous spacing -->
+  <div class="mx-auto max-w-7xl px-4 py-6 md:px-6 space-y-12 sm:space-y-16">
+    <!-- Breadcrumb Navigation -->
+    <Breadcrumbs
+      items={[
+        { name: 'Courses', url: '/courses' },
+        { name: 'Data Science & AI', url: courseUrl },
+      ]}
+    />
+
+    <!-- Hero Section -->
+    <CourseHero course={data} />
+  </div>
+
+  <!-- Sticky In-Page Navigation Bar -->
+  <StickyCourseNav />
+
+  <div class="mx-auto max-w-7xl px-4 py-12 md:px-6 space-y-20 md:space-y-24">
+    <!-- Complete Curriculum & Interactive Accordion (40% Left Poster / 60% Right Modules) -->
+    <section id="curriculum" class="scroll-mt-24">
+      <div class="max-w-3xl mb-8">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-brand/10 text-brand mb-3">
+          Full 7-Module Syllabus
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+          Complete Curriculum & Interactive Modules
+        </h2>
+        <p class="mt-2 text-sm sm:text-base text-muted-foreground leading-relaxed">
+          Every module features hands-on assignments, structured datasets, and practical business case studies. Click any module to explore all underlying topics and project outcomes.
+        </p>
+      </div>
+
+      <!-- 40% Left / 60% Right Responsive Split -->
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-10 items-start">
+        <!-- 40% Left: Sticky Course Poster, Visual Animations & Telemetry -->
+        <div class="lg:col-span-2 lg:sticky lg:top-28">
+          <CourseCurriculumPoster
+            totalModules={data.modules.length}
+            totalProjects={data.projects.length}
+          />
+        </div>
+
+        <!-- 60% Right: Module List Accordion -->
+        <div class="lg:col-span-3 min-w-0">
+          <CurriculumAccordion modules={data.modules} />
+        </div>
+      </div>
+    </section>
+
+    <!-- Software & Technology Stack -->
+    <TechStackSection techStack={data.techStack} note={data.techStackNote} />
+
+    <!-- Practical Project Portfolio -->
+    <ProjectPortfolioSection projects={data.projects} />
+
+    <!-- Learning Outcomes & 7-Stage Pathway -->
+    <LearningOutcomesSection
+      outcomes={data.learningOutcomes.items}
+      disclaimer={data.learningOutcomes.disclaimer}
+      progression={data.learningProgression}
+      progressionNote={data.progressionNote}
+    />
+
+    <!-- Additional Learning Areas (Deep Learning, NLP, Vision, GenAI, IBM Cloud) -->
+    <AdditionalLearningSection
+      areas={data.additionalLearningAreas}
+      syllabusNote={data.syllabusNote}
+    />
+
+    <!-- Career Preparation & Certifications -->
+    <CareerAndCertificationSection
+      careerComponents={data.careerPreparation.components}
+      careerDisclaimer={data.careerPreparation.disclaimer}
+      certifications={data.certifications.items}
+      certDisclaimer={data.certifications.disclaimer}
+    />
+
+    <!-- Course FAQs -->
+    <CourseFaqSection faqs={data.faqs} />
+
+    <!-- Related Programs & Insights -->
+    {relatedCourses.length > 0 && (
+      <section class="border-t border-border pt-12">
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-brand">Related Programs</span>
+            <h3 class="text-2xl font-bold text-foreground">Explore Other IT Specializations</h3>
+          </div>
+          <a href={withBase('/courses')} class="text-sm font-bold text-brand hover:underline">
+            View All Courses &rarr;
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {relatedCourses.map((c) => (
+            <a
+              href={withBase(`/courses/${c.id.replace(/\.(md|mdx)$/, '')}`)}
+              class="group rounded-2xl border border-border bg-card p-6 transition-all hover:border-brand/40 hover:shadow-md"
+            >
+              <span class="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                {c.data.duration} &bull; {c.data.level}
+              </span>
+              <h4 class="mt-2 text-lg font-bold text-foreground group-hover:text-brand transition-colors">
+                {c.data.title}
+              </h4>
+              <p class="mt-2 text-xs sm:text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+                {c.data.description}
+              </p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Bottom Conversion Bar (Pinterest-inspired 32px radius card) -->
+    <div class="rounded-[32px] bg-brand text-primary-foreground p-8 sm:p-12 md:p-14 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 shadow-xl">
+      <div class="max-w-2xl space-y-2">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-black/20 text-white">
+          Begin Your Data Career
+        </span>
+        <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+          Ready to master Data Science, Machine Learning & AI?
+        </h2>
+        <p class="text-sm sm:text-base text-white/90 leading-relaxed">
+          Join our next cohort. Discuss prerequisites, review curriculum details, and explore batch schedules with our academic guidance counsellors.
+        </p>
+      </div>
+
+      <div class="shrink-0 flex flex-wrap items-center gap-3 w-full sm:w-auto">
+        <a
+          href={withBase('/contact')}
+          class="inline-flex h-12 w-full sm:w-auto items-center justify-center rounded-2xl bg-white px-8 text-sm font-bold text-zinc-950 transition-all hover:bg-zinc-100 hover:shadow-lg active:scale-95"
+        >
+          Book Free Counselling
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
