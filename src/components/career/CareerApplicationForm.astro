@@ -1,26 +1,37 @@
 ---
 // CareerApplicationForm.astro
 // Clean, aesthetic, and minimal application form for Careers at AKSNOVA
+import { withBase } from "@/lib/paths";
+
+const softwareLottieUrl = withBase("/animations/software-development.lottie?v=1");
+const softwareJsonUrl = withBase("/animations/software-development.json?v=1");
+const wasmUrl = withBase("/animations/dotlottie-player.wasm");
 ---
 
 <section id="career-apply" class="relative py-12 md:py-16 scroll-mt-20">
   <!-- Soft subtle ambient background glow -->
   <div class="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center overflow-hidden">
-    <div class="h-96 w-full max-w-3xl rounded-full bg-gradient-to-tr from-brand/5 via-primary/5 to-transparent blur-3xl opacity-70"></div>
+    <div class="h-96 w-full max-w-5xl rounded-full bg-gradient-to-tr from-brand/5 via-primary/5 to-transparent blur-3xl opacity-70"></div>
   </div>
 
-  <div class="mx-auto max-w-4xl">
-    <!-- Form Card Container -->
-    <div id="career-form-card" class="relative z-20 rounded-[28px] border border-border/80 bg-card/80 p-6 sm:p-10 md:p-12 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-brand/30 hover:shadow-md">
-      <!-- Section Header -->
-      <div class="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
-          Apply to Work with AKSNOVA
-        </h2>
-        <p class="mt-2.5 text-sm sm:text-base text-muted-foreground leading-relaxed">
-          Share your qualifications and preferred job role. Our recruitment team reviews every profile and connects with matching opportunities.
-        </p>
-      </div>
+  <div class="mx-auto max-w-7xl">
+    <!-- Main 2-Column Grid: Form Card on Left, Software Dev Animation on Right -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-12 items-center">
+      <!-- Left Column: Form Card Container -->
+      <div class="lg:col-span-7 xl:col-span-7 order-1">
+        <div id="career-form-card" class="relative z-20 rounded-[28px] border border-border/80 bg-card/80 p-6 sm:p-8 md:p-10 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-brand/30 hover:shadow-md">
+          <!-- Section Header -->
+          <div class="text-left mb-6 sm:mb-8">
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand mb-3">
+              Talent Application
+            </span>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
+              Apply to Work with AKSNOVA
+            </h2>
+            <p class="mt-2 text-sm sm:text-base text-muted-foreground leading-relaxed">
+              Share your qualifications and preferred job role. Our recruitment team reviews every profile and connects with matching opportunities.
+            </p>
+          </div>
 
       <!-- Application Form -->
       <form id="career-applicant-form" class="space-y-6" novalidate>
@@ -284,6 +295,40 @@
         <div id="applicant-feedback" class="hidden rounded-2xl p-4 text-sm font-medium transition-all" role="alert"></div>
       </form>
     </div>
+  </div>
+
+  <!-- Right Column: Software Development Animation -->
+  <div class="lg:col-span-5 xl:col-span-5 order-2 flex flex-col items-center justify-center p-2 sm:p-4 overflow-visible">
+    <div class="relative w-full max-w-md lg:max-w-none flex flex-col items-center justify-center overflow-visible">
+      <!-- Ambient glow backdrop -->
+      <div class="pointer-events-none absolute -inset-6 rounded-full bg-brand/10 blur-3xl opacity-60 dark:opacity-40"></div>
+
+      <div
+        id="software-dev-lottie-container"
+        class="relative w-full flex items-center justify-center overflow-visible"
+        data-lottie-src={softwareLottieUrl}
+        data-wasm-src={wasmUrl}
+        data-json-src={softwareJsonUrl}
+      >
+        <canvas
+          id="software-dev-canvas"
+          class="w-full h-auto drop-shadow-md select-none scale-100 sm:scale-105 transition-transform origin-center"
+          style="aspect-ratio: 1 / 1; width: 100%; max-height: 520px; object-fit: contain;"
+        ></canvas>
+      </div>
+
+      <!-- Supportive caption -->
+      <div class="mt-4 text-center">
+        <p class="text-xs sm:text-sm font-semibold text-foreground/85 tracking-wide">
+          Engineering &bull; Teaching &bull; Mentorship
+        </p>
+        <p class="mt-1 text-xs text-muted-foreground">
+          Empowering learners through real-world tech & training
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
 
     <!-- Below Form: AKSNOVA Direct Contact Info -->
     <div class="relative z-[1] mt-8 rounded-3xl border border-border/70 bg-card/50 p-6 sm:p-8 backdrop-blur transition-all duration-300 hover:border-border">
@@ -752,3 +797,74 @@
     });
   })();
 </script>
+
+<script>
+  import { DotLottie } from '@lottiefiles/dotlottie-web';
+  import lottie from 'lottie-web/build/player/lottie_light';
+
+  const container = document.getElementById('software-dev-lottie-container');
+  const canvas = document.getElementById('software-dev-canvas') as HTMLCanvasElement | null;
+
+  if (container && canvas) {
+    const lottieSrc = container.getAttribute('data-lottie-src') || '';
+    const wasmSrc = container.getAttribute('data-wasm-src') || '';
+    const jsonSrc = container.getAttribute('data-json-src') || '';
+
+    let initialized = false;
+
+    if (wasmSrc && typeof (DotLottie as any).setWasmUrl === 'function') {
+      try {
+        (DotLottie as any).setWasmUrl(wasmSrc);
+      } catch (e) {
+        console.warn('Could not set custom wasm URL for DotLottie:', e);
+      }
+    }
+
+    const fallbackToSvg = () => {
+      if (initialized) return;
+      initialized = true;
+      if (canvas && canvas.parentNode) {
+        canvas.style.display = 'none';
+      }
+      if (jsonSrc) {
+        lottie.loadAnimation({
+          container,
+          renderer: 'svg',
+          loop: true,
+          autoplay: true,
+          path: jsonSrc,
+        });
+      }
+    };
+
+    if (lottieSrc) {
+      try {
+        const dotLottie = new DotLottie({
+          canvas,
+          src: lottieSrc,
+          loop: true,
+          autoplay: true,
+          layout: {
+            fit: 'contain',
+            align: [0.5, 0.5],
+          },
+        });
+
+        dotLottie.addEventListener('loadError', (err) => {
+          console.warn('DotLottie load error, falling back to SVG renderer:', err);
+          fallbackToSvg();
+        });
+
+        dotLottie.addEventListener('ready', () => {
+          initialized = true;
+        });
+      } catch (err) {
+        console.warn('DotLottie init failed, falling back to SVG renderer:', err);
+        fallbackToSvg();
+      }
+    } else {
+      fallbackToSvg();
+    }
+  }
+</script>
+
