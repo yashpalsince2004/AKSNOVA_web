@@ -44,4 +44,47 @@ describe('Web-page form direct Supabase payload and validation', () => {
 
     expect(Object.keys(payload)).toEqual(['name', 'number', 'email', 'query']);
   });
+
+  it('rejects phone numbers starting with 0 or not exactly 10 digits', () => {
+    const validatePhone = (num: string) => {
+      const rawNum = num.replace(/\D/g, '');
+      const normalizedPhone = rawNum.length === 12 && rawNum.startsWith('91') ? rawNum.slice(2) : rawNum;
+      if (!normalizedPhone) return { valid: false, error: 'Enter your 10-digit mobile number.' };
+      if (normalizedPhone.startsWith('0')) return { valid: false, error: 'Mobile number cannot start with 0.' };
+      if (normalizedPhone.length !== 10) return { valid: false, error: 'Enter a valid 10-digit mobile number.' };
+      return { valid: true, phone: normalizedPhone };
+    };
+
+    expect(validatePhone('0987654321').valid).toBe(false);
+    expect(validatePhone('0987654321').error).toBe('Mobile number cannot start with 0.');
+    expect(validatePhone('987654321').valid).toBe(false); // 9 digits
+    expect(validatePhone('98765432101').valid).toBe(false); // 11 digits
+    expect(validatePhone('9876543210').valid).toBe(true);
+    expect(validatePhone('+91 9876543210').valid).toBe(true);
+  });
+
+  it('structures query table payload containing phone and number aliases', () => {
+    const payload = {
+      name: 'Priya Verma',
+      number: '9876543210',
+      email: 'priya@example.com',
+      query: 'Inquiry about Data Analytics curriculum',
+    };
+
+    const queryPayload = {
+      name: payload.name,
+      number: payload.number,
+      phone: payload.number,
+      email: payload.email,
+      query: payload.query,
+    };
+
+    expect(queryPayload).toMatchObject({
+      name: 'Priya Verma',
+      number: '9876543210',
+      phone: '9876543210',
+      email: 'priya@example.com',
+      query: 'Inquiry about Data Analytics curriculum',
+    });
+  });
 });

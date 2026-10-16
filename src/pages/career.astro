@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/common/Breadcrumbs.astro';
+import CareerApplicationForm from '@/components/career/CareerApplicationForm.astro';
 import { withBase } from '@/lib/paths';
 
 // Add verified roles here when AKSNOVA has openings to publish.
@@ -20,6 +21,7 @@ const openings: {
   title="Careers at AKSNOVA | Open Positions"
   description="Explore job openings at AKSNOVA Edutech and learn about the roles, responsibilities, and qualifications for joining our team."
   canonical="/career"
+  showConnectForm={false}
 >
   <div class="mx-auto max-w-7xl px-4 py-8 md:px-6">
     <Breadcrumbs items={[{ name: 'Careers', url: '/career' }]} />
@@ -27,7 +29,7 @@ const openings: {
     <header class="mt-8 border-b border-border pb-16">
       <p class="eyebrow rise">Careers at AKSNOVA</p>
       <h1 class="rise mt-4 max-w-4xl text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-7xl">
-        Help people build <span class="text-brand">what comes next.</span>
+        Help people build what comes next.
       </h1>
       <p class="rise mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
         Join the team working across education, technology, mentorship, and learner support. Browse our current openings and review each role's responsibilities and qualifications.
@@ -96,17 +98,28 @@ const openings: {
         </div>
       ) : (
         <div class="mt-10 rounded-3xl border border-border bg-card p-8 sm:p-12">
-          <p class="text-xs font-bold uppercase tracking-widest text-brand">No listed vacancies</p>
+          <p class="text-xs font-semibold text-brand">No listed vacancies</p>
           <h3 class="mt-3 text-2xl font-bold tracking-tight text-foreground">There are no open roles posted right now.</h3>
           <p class="mt-3 max-w-2xl leading-relaxed text-muted-foreground">
             Please check back for future opportunities. For general enquiries, contact the AKSNOVA team and include “Careers” in your message.
           </p>
-          <a href={withBase('/contact')} class="mt-6 inline-flex h-11 items-center rounded-2xl bg-brand px-5 text-sm font-bold text-primary-foreground transition hover:bg-brand-deep">
-            Contact AKSNOVA
-          </a>
+          <div class="mt-6 flex flex-wrap items-center gap-3">
+            <a href="#career-apply" class="inline-flex h-11 items-center gap-2 rounded-2xl bg-brand px-5 text-sm font-semibold text-primary-foreground transition hover:bg-brand-deep">
+              Apply with talent form
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
+            </a>
+            <a href={withBase('/contact')} class="inline-flex h-11 items-center rounded-2xl border border-border bg-background px-5 text-sm font-semibold text-foreground transition hover:bg-secondary">
+              Contact AKSNOVA
+            </a>
+          </div>
         </div>
       )}
     </section>
+
+    <!-- Career Application Form & Direct AKSNOVA Contacts -->
+    <CareerApplicationForm />
 
     <section class="mb-8 rounded-[32px] bg-secondary/50 p-8 sm:p-10">
       <div class="max-w-3xl">
@@ -115,8 +128,8 @@ const openings: {
         <p class="mt-3 leading-relaxed text-muted-foreground">
           AKSNOVA brings together educators and industry practitioners to help learners build useful skills through hands-on training, mentorship, and placement support.
         </p>
-        <a href={withBase('/about')} class="mt-5 inline-flex text-sm font-bold text-brand hover:underline">
-          Learn about AKSNOVA <span aria-hidden="true" class="ml-1">→</span>
+        <a href={withBase('/about')} class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:underline">
+          <span>Learn about AKSNOVA</span>
         </a>
       </div>
     </section>
